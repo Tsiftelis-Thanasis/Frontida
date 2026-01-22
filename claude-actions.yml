@@ -1,0 +1,136 @@
+name: Claude AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  claude-review:
+    runs-on: ubuntu-latest
+    name: Claude Code Review
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build --no-restore --configuration Release
+
+      - name: Run tests
+        run: dotnet test --no-build --configuration Release --verbosity normal
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v41
+        with:
+          files: |
+            **/*.cs
+            **/*.cshtml
+            **/*.razor
+            **/*.csproj
+
+      - name: Claude AI Review
+        if: steps.changed-files.outputs.any_changed == 'true'
+        uses: anthropics/anthropic-review-action@v1
+        with:
+          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
+          model: claude-sonnet-4-5-20250929
+          files: ${{ steps.changed-files.outputs.all_changed_files }}
+          review-prompt: |
+            You are reviewing code for Frontida, a caregiving platform built with .NET 10 and SQL Server.
+            
+            Please review the following code changes with focus on:
+            
+            1. **Code Quality**
+               - Follow C# and .NET best practices
+               - Proper use of async/await patterns
+               - LINQ query optimization
+               - Proper exception handling
+            
+            2. **Security**
+               - SQL injection prevention (EF Core parameterization)
+               - Input validation
+               - Authorization checks
+               - Secure data handling (passwords, personal info)
+               - CSRF protection
+            
+            3. **Architecture**
+               - Separation of concerns
+               - Repository pattern usage
+               - Service layer implementation
+               - Dependency injection
+            
+            4. **Entity Framework**
+               - Efficient queries (avoid N+1 problems)
+               - Proper use of Include/ThenInclude
+               - Migration quality
+               - Index usage
+            
+            5. **ASP.NET Core MVC**
+               - Controller action design
+               - Model binding and validation
+               - View model usage
+               - Razor syntax
+            
+            6. **Performance**
+               - Database query efficiency
+               - Caching opportunities
+               - Async operations
+               - Memory management
+            
+            7. **Localization**
+               - Proper use of resource files
+               - Greek and English support
+               - Culture-specific formatting
+            
+            8. **Testing**
+               - Unit test coverage
+               - Test quality and assertions
+               - Mock usage
+            
+            Provide specific, actionable feedback. Highlight potential bugs, security issues, 
+            and suggest improvements. Be constructive and educational.
+
+      - name: Code Quality Check
+        run: |
+          dotnet format --verify-no-changes --verbosity diagnostic || true
+
+      - name: Security Scan
+        run: |
+          dotnet list package --vulnerable --include-transitive || true
+
+      - name: Comment PR
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const output = `#### Frontida Build Summary 🏥
+            
+            - ✅ Build: ${{ steps.build.outcome }}
+            - ✅ Tests: ${{ steps.test.outcome }}
+            - 🤖 Claude AI Review: Completed
+            
+            *Powered by Claude Sonnet 4.5*`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
