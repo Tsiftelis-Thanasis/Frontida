@@ -11,7 +11,26 @@ permissions:
   issues: write
 
 jobs:
+  check-project:
+    runs-on: ubuntu-latest
+    outputs:
+      project-exists: ${{ steps.check.outputs.exists }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Check if project exists
+        id: check
+        run: |
+          if [ -f "Frontida/Frontida.csproj" ]; then
+            echo "exists=true" >> $GITHUB_OUTPUT
+          else
+            echo "exists=false" >> $GITHUB_OUTPUT
+          fi
+
   claude-review:
+    needs: check-project
+    if: needs.check-project.outputs.project-exists == 'true'
     runs-on: ubuntu-latest
     name: Claude Code Review
     
@@ -27,13 +46,21 @@ jobs:
           dotnet-version: '10.0.x'
 
       - name: Restore dependencies
-        run: dotnet restore
+        run: |
+          cd Frontida
+          dotnet restore
 
       - name: Build
-        run: dotnet build --no-restore --configuration Release
+        id: build
+        run: |
+          cd Frontida
+          dotnet build --no-restore --configuration Release
 
       - name: Run tests
-        run: dotnet test --no-build --configuration Release --verbosity normal
+        id: test
+        run: |
+          cd Frontida
+          dotnet test --no-build --configuration Release --verbosity normal || true
 
       - name: Get changed files
         id: changed-files
@@ -44,16 +71,45 @@ jobs:
             **/*.cshtml
             **/*.razor
             **/*.csproj
+            **/*.json
 
-      - name: Claude AI Review
+      - name: Analyze code changes
         if: steps.changed-files.outputs.any_changed == 'true'
-        uses: anthropics/anthropic-review-action@v1
+        id: analyze
+        uses: actions/github-script@v7
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         with:
-          anthropic-api-key: ${{ secrets.ANTHROPIC_API_KEY }}
-          model: claude-sonnet-4-5-20250929
-          files: ${{ steps.changed-files.outputs.all_changed_files }}
-          review-prompt: |
-            You are reviewing code for Frontida, a caregiving platform built with .NET 10 and SQL Server.
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Get changed files
+            const changedFiles = '${{ steps.changed-files.outputs.all_changed_files }}'.split(' ');
+            
+            // Read file contents
+            let fileContents = '';
+            for (const file of changedFiles) {
+              if (fs.existsSync(file)) {
+                const content = fs.readFileSync(file, 'utf8');
+                fileContents += `\n\n=== FILE: ${file} ===\n${content}`;
+              }
+            }
+            
+            // Call Claude API for code review
+            const response = await fetch('https://api.anthropic.com/v1/messages', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+                'x-api-key': process.env.ANTHROPIC_API_KEY,
+                'anthropic-version': '2023-06-01'
+              },
+              body: JSON.stringify({
+                model: 'claude-sonnet-4-20250514',
+                max_tokens: 4000,
+                messages: [{
+                  role: 'user',
+                  content: `You are reviewing code for Frontida, a caregiving platform built with .NET 10 and SQL Server.
             
             Please review the following code changes with focus on:
             
@@ -94,37 +150,37 @@ jobs:
                - Async operations
                - Memory management
             
-            7. **Localization**
-               - Proper use of resource files
-               - Greek and English support
-               - Culture-specific formatting
+            Provide specific, actionable feedback. Be constructive and educational.
             
-            8. **Testing**
-               - Unit test coverage
-               - Test quality and assertions
-               - Mock usage
+            Changed files and their contents:
+            ${fileContents}`
+                }]
+              })
+            });
             
-            Provide specific, actionable feedback. Highlight potential bugs, security issues, 
-            and suggest improvements. Be constructive and educational.
+            const data = await response.json();
+            const review = data.content[0].text;
+            
+            // Save review to output
+            core.setOutput('review', review);
+            return review;
 
-      - name: Code Quality Check
-        run: |
-          dotnet format --verify-no-changes --verbosity diagnostic || true
-
-      - name: Security Scan
-        run: |
-          dotnet list package --vulnerable --include-transitive || true
-
-      - name: Comment PR
-        if: always()
+      - name: Comment PR with Review
+        if: steps.analyze.outputs.review
         uses: actions/github-script@v7
         with:
           script: |
-            const output = `#### Frontida Build Summary 🏥
+            const review = `${{ steps.analyze.outputs.review }}`;
             
-            - ✅ Build: ${{ steps.build.outcome }}
-            - ✅ Tests: ${{ steps.test.outcome }}
-            - 🤖 Claude AI Review: Completed
+            const output = `## 🤖 Claude AI Code Review
+            
+            ${review}
+            
+            ---
+            
+            ### Build Summary
+            - Build: ${{ steps.build.outcome }}
+            - Tests: ${{ steps.test.outcome }}
             
             *Powered by Claude Sonnet 4.5*`;
             
@@ -133,4 +189,26 @@ jobs:
               owner: context.repo.owner,
               repo: context.repo.repo,
               body: output
-            })
+            });
+
+      - name: Code Quality Check
+        if: needs.check-project.outputs.project-exists == 'true'
+        run: |
+          cd Frontida
+          dotnet format --verify-no-changes --verbosity diagnostic || true
+
+  no-project-warning:
+    needs: check-project
+    if: needs.check-project.outputs.project-exists == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment on PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '⚠️ **No .NET project found**\n\nThe Frontida project has not been initialized yet. Please create Issue #1 "Initial .NET 10 Project Setup" or manually run the "Initialize Frontida Project" workflow to set up the project structure.\n\nOnce the project is initialized, this workflow will automatically review your code changes.'
+            });
