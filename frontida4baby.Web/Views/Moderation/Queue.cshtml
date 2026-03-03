@@ -1,0 +1,172 @@
+@model frontida4baby.Web.Models.ViewModels.AdminQueueViewModel
+@using frontida4baby.Web.Models.Entities
+@{
+    ViewData["Title"] = "Moderation Queue";
+    int total = Model.PendingPosts.Count + Model.PendingReplies.Count;
+}
+
+<div class="container py-4">
+<h2 class="mb-1">Moderation Queue</h2>
+<p class="text-muted mb-4">@total item@(total != 1 ? "s" : "") awaiting review</p>
+
+@if (TempData["AdminMessage"] is string msg)
+{
+    <div class="alert alert-success">@msg</div>
+}
+
+@* Pending Posts *@
+<h5>Posts (@Model.PendingPosts.Count)</h5>
+
+@if (!Model.PendingPosts.Any())
+{
+    <p class="text-muted mb-4">No pending posts.</p>
+}
+else
+{
+    <div class="table-responsive mb-5">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Service / City</th>
+                    <th>Submitted</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var post in Model.PendingPosts)
+                {
+                    <tr>
+                        <td>
+                            <div class="fw-semibold">@post.Title</div>
+                            <small class="text-muted" style="white-space: pre-wrap">
+                                @(post.Body.Length > 200 ? post.Body[..200] + "…" : post.Body)
+                            </small>
+                        </td>
+                        <td>@post.AuthorName</td>
+                        <td>
+                            @post.ServiceType
+                            @if (!string.IsNullOrEmpty(post.City))
+                            { <br /><small>@post.City</small> }
+                        </td>
+                        <td><small>@post.CreatedAt.ToLocalTime().ToString("dd MMM HH:mm")</small></td>
+                        <td>
+                            <form asp-action="Approve" method="post" class="d-inline">
+                                <input type="hidden" name="contentType" value="@ContentType.Post" />
+                                <input type="hidden" name="id" value="@post.Id" />
+                                <button class="btn btn-sm btn-success">Approve</button>
+                            </form>
+                            <button class="btn btn-sm btn-danger ms-1"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#rejectModal"
+                                    data-content-type="@ContentType.Post"
+                                    data-id="@post.Id">
+                                Reject
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@* Pending Replies *@
+<h5>Replies (@Model.PendingReplies.Count)</h5>
+
+@if (!Model.PendingReplies.Any())
+{
+    <p class="text-muted">No pending replies.</p>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Post</th>
+                    <th>Reply text</th>
+                    <th>Author</th>
+                    <th>Submitted</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var reply in Model.PendingReplies)
+                {
+                    <tr>
+                        <td>
+                            <a asp-controller="Posts" asp-action="Details"
+                               asp-route-id="@reply.PostId" class="small">
+                                @reply.PostTitle
+                            </a>
+                        </td>
+                        <td>
+                            <small style="white-space: pre-wrap">
+                                @(reply.Body.Length > 200 ? reply.Body[..200] + "…" : reply.Body)
+                            </small>
+                        </td>
+                        <td>@reply.AuthorName</td>
+                        <td><small>@reply.CreatedAt.ToLocalTime().ToString("dd MMM HH:mm")</small></td>
+                        <td>
+                            <form asp-action="Approve" method="post" class="d-inline">
+                                <input type="hidden" name="contentType" value="@ContentType.Reply" />
+                                <input type="hidden" name="id" value="@reply.Id" />
+                                <button class="btn btn-sm btn-success">Approve</button>
+                            </form>
+                            <button class="btn btn-sm btn-danger ms-1"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#rejectModal"
+                                    data-content-type="@ContentType.Reply"
+                                    data-id="@reply.Id">
+                                Reject
+                            </button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@* Audit log link *@
+<div class="mt-4">
+    <a asp-action="Logs" class="btn btn-outline-secondary btn-sm">View Audit Log</a>
+</div>
+
+@* Reject modal *@
+<div class="modal fade" id="rejectModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="Reject" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title">Reject Content</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="contentType" id="modalContentType" />
+                    <input type="hidden" name="id" id="modalId" />
+                    <label class="form-label">Reason for rejection</label>
+                    <input name="reason" class="form-control"
+                           placeholder="e.g. Contains profanity" required />
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-danger">Confirm Reject</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</div>@* /container *@
+
+@section Scripts {
+<script>
+    document.getElementById('rejectModal').addEventListener('show.bs.modal', function (e) {
+        var btn = e.relatedTarget;
+        document.getElementById('modalContentType').value = btn.dataset.contentType;
+        document.getElementById('modalId').value = btn.dataset.id;
+    });
+</script>
+}

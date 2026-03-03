@@ -1,14 +1,14 @@
-# Frontida - Quick Start Guide
+# frontida4baby - Quick Start Guide
 
 ## ✅ Solution Created Successfully!
 
-Your Frontida caregiving platform solution has been created at: `C:\Develop\Frontida`
+Your frontida4baby caregiving platform solution has been created at: `C:\Develop\frontida4baby`
 
 ## 📁 Project Structure
 
 ```
-Frontida/
-├── Frontida.Web/                    # Main web application
+frontida4baby/
+├── frontida4baby.Web/                    # Main web application
 │   ├── Controllers/
 │   │   ├── AccountController.cs     # User authentication & registration
 │   │   ├── CaregiversController.cs  # Caregiver search & listing
@@ -32,7 +32,7 @@ Frontida/
 │   └── wwwroot/                     # Static files
 ├── README.md                        # Full project documentation
 ├── .gitignore                       # Git ignore file
-└── Frontida.sln                     # Solution file
+└── frontida4baby.sln                     # Solution file
 ```
 
 ## 🗄️ Database Entities
@@ -70,14 +70,14 @@ Frontida/
 Make sure SQL Server is running, then apply migrations:
 
 ```bash
-cd C:\Develop\Frontida\Frontida.Web
+cd C:\Develop\frontida4baby\frontida4baby.Web
 dotnet ef database update
 ```
 
 ### 2. Run the Application
 
 ```bash
-cd C:\Develop\Frontida\Frontida.Web
+cd C:\Develop\frontida4baby\frontida4baby.Web
 dotnet run
 ```
 
@@ -85,12 +85,12 @@ Then navigate to: `https://localhost:5001`
 
 ### 3. Customize Connection String
 
-Edit `Frontida.Web/appsettings.json` if needed:
+Edit `frontida4baby.Web/appsettings.json` if needed:
 
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=FrontidaDB;Trusted_Connection=True;TrustServerCertificate=True;"
+    "DefaultConnection": "Server=localhost;Database=frontida4babyDB;Trusted_Connection=True;TrustServerCertificate=True;"
   }
 }
 ```
@@ -166,16 +166,16 @@ Edit `Frontida.Web/appsettings.json` if needed:
 dotnet build
 
 # Run the application
-dotnet run --project Frontida.Web
+dotnet run --project frontida4baby.Web
 
 # Create a new migration
-dotnet ef migrations add MigrationName --project Frontida.Web
+dotnet ef migrations add MigrationName --project frontida4baby.Web
 
 # Apply migrations
-dotnet ef database update --project Frontida.Web
+dotnet ef database update --project frontida4baby.Web
 
 # Remove last migration
-dotnet ef migrations remove --project Frontida.Web
+dotnet ef migrations remove --project frontida4baby.Web
 
 # Restore packages
 dotnet restore
@@ -205,4 +205,4 @@ dotnet restore
 
 **Ready to start developing!** 🎉
 
-The foundation is set - now you can build out the views, enhance the controllers, and add business logic to make Frontida a complete caregiving platform.
+The foundation is set - now you can build out the views, enhance the controllers, and add business logic to make frontida4baby a complete caregiving platform.

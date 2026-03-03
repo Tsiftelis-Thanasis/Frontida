@@ -1,0 +1,70 @@
+@model List<frontida4baby.Web.Models.Entities.ApplicationUser>
+@using frontida4baby.Web.Models.Entities
+@{
+    ViewData["Title"] = "Διαχείριση Χρηστών";
+    int page = ViewBag.Page;
+    int total = ViewBag.Total;
+}
+
+<div class="container py-4">
+    <h2 class="mb-4"><i class="fas fa-users me-2"></i>Χρήστες (@total)</h2>
+
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Email</th>
+                    <th>Όνομα</th>
+                    <th>Πλάνο</th>
+                    <th>Φροντιστής</th>
+                    <th>Εγγραφή</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Email</td>
+                        <td>@user.FirstName @user.LastName</td>
+                        <td>
+                            @if (user.Subscription?.Plan == SubscriptionPlan.Paid)
+                            {
+                                <span class="badge bg-warning text-dark">Premium</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-secondary">Free</span>
+                            }
+                        </td>
+                        <td>
+                            @if (user.IsCaregiver)
+                            {
+                                <i class="fas fa-check text-success"></i>
+                            }
+                        </td>
+                        <td><small>@user.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy")</small></td>
+                        <td>
+                            <a asp-action="UserDetail" asp-route-id="@user.Id"
+                               class="btn btn-sm btn-outline-primary">Λεπτομέρειες</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    @if (total > 20)
+    {
+        <nav>
+            <ul class="pagination">
+                @for (int i = 1; i <= (int)Math.Ceiling(total / 20.0); i++)
+                {
+                    <li class="page-item @(i == page ? "active" : "")">
+                        <a class="page-link" asp-action="Users" asp-route-page="@i">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    }
+</div>

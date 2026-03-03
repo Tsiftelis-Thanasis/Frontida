@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+
+  <!-- Πλοήγηση -->
+  <data name="NavHome"         xml:space="preserve"><value>Αρχική</value></data>
+  <data name="NavFindHelp"     xml:space="preserve"><value>Βρες Βοήθεια</value></data>
+  <data name="NavBrowse"       xml:space="preserve"><value>Φροντιστές</value></data>
+  <data name="NavLogin"        xml:space="preserve"><value>Σύνδεση</value></data>
+  <data name="NavRegister"     xml:space="preserve"><value>Εγγραφή</value></data>
+  <data name="NavLogout"       xml:space="preserve"><value>Αποσύνδεση</value></data>
+  <data name="NavModeration"   xml:space="preserve"><value>Διαχείριση</value></data>
+
+  <!-- Hero -->
+  <data name="HeroTitle"       xml:space="preserve"><value>Βρείτε Αξιόπιστους Φροντιστές</value></data>
+  <data name="HeroSubtitle"    xml:space="preserve"><value>Συνδέουμε οικογένειες με επαληθευμένους επαγγελματίες σε όλη την Ελλάδα.</value></data>
+  <data name="HeroBtnSearch"   xml:space="preserve"><value>Αναζήτηση</value></data>
+  <data name="HeroSelectService" xml:space="preserve"><value>Τύπος υπηρεσίας</value></data>
+  <data name="HeroSelectCity"  xml:space="preserve"><value>Πόλη</value></data>
+
+  <!-- Υπηρεσίες -->
+  <data name="SvcTitle"              xml:space="preserve"><value>Οι Υπηρεσίες μας</value></data>
+  <data name="SvcSubtitle"           xml:space="preserve"><value>Σας συνδέουμε με επαγγελματίες για όλες τις ανάγκες φροντίδας.</value></data>
+  <data name="SvcChildcareTitle"     xml:space="preserve"><value>Παιδική Φροντίδα</value></data>
+  <data name="SvcChildcareDesc"      xml:space="preserve"><value>Νταντάδες, μπέιμπι σίτερ και au pair για τα παιδιά σας.</value></data>
+  <data name="SvcElderlyTitle"       xml:space="preserve"><value>Φροντίδα Ηλικιωμένων</value></data>
+  <data name="SvcElderlyDesc"        xml:space="preserve"><value>Φροντίδα με αγάπη για τα ηλικιωμένα αγαπημένα σας πρόσωπα.</value></data>
+  <data name="SvcTutoringTitle"      xml:space="preserve"><value>Ιδιαίτερα Μαθήματα</value></data>
+  <data name="SvcTutoringDesc"       xml:space="preserve"><value>Ακαδημαϊκή υποστήριξη από δημοτικό έως πανεπιστήμιο.</value></data>
+  <data name="SvcHousekeepingTitle"  xml:space="preserve"><value>Οικιακή Βοήθεια</value></data>
+  <data name="SvcHousekeepingDesc"   xml:space="preserve"><value>Επαγγελματικός καθαρισμός και διαχείριση σπιτιού.</value></data>
+  <data name="SvcPetTitle"           xml:space="preserve"><value>Φροντίδα Κατοικίδιων</value></data>
+  <data name="SvcPetDesc"            xml:space="preserve"><value>Περπάτημα σκύλου, φύλαξη και φροντίδα ζώων.</value></data>
+
+  <!-- Πώς λειτουργεί -->
+  <data name="HowTitle"        xml:space="preserve"><value>Πώς Λειτουργεί</value></data>
+  <data name="HowSubtitle"     xml:space="preserve"><value>Ξεκινήστε σε 3 απλά βήματα.</value></data>
+  <data name="HowStep1Title"   xml:space="preserve"><value>Δημοσιεύστε</value></data>
+  <data name="HowStep1Desc"    xml:space="preserve"><value>Περιγράψτε τι αναζητάτε και θα βρούμε την κατάλληλη αντιστοίχιση.</value></data>
+  <data name="HowStep2Title"   xml:space="preserve"><value>Περιηγηθείτε &amp; Επικοινωνήστε</value></data>
+  <data name="HowStep2Desc"    xml:space="preserve"><value>Δείτε προφίλ, διαβάστε κριτικές και επικοινωνήστε με φροντιστές.</value></data>
+  <data name="HowStep3Title"   xml:space="preserve"><value>Λάβετε Βοήθεια</value></data>
+  <data name="HowStep3Desc"    xml:space="preserve"><value>Κανονίστε και ξεκινήστε να λαμβάνετε ποιοτική φροντίδα αμέσως.</value></data>
+
+  <!-- Στατιστικά -->
+  <data name="Stat1Value"  xml:space="preserve"><value>5.000+</value></data>
+  <data name="Stat1Label"  xml:space="preserve"><value>Ευτυχισμένες Οικογένειες</value></data>
+  <data name="Stat2Value"  xml:space="preserve"><value>1.200+</value></data>
+  <data name="Stat2Label"  xml:space="preserve"><value>Επαληθευμένοι Φροντιστές</value></data>
+  <data name="Stat3Value"  xml:space="preserve"><value>4,8/5</value></data>
+  <data name="Stat3Label"  xml:space="preserve"><value>Μέση Βαθμολογία</value></data>
+
+  <!-- CTA -->
+  <data name="CtaFamilyTitle"     xml:space="preserve"><value>Χρειάζεστε Φροντιστή;</value></data>
+  <data name="CtaFamilyDesc"      xml:space="preserve"><value>Δημοσιεύστε το αίτημά σας και λάβετε απαντήσεις από ειδικούς.</value></data>
+  <data name="CtaFamilyBtn"       xml:space="preserve"><value>Δημοσιεύστε Αίτημα</value></data>
+  <data name="CtaCaregiverTitle"  xml:space="preserve"><value>Είστε Φροντιστής;</value></data>
+  <data name="CtaCaregiverDesc"   xml:space="preserve"><value>Δημιουργήστε προφίλ και συνδεθείτε με οικογένειες.</value></data>
+  <data name="CtaCaregiverBtn"    xml:space="preserve"><value>Εγγραφή ως Φροντιστής</value></data>
+
+  <!-- Εμπιστοσύνη -->
+  <data name="TrustTitle"         xml:space="preserve"><value>Γιατί να μας Επιλέξετε;</value></data>
+  <data name="TrustVerifiedTitle" xml:space="preserve"><value>Επαληθευμένα Προφίλ</value></data>
+  <data name="TrustVerifiedDesc"  xml:space="preserve"><value>Όλοι οι φροντιστές ελέγχονται για ταυτότητα και υπόβαθρο.</value></data>
+  <data name="TrustSafeTitle"     xml:space="preserve"><value>Ασφαλές Περιβάλλον</value></data>
+  <data name="TrustSafeDesc"      xml:space="preserve"><value>Όλο το περιεχόμενο ελέγχεται για ασφαλή κοινότητα.</value></data>
+  <data name="Trust24Title"       xml:space="preserve"><value>Υποστήριξη 24/7</value></data>
+  <data name="Trust24Desc"        xml:space="preserve"><value>Η ομάδα μας είναι διαθέσιμη ανά πάσα στιγμή.</value></data>
+
+  <!-- Footer -->
+  <data name="FtrTagline"   xml:space="preserve"><value>Συνδέουμε οικογένειες με φροντιστές σε όλη την Ελλάδα.</value></data>
+  <data name="FtrLinks"     xml:space="preserve"><value>Γρήγοροι Σύνδεσμοι</value></data>
+  <data name="FtrServices"  xml:space="preserve"><value>Υπηρεσίες</value></data>
+  <data name="FtrPrivacy"   xml:space="preserve"><value>Πολιτική Απορρήτου</value></data>
+  <data name="FtrCopyright" xml:space="preserve"><value>© 2026 frontida4baby. Όλα τα δικαιώματα διατηρούνται.</value></data>
+
+  <!-- Σύνδεση -->
+  <data name="LoginTitle"        xml:space="preserve"><value>Καλώς Ήρθατε</value></data>
+  <data name="LoginSubtitle"     xml:space="preserve"><value>Συνδεθείτε στον λογαριασμό σας</value></data>
+  <data name="LoginEmail"        xml:space="preserve"><value>Διεύθυνση Email</value></data>
+  <data name="LoginPassword"     xml:space="preserve"><value>Κωδικός πρόσβασης</value></data>
+  <data name="LoginRemember"     xml:space="preserve"><value>Να με θυμάσαι</value></data>
+  <data name="LoginBtn"          xml:space="preserve"><value>Σύνδεση</value></data>
+  <data name="LoginNoAccount"    xml:space="preserve"><value>Δεν έχετε λογαριασμό;</value></data>
+  <data name="LoginRegisterLink" xml:space="preserve"><value>Εγγραφείτε εδώ</value></data>
+
+  <!-- Εγγραφή -->
+  <data name="RegTitle"        xml:space="preserve"><value>Δημιουργία Λογαριασμού</value></data>
+  <data name="RegSubtitle"     xml:space="preserve"><value>Εγγραφείτε στο frontida4baby σήμερα</value></data>
+  <data name="RegFirstName"    xml:space="preserve"><value>Όνομα</value></data>
+  <data name="RegLastName"     xml:space="preserve"><value>Επώνυμο</value></data>
+  <data name="RegEmail"        xml:space="preserve"><value>Διεύθυνση Email</value></data>
+  <data name="RegPassword"     xml:space="preserve"><value>Κωδικός πρόσβασης</value></data>
+  <data name="RegConfirm"      xml:space="preserve"><value>Επιβεβαίωση Κωδικού</value></data>
+  <data name="RegIsCaregiver"  xml:space="preserve"><value>Είμαι φροντιστής που προσφέρει υπηρεσίες</value></data>
+  <data name="RegIsCaregiverHint" xml:space="preserve"><value>Αφήστε χωρίς επιλογή αν αναζητάτε υπηρεσίες φροντίδας.</value></data>
+  <data name="RegBtn"          xml:space="preserve"><value>Δημιουργία Λογαριασμού</value></data>
+  <data name="RegHaveAccount"  xml:space="preserve"><value>Έχετε ήδη λογαριασμό;</value></data>
+  <data name="RegLoginLink"    xml:space="preserve"><value>Συνδεθείτε εδώ</value></data>
+
+  <!-- Κοινωνική σύνδεση -->
+  <data name="SocialOrDivider"        xml:space="preserve"><value>ή</value></data>
+  <data name="ExternalConfirmTitle"   xml:space="preserve"><value>Ολοκλήρωση Εγγραφής</value></data>
+  <data name="ExternalConfirmSubtitle" xml:space="preserve"><value>Παρακαλώ εισάγετε τη διεύθυνση email σας για να ολοκληρώσετε τη δημιουργία του λογαριασμού σας.</value></data>
+
+  <!-- Σελίδα φροντιστών -->
+  <data name="CaregiverTitle"    xml:space="preserve"><value>Βρείτε Φροντιστές</value></data>
+  <data name="CaregiverSubtitle" xml:space="preserve"><value>Βρείτε τον ιδανικό επαγγελματία για τις ανάγκες σας.</value></data>
+  <data name="FilterService"     xml:space="preserve"><value>Τύπος Υπηρεσίας</value></data>
+  <data name="FilterCity"        xml:space="preserve"><value>Πόλη</value></data>
+  <data name="FilterRate"        xml:space="preserve"><value>Μέγ. ωριαία αμοιβή (€)</value></data>
+  <data name="FilterVerified"    xml:space="preserve"><value>Μόνο επαληθευμένοι</value></data>
+  <data name="FilterBtn"         xml:space="preserve"><value>Εφαρμογή Φίλτρων</value></data>
+  <data name="FilterClear"       xml:space="preserve"><value>Καθαρισμός</value></data>
+  <data name="CaregiverEmpty"    xml:space="preserve"><value>Δεν βρέθηκαν φροντιστές με αυτά τα κριτήρια.</value></data>
+  <data name="CaregiverHourly"   xml:space="preserve"><value>/ώρα</value></data>
+  <data name="CaregiverReviews"  xml:space="preserve"><value>κριτικές</value></data>
+
+  <!-- Πίνακας αναρτήσεων -->
+  <data name="PostBoardTitle"    xml:space="preserve"><value>Κοινοτικό Forum</value></data>
+  <data name="PostBoardSubtitle" xml:space="preserve"><value>Δημοσιεύστε αίτημα ή δείτε τι αναζητούν άλλοι.</value></data>
+</root>

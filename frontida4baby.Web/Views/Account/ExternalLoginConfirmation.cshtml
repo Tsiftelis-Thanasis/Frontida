@@ -1,0 +1,44 @@
+@model frontida4baby.Web.Models.ViewModels.ExternalLoginViewModel
+@{
+    ViewData["Title"] = L["ExternalConfirmTitle"].Value;
+}
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="text-center mb-4">
+            <i class="fa-solid fa-envelope fa-2x text-primary mb-3 d-block"></i>
+            <h2>@L["ExternalConfirmTitle"]</h2>
+            <p class="subtitle">@L["ExternalConfirmSubtitle"]</p>
+        </div>
+
+        <form asp-action="ExternalLoginConfirmation" asp-route-returnUrl="@ViewData["ReturnUrl"]" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger small"></div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-6">
+                    <label class="form-label">@L["RegFirstName"]</label>
+                    <input asp-for="FirstName" class="form-control" autocomplete="given-name" />
+                    <span asp-validation-for="FirstName" class="text-danger small"></span>
+                </div>
+                <div class="col-6">
+                    <label class="form-label">@L["RegLastName"]</label>
+                    <input asp-for="LastName" class="form-control" autocomplete="family-name" />
+                    <span asp-validation-for="LastName" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">@L["LoginEmail"]</label>
+                <input asp-for="Email" class="form-control" type="email" autocomplete="email"
+                       placeholder="your@email.com" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <button type="submit" class="btn-auth">@L["RegBtn"]</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

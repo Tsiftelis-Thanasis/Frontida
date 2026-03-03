@@ -167,7 +167,7 @@ jobs:
           cat > Frontida/appsettings.json << 'EOF'
           {
             "ConnectionStrings": {
-              "DefaultConnection": "Server=localhost;Database=FrontidaDB;Trusted_Connection=True;TrustServerCertificate=True;"
+              "DefaultConnection": "Server=localhost;Database=frontida4babyDB;Trusted_Connection=True;TrustServerCertificate=True;"
             },
             "Logging": {
               "LogLevel": {
@@ -185,7 +185,7 @@ jobs:
           cat > Frontida/appsettings.Development.json.example << 'EOF'
           {
             "ConnectionStrings": {
-              "DefaultConnection": "Server=localhost;Database=FrontidaDB;Trusted_Connection=True;TrustServerCertificate=True;"
+              "DefaultConnection": "Server=localhost;Database=frontida4babyDB;Trusted_Connection=True;TrustServerCertificate=True;"
             },
             "Logging": {
               "LogLevel": {

@@ -1,0 +1,42 @@
+using System.ComponentModel.DataAnnotations;
+using frontida4baby.Web.Models.Entities;
+
+namespace frontida4baby.Web.Models.ViewModels;
+
+public class PostDetailViewModel
+{
+    public int          PostId            { get; set; }
+    public string       Title             { get; set; } = string.Empty;
+    public string       Body              { get; set; } = string.Empty;
+    public string       AuthorName        { get; set; } = string.Empty;
+    public string       AuthorId          { get; set; } = string.Empty;
+    public ServiceType? ServiceType       { get; set; }
+    public string?      City              { get; set; }
+    public PostStatus   Status            { get; set; }
+    public DateTime     CreatedAt         { get; set; }
+    public DateTime?    EditedAt          { get; set; }
+    public int          ReactionCount     { get; set; }
+    public bool         CurrentUserLiked  { get; set; }
+    public bool         CurrentUserSaved  { get; set; }
+    public bool         CanEdit           { get; set; }
+
+    public List<ReplyItemViewModel> Replies { get; set; } = new();
+
+    // Inline reply form
+    [Required(ErrorMessage = "Reply text is required.")]
+    [StringLength(2000, MinimumLength = 5,
+        ErrorMessage = "Reply must be between 5 and 2000 characters.")]
+    [Display(Name = "Your reply")]
+    public string ReplyBody { get; set; } = string.Empty;
+}
+
+public class ReplyItemViewModel
+{
+    public int       Id         { get; set; }
+    public string    AuthorName { get; set; } = string.Empty;
+    public string    AuthorId   { get; set; } = string.Empty;
+    public string    Body       { get; set; } = string.Empty;
+    public DateTime  CreatedAt  { get; set; }
+    public DateTime? EditedAt   { get; set; }
+    public bool      CanEdit    { get; set; }
+}

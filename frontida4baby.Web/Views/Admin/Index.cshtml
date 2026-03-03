@@ -1,0 +1,69 @@
+@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+
+<div class="container py-4">
+    <h2 class="mb-4"><i class="fas fa-shield-alt me-2 text-danger"></i>Admin Dashboard</h2>
+
+    <div class="row g-3 mb-4">
+        <div class="col-sm-6 col-xl-3">
+            <div class="card text-white bg-primary h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Σύνολο Χρηστών</h6>
+                    <div class="display-5 fw-bold">@ViewBag.TotalUsers</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card text-white bg-success h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Αγγελίες Σήμερα</h6>
+                    <div class="display-5 fw-bold">@ViewBag.PostsToday</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card text-white bg-warning h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Εκκρεμής Εποπτεία</h6>
+                    <div class="display-5 fw-bold">@ViewBag.PendingMod</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-xl-3">
+            <div class="card text-white bg-danger h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Σφάλματα (24h)</h6>
+                    <div class="display-5 fw-bold">@ViewBag.ErrorsRecent</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <a asp-action="Users" class="card text-decoration-none h-100">
+                <div class="card-body text-center py-4">
+                    <i class="fas fa-users fa-2x text-primary mb-2 d-block"></i>
+                    <strong>Χρήστες</strong>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a asp-action="Posts" class="card text-decoration-none h-100">
+                <div class="card-body text-center py-4">
+                    <i class="fas fa-file-alt fa-2x text-primary mb-2 d-block"></i>
+                    <strong>Αγγελίες</strong>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a asp-action="Logs" class="card text-decoration-none h-100">
+                <div class="card-body text-center py-4">
+                    <i class="fas fa-list-alt fa-2x text-primary mb-2 d-block"></i>
+                    <strong>Logs</strong>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>

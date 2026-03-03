@@ -1,0 +1,101 @@
+@model frontida4baby.Web.Models.ViewModels.RegisterViewModel
+@using Microsoft.AspNetCore.Authentication
+@{
+    ViewData["Title"] = L["RegTitle"].Value;
+    var providers = ViewData["ExternalProviders"] as List<AuthenticationScheme> ?? new();
+}
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="text-center mb-4">
+            <i class="fa-solid fa-user-plus fa-2x text-primary mb-3 d-block"></i>
+            <h2>@L["RegTitle"]</h2>
+            <p class="subtitle">@L["RegSubtitle"]</p>
+        </div>
+
+        @if (providers.Count > 0)
+        {
+            <form asp-action="ExternalLogin" method="post">
+                <div class="d-grid gap-2 mb-2">
+                    @foreach (var p in providers)
+                    {
+                        var (iconClass, btnClass) = p.Name switch
+                        {
+                            "Google"          => ("fa-brands fa-google",    "btn-google"),
+                            "Facebook"        => ("fa-brands fa-facebook-f","btn-facebook"),
+                            "Microsoft"       => ("fa-brands fa-microsoft", "btn-microsoft"),
+                            "Apple"           => ("fa-brands fa-apple",     "btn-apple"),
+                            _                 => ("fa-solid fa-key",        "btn-outline-secondary")
+                        };
+                        <button type="submit" name="provider" value="@p.Name"
+                                class="btn btn-social @btnClass w-100">
+                            <i class="@iconClass"></i>
+                            @p.DisplayName
+                        </button>
+                    }
+                </div>
+            </form>
+            <div class="social-divider">@L["SocialOrDivider"]</div>
+        }
+
+        <form asp-action="Register" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger small"></div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-6">
+                    <label class="form-label">@L["RegFirstName"]</label>
+                    <input asp-for="FirstName" class="form-control" autocomplete="given-name" />
+                    <span asp-validation-for="FirstName" class="text-danger small"></span>
+                </div>
+                <div class="col-6">
+                    <label class="form-label">@L["RegLastName"]</label>
+                    <input asp-for="LastName" class="form-control" autocomplete="family-name" />
+                    <span asp-validation-for="LastName" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">@L["RegEmail"]</label>
+                <input asp-for="Email" class="form-control" type="email" autocomplete="email"
+                       placeholder="your@email.com" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">@L["RegPassword"]</label>
+                <input asp-for="Password" class="form-control" type="password"
+                       autocomplete="new-password" placeholder="••••••••" />
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">@L["RegConfirm"]</label>
+                <input asp-for="ConfirmPassword" class="form-control" type="password"
+                       autocomplete="new-password" placeholder="••••••••" />
+                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <div class="form-check p-3 rounded-xl border" style="background:var(--c-light)">
+                    <input asp-for="IsCaregiver" class="form-check-input" />
+                    <label asp-for="IsCaregiver" class="form-check-label fw-bold">
+                        <i class="fa-solid fa-user-nurse me-1 text-primary"></i>@L["RegIsCaregiver"]
+                    </label>
+                    <small class="d-block mt-1" style="color:var(--c-muted)">@L["RegIsCaregiverHint"]</small>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-auth">@L["RegBtn"]</button>
+        </form>
+
+        <p class="text-center mt-4 mb-0 small" style="color:var(--c-muted)">
+            @L["RegHaveAccount"]
+            <a asp-controller="Account" asp-action="Login"
+               class="fw-bold" style="color:var(--c-primary)">@L["RegLoginLink"]</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

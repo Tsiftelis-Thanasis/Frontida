@@ -1,7 +1,7 @@
-# Frontida - Project Context for Claude
+# frontida4baby - Project Context for Claude
 
 ## Project Overview
-Frontida (Φροντίδα - Greek for "care") is a simplified caregiving platform that connects families with verified caregivers in Greece. This is a streamlined alternative to platforms like Nannuka, focusing on simplicity and core functionality.
+frontida4baby (Φροντίδα - Greek for "care") is a simplified caregiving platform that connects families with verified caregivers in Greece. This is a streamlined alternative to platforms like Nannuka, focusing on simplicity and core functionality.
 
 ## Technical Stack
 - **Framework**: .NET 10
@@ -106,7 +106,7 @@ Frontida (Φροντίδα - Greek for "care") is a simplified caregiving platfo
 
 ## Project Structure
 ```
-Frontida/
+frontida4baby/
 ├── Controllers/
 │   ├── HomeController.cs
 │   ├── AccountController.cs

@@ -1,0 +1,169 @@
+@model frontida4baby.Web.Models.ViewModels.CaregiverSearchViewModel
+@using frontida4baby.Web.Models.Entities
+@{
+    ViewData["Title"] = L["CaregiverTitle"].Value;
+}
+
+@* ─── Page Header ─────────────────────────────────────────────────────────── *@
+<div class="page-header">
+    <div class="container">
+        <h1>@L["CaregiverTitle"]</h1>
+        <p>@L["CaregiverSubtitle"]</p>
+    </div>
+</div>
+
+@* ─── Content ─────────────────────────────────────────────────────────────── *@
+<div class="container pb-5">
+    <div class="row g-4">
+
+        @* Filter sidebar *@
+        <div class="col-lg-3">
+            <div class="filter-card">
+                <h6><i class="fa-solid fa-sliders me-2 text-primary"></i>@L["FilterService"]</h6>
+
+                <form method="get">
+                    <div class="mb-3">
+                        <select name="ServiceType" class="form-select form-select-sm">
+                            <option value="">— @L["FilterService"] —</option>
+                            @foreach (var svc in Enum.GetValues<ServiceType>())
+                            {
+                                var key = svc switch
+                                {
+                                    ServiceType.Childcare    => "SvcChildcareTitle",
+                                    ServiceType.ElderlyCare  => "SvcElderlyTitle",
+                                    ServiceType.Tutoring     => "SvcTutoringTitle",
+                                    ServiceType.Housekeeping => "SvcHousekeepingTitle",
+                                    ServiceType.PetCare      => "SvcPetTitle",
+                                    _                        => svc.ToString()
+                                };
+                                var isSelected = Model.ServiceType == svc;
+                                if (isSelected)
+                                {
+                                    <option value="@svc" selected>@L[key]</option>
+                                }
+                                else
+                                {
+                                    <option value="@svc">@L[key]</option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small">@L["FilterCity"]</label>
+                        <input name="City" value="@Model.City" class="form-control form-control-sm"
+                               placeholder="@L["FilterCity"]" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small">@L["FilterRate"]</label>
+                        <input name="MaxHourlyRate" value="@Model.MaxHourlyRate"
+                               class="form-control form-control-sm" type="number" min="0" step="1" />
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-check">
+                            <input name="VerifiedOnly" value="true" type="checkbox"
+                                   class="form-check-input" id="verifiedOnly"
+                                   @(Model.VerifiedOnly == true ? "checked" : "") />
+                            <label for="verifiedOnly" class="form-check-label small">
+                                @L["FilterVerified"]
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100 btn-sm">@L["FilterBtn"]</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary w-100 btn-sm mt-2">@L["FilterClear"]</a>
+                </form>
+            </div>
+        </div>
+
+        @* Results grid *@
+        <div class="col-lg-9">
+            @if (!Model.Caregivers.Any())
+            {
+                <div class="text-center py-5">
+                    <i class="fa-solid fa-user-slash fa-3x mb-3" style="color:var(--c-border)"></i>
+                    <p class="text-muted mb-0">@L["CaregiverEmpty"]</p>
+                </div>
+            }
+            else
+            {
+                <div class="row g-3">
+                    @foreach (var c in Model.Caregivers)
+                    {
+                        <div class="col-sm-6 col-xl-4">
+                            <div class="card caregiver-card h-100">
+                                <div class="card-body p-3">
+                                    <div class="d-flex align-items-start gap-3 mb-3">
+                                        @if (!string.IsNullOrEmpty(c.ProfileImageUrl))
+                                        {
+                                            <img src="@c.ProfileImageUrl" class="caregiver-avatar" alt="@c.FullName" />
+                                        }
+                                        else
+                                        {
+                                            <div class="caregiver-initials">
+                                                @(c.FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                                                    .Take(2)
+                                                    .Aggregate("", (s, w) => s + w[0]))
+                                            </div>
+                                        }
+                                        <div class="flex-grow-1 min-w-0">
+                                            <div class="fw-bold text-truncate">@c.FullName</div>
+                                            @if (!string.IsNullOrEmpty(c.City))
+                                            {
+                                                <small class="text-muted">
+                                                    <i class="fa-solid fa-location-dot me-1"></i>@c.City
+                                                </small>
+                                            }
+                                            @if (c.IsVerified)
+                                            {
+                                                <div class="mt-1">
+                                                    <span class="badge-verified">
+                                                        <i class="fa-solid fa-circle-check"></i>@L["TrustVerifiedTitle"]
+                                                    </span>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+
+                                    @if (c.Services.Any())
+                                    {
+                                        <div class="d-flex flex-wrap gap-1 mb-3">
+                                            @foreach (var svc in c.Services.Take(3))
+                                            {
+                                                <span class="service-badge">@svc</span>
+                                            }
+                                        </div>
+                                    }
+
+                                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                                        @if (c.HourlyRate.HasValue)
+                                        {
+                                            <span class="fw-bold text-primary">
+                                                €@c.HourlyRate
+                                                <small class="fw-normal text-muted">@L["CaregiverHourly"]</small>
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span></span>
+                                        }
+                                        @if (c.AverageRating > 0)
+                                        {
+                                            <span class="rating-stars small">
+                                                <i class="fa-solid fa-star"></i>
+                                                @c.AverageRating.ToString("0.1")
+                                                <span class="text-muted">(@c.ReviewCount @L["CaregiverReviews"])</span>
+                                            </span>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>

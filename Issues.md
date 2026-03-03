@@ -1,4 +1,4 @@
-# Frontida Development Tasks - GitHub Issues
+# frontida4baby Development Tasks - GitHub Issues
 
 Copy each task below as a separate GitHub Issue. Tag with appropriate labels: `enhancement`, `bug`, `documentation`, `setup`, `database`, `backend`, `frontend`, `security`.
 
@@ -10,7 +10,7 @@ Copy each task below as a separate GitHub Issue. Tag with appropriate labels: `e
 **Labels:** `setup`, `enhancement`
 
 **Description:**
-Set up the initial .NET 10 MVC project structure for Frontida.
+Set up the initial .NET 10 MVC project structure for frontida4baby.
 
 **Tasks:**
 - [ ] Create new .NET 10 MVC project
@@ -920,4 +920,4 @@ Write user-facing documentation.
 4. Phase 4 (Controllers) - Issues #16-22
 5. Continue with remaining phases
 
-Good luck with your Frontida development! 🏥
+Good luck with your frontida4baby development! 🏥

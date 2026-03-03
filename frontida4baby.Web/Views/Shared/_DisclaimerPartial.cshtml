@@ -1,0 +1,39 @@
+<div id="disclaimer-banner" class="disclaimer-banner" style="display:none;">
+    <div class="container d-flex align-items-center justify-content-between py-2">
+        <div class="d-flex align-items-center gap-2">
+            <i class="fas fa-robot text-primary"></i>
+            <small>
+                Η πλατφόρμα δεν ευθύνεται για αλληλεπιδράσεις μεταξύ χρηστών.
+                Το περιεχόμενο εποπτεύεται από <strong>Claude AI</strong>.
+                <a href="/disclaimer" class="text-primary ms-1">Μάθετε περισσότερα</a>
+            </small>
+        </div>
+        <button type="button" class="btn-close btn-close-sm ms-3" id="disclaimer-close" aria-label="Κλείσιμο"></button>
+    </div>
+</div>
+
+<style>
+.disclaimer-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    z-index: 1030;
+}
+</style>
+
+<script>
+(function () {
+    var banner = document.getElementById('disclaimer-banner');
+    var closeBtn = document.getElementById('disclaimer-close');
+    if (!localStorage.getItem('disclaimerDismissed')) {
+        banner.style.display = '';
+    }
+    closeBtn.addEventListener('click', function () {
+        banner.style.display = 'none';
+        localStorage.setItem('disclaimerDismissed', '1');
+    });
+})();
+</script>

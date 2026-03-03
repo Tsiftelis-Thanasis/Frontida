@@ -1,0 +1,64 @@
+@model List<frontida4baby.Web.Models.Entities.AppLog>
+@using frontida4baby.Web.Models.Entities
+@{
+    ViewData["Title"] = "Application Logs";
+    int page = ViewBag.Page;
+    int total = ViewBag.Total;
+    var level = ViewBag.Level as AppLogLevel?;
+}
+
+<div class="container py-4">
+    <h2 class="mb-4"><i class="fas fa-list-alt me-2"></i>Application Logs (@total)</h2>
+
+    <form method="get" asp-action="Logs" class="row g-2 mb-4">
+        <div class="col-auto">
+            <select name="level" class="form-select form-select-sm">
+                <option value="">Όλα τα επίπεδα</option>
+                <option value="@AppLogLevel.Info" selected="@(level == AppLogLevel.Info)">Info</option>
+                <option value="@AppLogLevel.Warning" selected="@(level == AppLogLevel.Warning)">Warning</option>
+                <option value="@AppLogLevel.Error" selected="@(level == AppLogLevel.Error)">Error</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <input type="date" name="dateFrom" value="@ViewBag.DateFrom" class="form-control form-control-sm" />
+        </div>
+        <div class="col-auto">
+            <input type="date" name="dateTo" value="@ViewBag.DateTo" class="form-control form-control-sm" />
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-sm btn-primary">Φίλτρο</button>
+            <a asp-action="Logs" class="btn btn-sm btn-outline-secondary ms-1">Καθαρισμός</a>
+        </div>
+    </form>
+
+    <div class="table-responsive">
+        <table class="table table-sm table-hover">
+            <thead class="table-light">
+                <tr>
+                    <th>Επίπεδο</th>
+                    <th>Κατηγορία</th>
+                    <th>Μήνυμα</th>
+                    <th>Path</th>
+                    <th>Ημερομηνία</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var log in Model)
+                {
+                    <tr>
+                        <td>
+                            <span class="badge @(log.Level == AppLogLevel.Error ? "bg-danger" :
+                                                  log.Level == AppLogLevel.Warning ? "bg-warning text-dark" : "bg-info text-dark")">
+                                @log.Level
+                            </span>
+                        </td>
+                        <td><small class="text-muted">@log.Category</small></td>
+                        <td class="text-truncate" style="max-width:300px" title="@log.Message">@log.Message</td>
+                        <td><small class="text-muted">@log.RequestPath</small></td>
+                        <td><small>@log.CreatedAt.ToLocalTime().ToString("dd/MM/yy HH:mm")</small></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

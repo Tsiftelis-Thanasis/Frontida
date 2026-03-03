@@ -1,0 +1,70 @@
+@model frontida4baby.Web.Models.Entities.ApplicationUser
+@using frontida4baby.Web.Models.Entities
+@{
+    ViewData["Title"] = $"Χρήστης: {Model.Email}";
+    var roles = ViewBag.Roles as IList<string> ?? new List<string>();
+}
+
+<div class="container py-4">
+    <a asp-action="Users" class="btn btn-outline-secondary btn-sm mb-3">← Χρήστες</a>
+    <h2 class="mb-4">@Model.FirstName @Model.LastName</h2>
+
+    @if (TempData["AdminMsg"] != null)
+    {
+        <div class="alert alert-success">@TempData["AdminMsg"]</div>
+    }
+
+    <div class="row g-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Στοιχεία Χρήστη</div>
+                <div class="card-body">
+                    <p><strong>Email:</strong> @Model.Email</p>
+                    <p><strong>Πόλη:</strong> @(Model.City ?? "-")</p>
+                    <p><strong>Φροντιστής:</strong> @(Model.IsCaregiver ? "Ναι" : "Όχι")</p>
+                    <p><strong>Ρόλοι:</strong> @string.Join(", ", roles)</p>
+                    <p><strong>Εγγραφή:</strong> @Model.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">Συνδρομή</div>
+                <div class="card-body">
+                    <p>
+                        <strong>Τρέχον Πλάνο:</strong>
+                        <span class="badge @(Model.Subscription?.Plan == SubscriptionPlan.Paid ? "bg-warning text-dark" : "bg-secondary")">
+                            @(Model.Subscription?.Plan.ToString() ?? "Free")
+                        </span>
+                    </p>
+                    <p><strong>Status:</strong> @(Model.Subscription?.Status.ToString() ?? "-")</p>
+
+                    <form asp-action="SetPlan" asp-route-id="@Model.Id" method="post" class="d-flex gap-2 mt-3">
+                        @Html.AntiForgeryToken()
+                        <select name="plan" class="form-select form-select-sm">
+                            <option value="@SubscriptionPlan.Free">Free</option>
+                            <option value="@SubscriptionPlan.Paid">Paid</option>
+                        </select>
+                        <button type="submit" class="btn btn-sm btn-primary">Αλλαγή</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <h5>Αγγελίες (@Model.Posts.Count)</h5>
+        <div class="list-group">
+            @foreach (var post in Model.Posts.OrderByDescending(p => p.CreatedAt).Take(10))
+            {
+                <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.Id"
+                   class="list-group-item list-group-item-action">
+                    @post.Title
+                    <span class="badge bg-secondary ms-1">@post.ModerationStatus</span>
+                    <small class="text-muted float-end">@post.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy")</small>
+                </a>
+            }
+        </div>
+    </div>
+</div>

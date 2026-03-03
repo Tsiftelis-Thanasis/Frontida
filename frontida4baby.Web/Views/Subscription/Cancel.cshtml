@@ -1,0 +1,19 @@
+@{
+    ViewData["Title"] = "Ακύρωση Συνδρομής";
+}
+
+<div class="container py-5 text-center">
+    <div class="mb-4">
+        <i class="fas fa-times-circle text-secondary" style="font-size: 4rem;"></i>
+    </div>
+    <h1 class="display-5 fw-bold">Η αγορά ακυρώθηκε</h1>
+    <p class="lead mt-3 text-muted">Δεν έγινε χρέωση. Μπορείτε να αναβαθμίσετε οποιαδήποτε στιγμή.</p>
+    <div class="mt-4">
+        <a asp-controller="Subscription" asp-action="Index" class="btn btn-primary me-2">
+            <i class="fas fa-crown me-2"></i>Δείτε τα Πλάνα
+        </a>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">
+            <i class="fas fa-home me-2"></i>Αρχική
+        </a>
+    </div>
+</div>

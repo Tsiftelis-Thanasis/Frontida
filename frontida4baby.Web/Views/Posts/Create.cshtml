@@ -1,0 +1,61 @@
+@model frontida4baby.Web.Models.ViewModels.CreatePostViewModel
+@using frontida4baby.Web.Models.Entities
+@{
+    ViewData["Title"] = "Post a Request";
+}
+
+<div class="container py-5">
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <h2 class="mb-3">Post a Caregiving Request</h2>
+
+        <div class="alert alert-warning" role="alert">
+            <strong>Community Policy</strong><br />
+            All posts are automatically reviewed before publication. Content containing
+            profanity, threats, hate speech, or illegal offers will be <strong>blocked</strong>.
+            Repeated violations may result in account suspension. Keep it respectful.
+        </div>
+
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label"></label>
+                <input asp-for="Title" class="form-control"
+                       placeholder="e.g. Looking for a babysitter in Athens" />
+                <span asp-validation-for="Title" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Body" class="form-label"></label>
+                <textarea asp-for="Body" class="form-control" rows="6"
+                          placeholder="Describe what you need, schedule, any requirements…"></textarea>
+                <span asp-validation-for="Body" class="text-danger small"></span>
+            </div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-sm-6">
+                    <label asp-for="ServiceType" class="form-label"></label>
+                    <select asp-for="ServiceType" class="form-select"
+                            asp-items="Html.GetEnumSelectList<ServiceType>()">
+                        <option value="">-- Select (optional) --</option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                    <label asp-for="City" class="form-label"></label>
+                    <input asp-for="City" class="form-control" placeholder="Athens" />
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Publish Request</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+</div>@* /container *@
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

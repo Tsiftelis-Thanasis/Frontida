@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>2.0</value></resheader>
+
+  <!-- Navigation -->
+  <data name="NavHome"         xml:space="preserve"><value>Home</value></data>
+  <data name="NavFindHelp"     xml:space="preserve"><value>Find Help</value></data>
+  <data name="NavBrowse"       xml:space="preserve"><value>Browse Caregivers</value></data>
+  <data name="NavLogin"        xml:space="preserve"><value>Log in</value></data>
+  <data name="NavRegister"     xml:space="preserve"><value>Register</value></data>
+  <data name="NavLogout"       xml:space="preserve"><value>Log out</value></data>
+  <data name="NavModeration"   xml:space="preserve"><value>Moderation</value></data>
+
+  <!-- Hero -->
+  <data name="HeroTitle"       xml:space="preserve"><value>Find Trusted Caregivers</value></data>
+  <data name="HeroSubtitle"    xml:space="preserve"><value>Connect with verified, caring professionals across Greece.</value></data>
+  <data name="HeroBtnSearch"   xml:space="preserve"><value>Search</value></data>
+  <data name="HeroSelectService" xml:space="preserve"><value>Service type</value></data>
+  <data name="HeroSelectCity"  xml:space="preserve"><value>City</value></data>
+
+  <!-- Services -->
+  <data name="SvcTitle"              xml:space="preserve"><value>Our Services</value></data>
+  <data name="SvcSubtitle"           xml:space="preserve"><value>We connect you with professionals for all your care needs.</value></data>
+  <data name="SvcChildcareTitle"     xml:space="preserve"><value>Childcare</value></data>
+  <data name="SvcChildcareDesc"      xml:space="preserve"><value>Nannies, babysitters and au pairs for your children.</value></data>
+  <data name="SvcElderlyTitle"       xml:space="preserve"><value>Elderly Care</value></data>
+  <data name="SvcElderlyDesc"        xml:space="preserve"><value>Compassionate support for your elderly loved ones.</value></data>
+  <data name="SvcTutoringTitle"      xml:space="preserve"><value>Tutoring</value></data>
+  <data name="SvcTutoringDesc"       xml:space="preserve"><value>Academic support from primary school to university.</value></data>
+  <data name="SvcHousekeepingTitle"  xml:space="preserve"><value>Housekeeping</value></data>
+  <data name="SvcHousekeepingDesc"   xml:space="preserve"><value>Professional home cleaning and household management.</value></data>
+  <data name="SvcPetTitle"           xml:space="preserve"><value>Pet Care</value></data>
+  <data name="SvcPetDesc"            xml:space="preserve"><value>Dog walking, pet sitting and animal care.</value></data>
+
+  <!-- How it works -->
+  <data name="HowTitle"        xml:space="preserve"><value>How It Works</value></data>
+  <data name="HowSubtitle"     xml:space="preserve"><value>Get started in 3 simple steps.</value></data>
+  <data name="HowStep1Title"   xml:space="preserve"><value>Post Your Need</value></data>
+  <data name="HowStep1Desc"    xml:space="preserve"><value>Describe what you are looking for and we will find the right match.</value></data>
+  <data name="HowStep2Title"   xml:space="preserve"><value>Browse &amp; Contact</value></data>
+  <data name="HowStep2Desc"    xml:space="preserve"><value>Review profiles, read reviews and reach out to caregivers.</value></data>
+  <data name="HowStep3Title"   xml:space="preserve"><value>Get Help</value></data>
+  <data name="HowStep3Desc"    xml:space="preserve"><value>Schedule and start receiving quality care right away.</value></data>
+
+  <!-- Stats -->
+  <data name="Stat1Value"  xml:space="preserve"><value>5,000+</value></data>
+  <data name="Stat1Label"  xml:space="preserve"><value>Happy Families</value></data>
+  <data name="Stat2Value"  xml:space="preserve"><value>1,200+</value></data>
+  <data name="Stat2Label"  xml:space="preserve"><value>Verified Caregivers</value></data>
+  <data name="Stat3Value"  xml:space="preserve"><value>4.8/5</value></data>
+  <data name="Stat3Label"  xml:space="preserve"><value>Average Rating</value></data>
+
+  <!-- CTA -->
+  <data name="CtaFamilyTitle"     xml:space="preserve"><value>Need a Caregiver?</value></data>
+  <data name="CtaFamilyDesc"      xml:space="preserve"><value>Post your request and receive responses from qualified professionals.</value></data>
+  <data name="CtaFamilyBtn"       xml:space="preserve"><value>Post a Request</value></data>
+  <data name="CtaCaregiverTitle"  xml:space="preserve"><value>Are You a Caregiver?</value></data>
+  <data name="CtaCaregiverDesc"   xml:space="preserve"><value>Create a profile and connect with families who need your skills.</value></data>
+  <data name="CtaCaregiverBtn"    xml:space="preserve"><value>Join as Caregiver</value></data>
+
+  <!-- Trust -->
+  <data name="TrustTitle"         xml:space="preserve"><value>Why Choose Us?</value></data>
+  <data name="TrustVerifiedTitle" xml:space="preserve"><value>Verified Profiles</value></data>
+  <data name="TrustVerifiedDesc"  xml:space="preserve"><value>All caregivers go through an identity and background check.</value></data>
+  <data name="TrustSafeTitle"     xml:space="preserve"><value>Safe &amp; Secure</value></data>
+  <data name="TrustSafeDesc"      xml:space="preserve"><value>All content is moderated to maintain a safe community.</value></data>
+  <data name="Trust24Title"       xml:space="preserve"><value>24/7 Support</value></data>
+  <data name="Trust24Desc"        xml:space="preserve"><value>Our team is available around the clock to help you.</value></data>
+
+  <!-- Footer -->
+  <data name="FtrTagline"   xml:space="preserve"><value>Connecting families with caregivers across Greece.</value></data>
+  <data name="FtrLinks"     xml:space="preserve"><value>Quick Links</value></data>
+  <data name="FtrServices"  xml:space="preserve"><value>Services</value></data>
+  <data name="FtrPrivacy"   xml:space="preserve"><value>Privacy Policy</value></data>
+  <data name="FtrCopyright" xml:space="preserve"><value>© 2026 frontida4baby. All rights reserved.</value></data>
+
+  <!-- Login -->
+  <data name="LoginTitle"        xml:space="preserve"><value>Welcome Back</value></data>
+  <data name="LoginSubtitle"     xml:space="preserve"><value>Sign in to your account</value></data>
+  <data name="LoginEmail"        xml:space="preserve"><value>Email address</value></data>
+  <data name="LoginPassword"     xml:space="preserve"><value>Password</value></data>
+  <data name="LoginRemember"     xml:space="preserve"><value>Remember me</value></data>
+  <data name="LoginBtn"          xml:space="preserve"><value>Sign In</value></data>
+  <data name="LoginNoAccount"    xml:space="preserve"><value>Don't have an account?</value></data>
+  <data name="LoginRegisterLink" xml:space="preserve"><value>Register here</value></data>
+
+  <!-- Register -->
+  <data name="RegTitle"        xml:space="preserve"><value>Create an Account</value></data>
+  <data name="RegSubtitle"     xml:space="preserve"><value>Join frontida4baby today</value></data>
+  <data name="RegFirstName"    xml:space="preserve"><value>First Name</value></data>
+  <data name="RegLastName"     xml:space="preserve"><value>Last Name</value></data>
+  <data name="RegEmail"        xml:space="preserve"><value>Email address</value></data>
+  <data name="RegPassword"     xml:space="preserve"><value>Password</value></data>
+  <data name="RegConfirm"      xml:space="preserve"><value>Confirm Password</value></data>
+  <data name="RegIsCaregiver"  xml:space="preserve"><value>I am a caregiver offering services</value></data>
+  <data name="RegIsCaregiverHint" xml:space="preserve"><value>Leave unchecked if you are looking for care services.</value></data>
+  <data name="RegBtn"          xml:space="preserve"><value>Create Account</value></data>
+  <data name="RegHaveAccount"  xml:space="preserve"><value>Already have an account?</value></data>
+  <data name="RegLoginLink"    xml:space="preserve"><value>Sign in here</value></data>
+
+  <!-- Social login -->
+  <data name="SocialOrDivider"        xml:space="preserve"><value>or</value></data>
+  <data name="ExternalConfirmTitle"   xml:space="preserve"><value>Complete Registration</value></data>
+  <data name="ExternalConfirmSubtitle" xml:space="preserve"><value>Please provide your email address to finish creating your account.</value></data>
+
+  <!-- Caregivers page -->
+  <data name="CaregiverTitle"    xml:space="preserve"><value>Browse Caregivers</value></data>
+  <data name="CaregiverSubtitle" xml:space="preserve"><value>Find the perfect professional for your needs.</value></data>
+  <data name="FilterService"     xml:space="preserve"><value>Service Type</value></data>
+  <data name="FilterCity"        xml:space="preserve"><value>City</value></data>
+  <data name="FilterRate"        xml:space="preserve"><value>Max hourly rate (€)</value></data>
+  <data name="FilterVerified"    xml:space="preserve"><value>Verified only</value></data>
+  <data name="FilterBtn"         xml:space="preserve"><value>Apply Filters</value></data>
+  <data name="FilterClear"       xml:space="preserve"><value>Clear</value></data>
+  <data name="CaregiverEmpty"    xml:space="preserve"><value>No caregivers found matching your criteria.</value></data>
+  <data name="CaregiverHourly"   xml:space="preserve"><value>/hr</value></data>
+  <data name="CaregiverReviews"  xml:space="preserve"><value>reviews</value></data>
+
+  <!-- Posts board -->
+  <data name="PostBoardTitle"    xml:space="preserve"><value>Community Board</value></data>
+  <data name="PostBoardSubtitle" xml:space="preserve"><value>Post a request or browse what others are looking for.</value></data>
+</root>

@@ -1,0 +1,202 @@
+@{
+    ViewData["Title"] = L["HeroTitle"].Value;
+}
+
+@* ─── Hero ──────────────────────────────────────────────────────────────── *@
+<section class="hero">
+    <div class="container position-relative" style="z-index:1">
+        <div class="row">
+            <div class="col-lg-8 col-xl-7">
+                <h1>@L["HeroTitle"]</h1>
+                <p class="lead">@L["HeroSubtitle"]</p>
+
+                <form asp-controller="Caregivers" asp-action="Index" method="get" class="search-box">
+                    <select name="ServiceType" class="form-select">
+                        <option value="">@L["HeroSelectService"]</option>
+                        <option value="Childcare">@L["SvcChildcareTitle"]</option>
+                        <option value="ElderlyCare">@L["SvcElderlyTitle"]</option>
+                        <option value="Tutoring">@L["SvcTutoringTitle"]</option>
+                        <option value="Housekeeping">@L["SvcHousekeepingTitle"]</option>
+                        <option value="PetCare">@L["SvcPetTitle"]</option>
+                    </select>
+                    <input name="City" class="form-control" placeholder="@L["HeroSelectCity"]" />
+                    <button type="submit" class="btn btn-accent px-4">
+                        <i class="fa-solid fa-magnifying-glass me-1"></i>@L["HeroBtnSearch"]
+                    </button>
+                </form>
+
+                <div class="d-flex gap-3 flex-wrap">
+                    <a asp-controller="Caregivers" asp-action="Index" class="btn btn-outline-light">
+                        <i class="fa-solid fa-users me-1"></i>@L["NavBrowse"]
+                    </a>
+                    <a asp-controller="Posts" asp-action="Create" class="btn btn-accent">
+                        <i class="fa-solid fa-pen-to-square me-1"></i>@L["CtaFamilyBtn"]
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* ─── Services ───────────────────────────────────────────────────────────── *@
+<section class="section-padding">
+    <div class="container">
+        <h2 class="section-title">@L["SvcTitle"]</h2>
+        <p class="section-sub">@L["SvcSubtitle"]</p>
+
+        <div class="row g-4 row-cols-2 row-cols-sm-3 row-cols-lg-5">
+            <div class="col">
+                <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="Childcare"
+                   class="service-card">
+                    <div class="svc-icon icon-childcare"><i class="fa-solid fa-baby"></i></div>
+                    <h5>@L["SvcChildcareTitle"]</h5>
+                    <p>@L["SvcChildcareDesc"]</p>
+                </a>
+            </div>
+            <div class="col">
+                <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="ElderlyCare"
+                   class="service-card">
+                    <div class="svc-icon icon-elderly"><i class="fa-solid fa-heart-pulse"></i></div>
+                    <h5>@L["SvcElderlyTitle"]</h5>
+                    <p>@L["SvcElderlyDesc"]</p>
+                </a>
+            </div>
+            <div class="col">
+                <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="Tutoring"
+                   class="service-card">
+                    <div class="svc-icon icon-tutoring"><i class="fa-solid fa-graduation-cap"></i></div>
+                    <h5>@L["SvcTutoringTitle"]</h5>
+                    <p>@L["SvcTutoringDesc"]</p>
+                </a>
+            </div>
+            <div class="col">
+                <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="Housekeeping"
+                   class="service-card">
+                    <div class="svc-icon icon-housekeeping"><i class="fa-solid fa-broom"></i></div>
+                    <h5>@L["SvcHousekeepingTitle"]</h5>
+                    <p>@L["SvcHousekeepingDesc"]</p>
+                </a>
+            </div>
+            <div class="col">
+                <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="PetCare"
+                   class="service-card">
+                    <div class="svc-icon icon-pet"><i class="fa-solid fa-paw"></i></div>
+                    <h5>@L["SvcPetTitle"]</h5>
+                    <p>@L["SvcPetDesc"]</p>
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* ─── How It Works ───────────────────────────────────────────────────────── *@
+<section class="how-it-works">
+    <div class="container">
+        <h2 class="section-title">@L["HowTitle"]</h2>
+        <p class="section-sub">@L["HowSubtitle"]</p>
+
+        <div class="row justify-content-center align-items-start g-0">
+            <div class="col-md">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h5>@L["HowStep1Title"]</h5>
+                    <p>@L["HowStep1Desc"]</p>
+                </div>
+            </div>
+            <div class="col-md-1 d-none d-md-flex step-arrow">
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+            <div class="col-md">
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h5>@L["HowStep2Title"]</h5>
+                    <p>@L["HowStep2Desc"]</p>
+                </div>
+            </div>
+            <div class="col-md-1 d-none d-md-flex step-arrow">
+                <i class="fa-solid fa-chevron-right"></i>
+            </div>
+            <div class="col-md">
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h5>@L["HowStep3Title"]</h5>
+                    <p>@L["HowStep3Desc"]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* ─── Stats ──────────────────────────────────────────────────────────────── *@
+<section class="stats-bar">
+    <div class="container">
+        <div class="row g-4 text-center">
+            <div class="col-4">
+                <div class="stat-value">@L["Stat1Value"]</div>
+                <div class="stat-label">@L["Stat1Label"]</div>
+            </div>
+            <div class="col-4">
+                <div class="stat-value">@L["Stat2Value"]</div>
+                <div class="stat-label">@L["Stat2Label"]</div>
+            </div>
+            <div class="col-4">
+                <div class="stat-value">@L["Stat3Value"]</div>
+                <div class="stat-label">@L["Stat3Label"]</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* ─── Trust ──────────────────────────────────────────────────────────────── *@
+<section class="trust-section">
+    <div class="container">
+        <h2 class="section-title">@L["TrustTitle"]</h2>
+        <div class="row g-4 mt-2">
+            <div class="col-md-4">
+                <div class="trust-item">
+                    <div class="trust-icon"><i class="fa-solid fa-circle-check"></i></div>
+                    <h6>@L["TrustVerifiedTitle"]</h6>
+                    <p>@L["TrustVerifiedDesc"]</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="trust-item">
+                    <div class="trust-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <h6>@L["TrustSafeTitle"]</h6>
+                    <p>@L["TrustSafeDesc"]</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="trust-item">
+                    <div class="trust-icon"><i class="fa-solid fa-headset"></i></div>
+                    <h6>@L["Trust24Title"]</h6>
+                    <p>@L["Trust24Desc"]</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@* ─── Dual CTA ───────────────────────────────────────────────────────────── *@
+<section class="cta-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-6">
+                <div class="cta-card cta-family">
+                    <i class="fa-solid fa-house-chimney-heart fa-2x mb-3 d-block"></i>
+                    <h3>@L["CtaFamilyTitle"]</h3>
+                    <p>@L["CtaFamilyDesc"]</p>
+                    <a asp-controller="Posts" asp-action="Create" class="btn-cta">@L["CtaFamilyBtn"]</a>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="cta-card cta-caregiver">
+                    <i class="fa-solid fa-user-nurse fa-2x mb-3 d-block"></i>
+                    <h3>@L["CtaCaregiverTitle"]</h3>
+                    <p>@L["CtaCaregiverDesc"]</p>
+                    <a asp-controller="Account" asp-action="Register" class="btn-cta">@L["CtaCaregiverBtn"]</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

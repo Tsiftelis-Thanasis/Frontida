@@ -1,0 +1,152 @@
+@model frontida4baby.Web.Models.ViewModels.DashboardViewModel
+@using frontida4baby.Web.Models.Entities
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container py-4">
+    <div class="d-flex align-items-center justify-content-between mb-4">
+        <h2 class="mb-0"><i class="fas fa-tachometer-alt me-2 text-primary"></i>Dashboard</h2>
+        <span class="badge @(Model.CurrentPlan == SubscriptionPlan.Paid ? "bg-warning text-dark" : "bg-secondary") fs-6">
+            @(Model.CurrentPlan == SubscriptionPlan.Paid ? "⭐ Premium" : "Free")
+        </span>
+    </div>
+
+    @if (Model.CurrentPlan == SubscriptionPlan.Free)
+    {
+        <div class="alert alert-info mb-4">
+            <i class="fas fa-crown me-2"></i>
+            Αναβαθμίστε σε <a asp-controller="Subscription" asp-action="Index" class="alert-link">Premium (€10/μήνα)</a>
+            για απεριόριστες αγγελίες, απαντήσεις και reactions.
+        </div>
+    }
+
+    <ul class="nav nav-tabs mb-4">
+        <li class="nav-item">
+            <a class="nav-link @(Model.ActiveTab == "posts" ? "active" : "")"
+               asp-action="Index" asp-route-tab="posts">
+                <i class="fas fa-file-alt me-1"></i>Οι Αγγελίες μου
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(Model.ActiveTab == "replies" ? "active" : "")"
+               asp-action="Index" asp-route-tab="replies">
+                <i class="fas fa-reply me-1"></i>Οι Απαντήσεις μου
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(Model.ActiveTab == "reactions" ? "active" : "")"
+               asp-action="Index" asp-route-tab="reactions">
+                <i class="fas fa-heart me-1"></i>Αγαπημένα
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link @(Model.ActiveTab == "saved" ? "active" : "")"
+               asp-action="Index" asp-route-tab="saved">
+                <i class="fas fa-bookmark me-1"></i>Αποθηκευμένα
+            </a>
+        </li>
+        <li class="nav-item ms-auto">
+            <a class="nav-link" asp-action="Settings">
+                <i class="fas fa-cog me-1"></i>Ρυθμίσεις
+            </a>
+        </li>
+    </ul>
+
+    @if (Model.ActiveTab == "posts")
+    {
+        @if (!Model.MyPosts.Any())
+        {
+            <div class="text-muted py-4 text-center">
+                <i class="fas fa-file-alt fa-2x mb-2 d-block"></i>
+                Δεν έχετε δημοσιεύσει αγγελίες.
+                <a asp-controller="Posts" asp-action="Create" class="d-block mt-2">Δημιουργήστε την πρώτη σας αγγελία</a>
+            </div>
+        }
+        else
+        {
+            <div class="list-group">
+                @foreach (var post in Model.MyPosts)
+                {
+                    <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.Id"
+                       class="list-group-item list-group-item-action">
+                        <div class="d-flex justify-content-between align-items-start">
+                            <div>
+                                <strong>@post.Title</strong>
+                                @if (post.ServiceType.HasValue)
+                                {
+                                    <span class="badge bg-secondary ms-2">@post.ServiceType</span>
+                                }
+                            </div>
+                            <small class="text-muted">@post.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</small>
+                        </div>
+                        <small class="text-muted"><i class="fas fa-reply me-1"></i>@post.ReplyCount απαντήσεις</small>
+                    </a>
+                }
+            </div>
+        }
+    }
+    else if (Model.ActiveTab == "replies")
+    {
+        @if (!Model.MyReplies.Any())
+        {
+            <p class="text-muted text-center py-4">Δεν έχετε απαντήσει σε καμία αγγελία.</p>
+        }
+        else
+        {
+            <div class="list-group">
+                @foreach (var r in Model.MyReplies)
+                {
+                    <a asp-controller="Posts" asp-action="Details" asp-route-id="@r.PostId"
+                       class="list-group-item list-group-item-action">
+                        <div class="d-flex justify-content-between">
+                            <small class="text-muted fw-semibold">@r.PostTitle</small>
+                            <small class="text-muted">@r.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</small>
+                        </div>
+                        <p class="mb-0 text-truncate">@r.Body</p>
+                    </a>
+                }
+            </div>
+        }
+    }
+    else if (Model.ActiveTab == "reactions")
+    {
+        @if (!Model.ReactedPosts.Any())
+        {
+            <p class="text-muted text-center py-4">Δεν έχετε κάνει like σε καμία αγγελία.</p>
+        }
+        else
+        {
+            <div class="list-group">
+                @foreach (var post in Model.ReactedPosts)
+                {
+                    <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.Id"
+                       class="list-group-item list-group-item-action">
+                        <strong>@post.Title</strong>
+                        <small class="text-muted d-block">@post.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</small>
+                    </a>
+                }
+            </div>
+        }
+    }
+    else if (Model.ActiveTab == "saved")
+    {
+        @if (!Model.SavedPosts.Any())
+        {
+            <p class="text-muted text-center py-4">Δεν έχετε αποθηκεύσει καμία αγγελία.</p>
+        }
+        else
+        {
+            <div class="list-group">
+                @foreach (var post in Model.SavedPosts)
+                {
+                    <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.Id"
+                       class="list-group-item list-group-item-action">
+                        <strong>@post.Title</strong>
+                        <small class="text-muted d-block">@post.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</small>
+                    </a>
+                }
+            </div>
+        }
+    }
+</div>

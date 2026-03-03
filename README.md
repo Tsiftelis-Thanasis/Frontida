@@ -1,10 +1,10 @@
-# Frontida (Φροντίδα)
+# frontida4baby (Φροντίδα)
 
 A simplified caregiving platform connecting families with trusted caregivers in Greece.
 
 ## Overview
 
-Frontida is a streamlined web application that helps families find and connect with verified babysitters, tutors, elderly caregivers, and other household help. Built with modern .NET technologies, it provides a simple and efficient way to manage caregiving services.
+frontida4baby is a streamlined web application that helps families find and connect with verified babysitters, tutors, elderly caregivers, and other household help. Built with modern .NET technologies, it provides a simple and efficient way to manage caregiving services.
 
 ## Features
 
@@ -35,8 +35,8 @@ Frontida is a streamlined web application that helps families find and connect w
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/frontida.git
-cd frontida
+git clone https://github.com/yourusername/frontida4baby.git
+cd frontida4baby
 ```
 
 2. Restore dependencies:
@@ -48,7 +48,7 @@ dotnet restore
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=FrontidaDB;Trusted_Connection=True;TrustServerCertificate=True;"
+    "DefaultConnection": "Server=localhost;Database=frontida4babyDB;Trusted_Connection=True;TrustServerCertificate=True;"
   }
 }
 ```
@@ -68,7 +68,7 @@ dotnet run
 ## Project Structure
 
 ```
-Frontida/
+frontida4baby/
 ├── Controllers/          # MVC controllers
 ├── Models/              # Data models and view models
 ├── Views/               # Razor views
@@ -115,7 +115,7 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Contact
 
-Project Link: [https://github.com/yourusername/frontida](https://github.com/yourusername/frontida)
+Project Link: [https://github.com/yourusername/frontida4baby](https://github.com/yourusername/frontida4baby)
 
 ## Acknowledgments
 
