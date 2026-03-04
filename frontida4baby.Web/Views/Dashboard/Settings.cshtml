@@ -1,23 +1,49 @@
 @model frontida4baby.Web.Models.ViewModels.UserSettingsViewModel
 @{
-    ViewData["Title"] = "Ρυθμίσεις Λογαριασμού";
+    ViewData["Title"] = L["DashSettingsTitle"].Value;
 }
 
 <div class="container py-4">
     <div class="row justify-content-center">
         <div class="col-lg-6">
-            <h2 class="mb-4"><i class="fas fa-cog me-2 text-primary"></i>Ρυθμίσεις</h2>
+            <h2 class="mb-4"><i class="fas fa-cog me-2 text-primary"></i>@L["DashSettingsHeading"]</h2>
 
             @if (TempData["SettingsSaved"] != null)
             {
                 <div class="alert alert-success">
-                    <i class="fas fa-check me-2"></i>Οι αλλαγές αποθηκεύτηκαν.
+                    <i class="fas fa-check me-2"></i>@L["DashSettingsSaved"]
                 </div>
             }
 
-            <form asp-action="Settings" method="post">
+            <form asp-action="Settings" method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="All" class="alert alert-danger small"></div>
 
+                @* ── Profile photo ────────────────────────────────────────────── *@
+                <div class="mb-4 text-center">
+                    @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+                    {
+                        <img src="@Model.ProfileImageUrl" alt="@L["DashPhotoLabel"]"
+                             class="rounded-circle mb-3"
+                             style="width:100px;height:100px;object-fit:cover;border:3px solid var(--bs-primary)" />
+                    }
+                    else
+                    {
+                        <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center mb-3"
+                             style="width:100px;height:100px;font-size:2.5rem;color:#fff">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                    }
+                    <div>
+                        <label asp-for="ProfileImage" class="form-label d-block small text-muted">
+                            @L["DashPhotoLabel"]
+                        </label>
+                        <input asp-for="ProfileImage" type="file" class="form-control form-control-sm"
+                               accept=".jpg,.jpeg,.png,.webp" />
+                        <span asp-validation-for="ProfileImage" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                @* ── Basic info ───────────────────────────────────────────────── *@
                 <div class="row g-3 mb-3">
                     <div class="col-sm-6">
                         <label asp-for="FirstName" class="form-label"></label>
@@ -42,13 +68,50 @@
                 <div class="mb-3">
                     <label asp-for="Bio" class="form-label"></label>
                     <textarea asp-for="Bio" class="form-control" rows="4"
-                              placeholder="Παρουσιάστε τον εαυτό σας..."></textarea>
+                              placeholder="@L["DashBioPlaceholder"]"></textarea>
                     <span asp-validation-for="Bio" class="text-danger small"></span>
                 </div>
 
-                <div class="d-flex gap-2">
-                    <button type="submit" class="btn btn-primary">Αποθήκευση</button>
-                    <a asp-action="Index" class="btn btn-outline-secondary">Πίσω</a>
+                @* ── Caregiver-only fields ────────────────────────────────────── *@
+                @if (Model.IsCaregiver)
+                {
+                    <hr class="my-4" />
+                    <h5 class="mb-3">
+                        <i class="fa-solid fa-briefcase me-2 text-primary"></i>@L["DashCaregiverInfoTitle"]
+                    </h5>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-sm-6">
+                            <label asp-for="HourlyRate" class="form-label"></label>
+                            <div class="input-group">
+                                <span class="input-group-text">€</span>
+                                <input asp-for="HourlyRate" class="form-control" type="number"
+                                       min="0" max="1000" step="0.50"
+                                       placeholder="@L["DashHourlyRatePlaceholder"]" />
+                            </div>
+                            <span asp-validation-for="HourlyRate" class="text-danger small"></span>
+                        </div>
+                        <div class="col-sm-6">
+                            <label asp-for="YearsOfExperience" class="form-label"></label>
+                            <input asp-for="YearsOfExperience" class="form-control" type="number"
+                                   min="0" max="60"
+                                   placeholder="@L["DashExperiencePlaceholder"]" />
+                            <span asp-validation-for="YearsOfExperience" class="text-danger small"></span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label asp-for="Languages" class="form-label"></label>
+                        <input asp-for="Languages" class="form-control"
+                               placeholder="@L["DashLanguagesPlaceholder"]" />
+                        <div class="form-text">@L["DashLanguagesHint"]</div>
+                        <span asp-validation-for="Languages" class="text-danger small"></span>
+                    </div>
+                }
+
+                <div class="d-flex gap-2 mt-4">
+                    <button type="submit" class="btn btn-primary">@L["BtnSave"]</button>
+                    <a asp-action="Index" class="btn btn-outline-secondary">@L["BtnBack"]</a>
                 </div>
             </form>
         </div>

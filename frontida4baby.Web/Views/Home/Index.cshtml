@@ -127,25 +127,25 @@
     </div>
 </section>
 
-@* ─── Stats ──────────────────────────────────────────────────────────────── *@
+@* ─── Stats (shown only when 50+ caregivers are registered) ─────────────── *@
+@if ((int)(ViewBag.CaregiverCount ?? 0) > 50)
+{
 <section class="stats-bar">
     <div class="container">
         <div class="row g-4 text-center">
             <div class="col-4">
-                <div class="stat-value">@L["Stat1Value"]</div>
                 <div class="stat-label">@L["Stat1Label"]</div>
             </div>
             <div class="col-4">
-                <div class="stat-value">@L["Stat2Value"]</div>
                 <div class="stat-label">@L["Stat2Label"]</div>
             </div>
             <div class="col-4">
-                <div class="stat-value">@L["Stat3Value"]</div>
                 <div class="stat-label">@L["Stat3Label"]</div>
             </div>
         </div>
     </div>
 </section>
+}
 
 @* ─── Trust ──────────────────────────────────────────────────────────────── *@
 <section class="trust-section">
@@ -161,7 +161,7 @@
             </div>
             <div class="col-md-4">
                 <div class="trust-item">
-                    <div class="trust-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                    <div class="trust-icon"><i class="fa-solid fa-robot"></i></div>
                     <h6>@L["TrustSafeTitle"]</h6>
                     <p>@L["TrustSafeDesc"]</p>
                 </div>

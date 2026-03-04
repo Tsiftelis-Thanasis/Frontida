@@ -1,20 +1,20 @@
 @{
-    ViewData["Title"] = "Επιτυχής Συνδρομή";
+    ViewData["Title"] = L["SubSuccessTitle"].Value;
 }
 
 <div class="container py-5 text-center">
     <div class="mb-4">
         <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
     </div>
-    <h1 class="display-5 fw-bold text-success">Η συνδρομή σας ενεργοποιήθηκε!</h1>
-    <p class="lead mt-3">Ευχαριστούμε για την αναβάθμισή σας στο Premium πλάνο.</p>
-    <p class="text-muted">Τώρα έχετε απεριόριστη πρόσβαση σε όλες τις λειτουργίες.</p>
+    <h1 class="display-5 fw-bold text-success">@L["SubSuccessHeading"]</h1>
+    <p class="lead mt-3">@L["SubSuccessThankYou"]</p>
+    <p class="text-muted">@L["SubSuccessUnlimited"]</p>
     <div class="mt-4">
         <a asp-controller="Dashboard" asp-action="Index" class="btn btn-primary me-2">
-            <i class="fas fa-tachometer-alt me-2"></i>Το Dashboard μου
+            <i class="fas fa-tachometer-alt me-2"></i>@L["SubMyDashboard"]
         </a>
         <a asp-controller="Posts" asp-action="Index" class="btn btn-outline-primary">
-            <i class="fas fa-comments me-2"></i>Αγγελίες
+            <i class="fas fa-comments me-2"></i>@L["SubViewPosts"]
         </a>
     </div>
 </div>

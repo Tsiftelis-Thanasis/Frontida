@@ -11,11 +11,14 @@ public class PostListViewModel
 
 public class PostListItemViewModel
 {
-    public int          Id          { get; set; }
-    public string       Title       { get; set; } = string.Empty;
-    public string       AuthorName  { get; set; } = string.Empty;
-    public ServiceType? ServiceType { get; set; }
-    public string?      City        { get; set; }
-    public int          ReplyCount  { get; set; }
-    public DateTime     CreatedAt   { get; set; }
+    public int          Id                  { get; set; }
+    public string       Title               { get; set; } = string.Empty;
+    public string       AuthorName          { get; set; } = string.Empty;
+    public bool         AuthorIsCaregiver   { get; set; }
+    public double       AuthorAverageRating { get; set; }
+    public int          AuthorReviewCount   { get; set; }
+    public ServiceType? ServiceType         { get; set; }
+    public string?      City                { get; set; }
+    public int          ReplyCount          { get; set; }
+    public DateTime     CreatedAt           { get; set; }
 }

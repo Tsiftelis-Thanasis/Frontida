@@ -11,34 +11,36 @@ namespace frontida4baby.Web.Controllers;
 
 public class PostsController : Controller
 {
-    private readonly ApplicationDbContext   _db;
+    private readonly ApplicationDbContext      _db;
     private readonly IContentModerationService _moderation;
     private readonly ContentModerationService  _moderationLog;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ISubscriptionService _subscription;
+    private readonly IAppLogService       _log;
 
     public PostsController(
         ApplicationDbContext      db,
         IContentModerationService moderation,
         ContentModerationService  moderationLog,
         UserManager<ApplicationUser> userManager,
-        ISubscriptionService subscription)
+        ISubscriptionService subscription,
+        IAppLogService       log)
     {
         _db            = db;
         _moderation    = moderation;
         _moderationLog = moderationLog;
         _userManager   = userManager;
         _subscription  = subscription;
+        _log           = log;
     }
 
     // ── GET /posts ────────────────────────────────────────────────────────────
     public async Task<IActionResult> Index(PostListViewModel filter)
     {
         var query = _db.Posts
-            .Include(p => p.AuthorUser)
+            .Include(p => p.AuthorUser).ThenInclude(u => u.ReceivedReviews)
             .Include(p => p.Replies)
-            .Where(p => p.ModerationStatus == ModerationStatus.Approved
-                     && p.Status == PostStatus.Active);
+            .Where(p => p.Status == PostStatus.Active);
 
         if (filter.ServiceType.HasValue)
             query = query.Where(p => p.ServiceType == filter.ServiceType.Value);
@@ -51,13 +53,16 @@ public class PostsController : Controller
             .OrderByDescending(p => p.CreatedAt)
             .Select(p => new PostListItemViewModel
             {
-                Id          = p.Id,
-                Title       = p.Title,
-                AuthorName  = $"{p.AuthorUser.FirstName} {p.AuthorUser.LastName}".Trim(),
-                ServiceType = p.ServiceType,
-                City        = p.City,
-                ReplyCount  = p.Replies.Count(r => r.ModerationStatus == ModerationStatus.Approved),
-                CreatedAt   = p.CreatedAt,
+                Id                  = p.Id,
+                Title               = p.Title,
+                AuthorName          = $"{p.AuthorUser.FirstName} {p.AuthorUser.LastName}".Trim(),
+                AuthorIsCaregiver   = p.AuthorUser.IsCaregiver,
+                AuthorAverageRating = p.AuthorUser.ReceivedReviews.Any() ? p.AuthorUser.ReceivedReviews.Average(r => (double)r.Rating) : 0,
+                AuthorReviewCount   = p.AuthorUser.ReceivedReviews.Count(),
+                ServiceType         = p.ServiceType,
+                City                = p.City,
+                ReplyCount          = p.Replies.Count(r => r.ModerationStatus == ModerationStatus.Approved),
+                CreatedAt           = p.CreatedAt,
             })
             .ToListAsync();
 
@@ -70,10 +75,12 @@ public class PostsController : Controller
     {
         var post = await _db.Posts
             .Include(p => p.AuthorUser)
+                .ThenInclude(u => u.ReceivedReviews)
+                    .ThenInclude(rv => rv.ReviewerUser)
             .Include(p => p.Replies)
                 .ThenInclude(r => r.AuthorUser)
+                    .ThenInclude(u => u.ReceivedReviews)
             .FirstOrDefaultAsync(p => p.Id == id
-                && p.ModerationStatus == ModerationStatus.Approved
                 && (p.Status == PostStatus.Active || p.Status == PostStatus.Closed));
 
         if (post is null) return NotFound();
@@ -86,34 +93,72 @@ public class PostsController : Controller
         bool saved = currentUserId != null &&
             await _db.SavedPosts.AnyAsync(s => s.PostId == id && s.UserId == currentUserId);
 
+        var viewerUser = currentUserId != null
+            ? await _userManager.FindByIdAsync(currentUserId)
+            : null;
+        bool viewerIsCaregiver = viewerUser?.IsCaregiver ?? false;
+        bool canViewProfile    = false;
+        if (viewerIsCaregiver && currentUserId != null && currentUserId != post.AuthorUserId)
+            canViewProfile = await _subscription.CanViewProfileAsync(currentUserId, post.AuthorUserId);
+
+        bool isAdmin = User.IsInRole("Admin");
+        bool isPaid  = !isAdmin && currentUserId != null &&
+            await _db.Subscriptions.AnyAsync(s =>
+                s.UserId == currentUserId &&
+                s.Plan   == SubscriptionPlan.Paid &&
+                s.Status == SubscriptionStatus.Active);
+        bool canSeeRatingDetails = isAdmin || isPaid;
+
+        var authorReviews = canSeeRatingDetails
+            ? post.AuthorUser.ReceivedReviews
+                .OrderByDescending(r => r.CreatedAt)
+                .Select(r => new ReviewDetailItem
+                {
+                    ReviewerName = $"{r.ReviewerUser.FirstName} {r.ReviewerUser.LastName}".Trim(),
+                    Rating       = r.Rating,
+                    Comment      = r.Comment,
+                    CreatedAt    = r.CreatedAt,
+                }).ToList()
+            : new List<ReviewDetailItem>();
+
         var vm = new PostDetailViewModel
         {
-            PostId           = post.Id,
-            Title            = post.Title,
-            Body             = post.Body,
-            AuthorName       = $"{post.AuthorUser.FirstName} {post.AuthorUser.LastName}".Trim(),
-            AuthorId         = post.AuthorUserId,
-            ServiceType      = post.ServiceType,
-            City             = post.City,
-            Status           = post.Status,
-            CreatedAt        = post.CreatedAt,
-            EditedAt         = post.EditedAt,
-            ReactionCount    = reactionCount,
-            CurrentUserLiked = liked,
-            CurrentUserSaved = saved,
-            CanEdit          = currentUserId == post.AuthorUserId,
+            PostId               = post.Id,
+            Title                = post.Title,
+            Body                 = post.Body,
+            AuthorName           = $"{post.AuthorUser.FirstName} {post.AuthorUser.LastName}".Trim(),
+            AuthorId             = post.AuthorUserId,
+            AuthorIsCaregiver    = post.AuthorUser.IsCaregiver,
+            AuthorAverageRating  = post.AuthorUser.ReceivedReviews.Any() ? post.AuthorUser.ReceivedReviews.Average(r => (double)r.Rating) : 0,
+            AuthorReviewCount    = post.AuthorUser.ReceivedReviews.Count,
+            CanSeeRatingDetails  = canSeeRatingDetails,
+            AuthorReviews        = authorReviews,
+            ServiceType          = post.ServiceType,
+            City                 = post.City,
+            Status               = post.Status,
+            CreatedAt            = post.CreatedAt,
+            EditedAt             = post.EditedAt,
+            ReactionCount        = reactionCount,
+            CurrentUserLiked     = liked,
+            CurrentUserSaved     = saved,
+            CanEdit              = currentUserId == post.AuthorUserId,
+            ViewerIsCaregiver    = viewerIsCaregiver,
+            CanViewAuthorProfile = canViewProfile,
             Replies          = post.Replies
                 .Where(r => r.ModerationStatus == ModerationStatus.Approved)
                 .OrderBy(r => r.CreatedAt)
                 .Select(r => new ReplyItemViewModel
                 {
-                    Id         = r.Id,
-                    AuthorName = $"{r.AuthorUser.FirstName} {r.AuthorUser.LastName}".Trim(),
-                    AuthorId   = r.AuthorUserId,
-                    Body       = r.Body,
-                    CreatedAt  = r.CreatedAt,
-                    EditedAt   = r.EditedAt,
-                    CanEdit    = r.AuthorUserId == currentUserId,
+                    Id                  = r.Id,
+                    AuthorName          = $"{r.AuthorUser.FirstName} {r.AuthorUser.LastName}".Trim(),
+                    AuthorId            = r.AuthorUserId,
+                    AuthorIsCaregiver   = r.AuthorUser.IsCaregiver,
+                    AuthorAverageRating = r.AuthorUser.ReceivedReviews.Any() ? r.AuthorUser.ReceivedReviews.Average(rv => (double)rv.Rating) : 0,
+                    AuthorReviewCount   = r.AuthorUser.ReceivedReviews.Count,
+                    Body                = r.Body,
+                    CreatedAt           = r.CreatedAt,
+                    EditedAt            = r.EditedAt,
+                    CanEdit             = r.AuthorUserId == currentUserId,
                 })
                 .ToList(),
         };
@@ -167,6 +212,8 @@ public class PostsController : Controller
 
         await _moderationLog.LogAsync(ContentType.Post, post.Id, userId,
             model.Title, model.Body, result);
+        await _log.LogAsync(AppLogLevel.Info, "Post",
+            $"Created post #{post.Id}: \"{model.Title}\"", userId: userId);
 
         if (result.Status == ModerationStatus.PendingReview)
         {
@@ -256,6 +303,8 @@ public class PostsController : Controller
 
         await _moderationLog.LogAsync(ContentType.Reply, reply.Id, currentUserId,
             null, model.ReplyBody, result);
+        await _log.LogAsync(AppLogLevel.Info, "Post",
+            $"Reply #{reply.Id} on post #{post.Id}", userId: currentUserId);
 
         TempData["ReplyStatus"] = result.Status == ModerationStatus.Approved
             ? "Approved" : "Pending";

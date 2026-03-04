@@ -1,0 +1,12 @@
+**/.vs
+**/.git
+**/bin
+**/obj
+**/*.user
+**/TestResults
+
+# User secrets stay on the host – never in the image
+**/secrets.json
+
+# Test project not needed in the image
+frontida4baby.Tests

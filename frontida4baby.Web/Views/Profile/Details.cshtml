@@ -1,0 +1,119 @@
+@model frontida4baby.Web.Models.ViewModels.PublicProfileViewModel
+@{
+    ViewData["Title"] = Model.FullName;
+}
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            @* Page header *@
+            <div class="d-flex align-items-center gap-2 mb-4 flex-wrap">
+                <h3 class="mb-0">@Model.FullName</h3>
+                @if (!string.IsNullOrEmpty(Model.City))
+                {
+                    <span class="badge bg-light text-dark border">📍 @Model.City</span>
+                }
+                <span class="badge @(Model.IsCaregiver ? "bg-primary" : "bg-secondary")">
+                    @(Model.IsCaregiver ? L["ProfileCaregiver"].Value : L["ProfileFamily"].Value)
+                </span>
+                @if (Model.IsCaregiver && Model.AverageRating > 0)
+                {
+                    @await Html.PartialAsync("_StarRating", Model.AverageRating,
+                        new ViewDataDictionary(ViewData) { ["StarCount"] = Model.ReviewCount })
+                }
+            </div>
+
+            @* Rating details (admin / paid only) *@
+            @if (Model.IsCaregiver && Model.CanSeeRatingDetails && Model.Reviews.Any())
+            {
+                <div class="card mb-4">
+                    <div class="card-header">Αξιολογήσεις (@Model.ReviewCount)</div>
+                    <div class="card-body p-2">
+                        @foreach (var rv in Model.Reviews)
+                        {
+                            <div class="d-flex gap-2 py-2 border-bottom">
+                                <div class="flex-grow-1">
+                                    @await Html.PartialAsync("_StarRating", (double)rv.Rating,
+                                        new ViewDataDictionary(ViewData))
+                                    <span class="small fw-semibold ms-1">@rv.ReviewerName</span>
+                                    <span class="small text-muted ms-1">· @rv.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy")</span>
+                                    @if (!string.IsNullOrEmpty(rv.Comment))
+                                    {
+                                        <div class="small text-muted mt-1 fst-italic">@rv.Comment</div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+
+            @* Bio *@
+            @if (!string.IsNullOrEmpty(Model.Bio))
+            {
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h6 class="card-title text-muted">@L["ProfileAbout"]</h6>
+                        <p class="mb-0" style="white-space: pre-wrap">@Model.Bio</p>
+                    </div>
+                </div>
+            }
+
+            @* Phone *@
+            @if (Model.PhoneVisible && !string.IsNullOrEmpty(Model.Phone))
+            {
+                <div class="card mb-4 border-success">
+                    <div class="card-body d-flex align-items-center gap-3">
+                        <i class="fa-solid fa-phone fa-2x text-success"></i>
+                        <div>
+                            <div class="text-muted small">@L["ProfilePhone"]</div>
+                            <a href="tel:@Model.Phone" class="fs-5 fw-semibold text-decoration-none">@Model.Phone</a>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @* Recent posts *@
+            @if (Model.RecentPosts.Any())
+            {
+                <h5 class="mb-3">@L["ProfileRecentPosts"]</h5>
+                <div class="list-group mb-4">
+                    @foreach (var post in Model.RecentPosts)
+                    {
+                        <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.Id"
+                           class="list-group-item list-group-item-action">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div>
+                                    <div class="fw-semibold">@post.Title</div>
+                                    <div class="small text-muted">
+                                        @if (post.ServiceType.HasValue)
+                                        {
+                                            <span class="me-2">@post.ServiceType</span>
+                                        }
+                                        @if (!string.IsNullOrEmpty(post.City))
+                                        {
+                                            <span>📍 @post.City</span>
+                                        }
+                                    </div>
+                                </div>
+                                <small class="text-muted text-nowrap">
+                                    @post.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")
+                                </small>
+                            </div>
+                        </a>
+                    }
+                </div>
+            }
+            else
+            {
+                <p class="text-muted">@L["ProfileNoPosts"]</p>
+            }
+
+            <div class="mt-2">
+                <a asp-controller="Posts" asp-action="Index" class="text-muted small">@L["ProfileBackToPosts"]</a>
+            </div>
+
+        </div>
+    </div>
+</div>

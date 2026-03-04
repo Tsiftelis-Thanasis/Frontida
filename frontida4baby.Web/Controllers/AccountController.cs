@@ -4,20 +4,30 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication;
 using frontida4baby.Web.Models.Entities;
 using frontida4baby.Web.Models.ViewModels;
+using frontida4baby.Web.Services;
 
 namespace frontida4baby.Web.Controllers;
 
 public class AccountController : Controller
 {
-    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<ApplicationUser>   _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
+    private readonly IEmailService  _email;
+    private readonly IAppLogService _log;
+    private readonly IConfiguration _config;
 
     public AccountController(
-        UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager)
+        UserManager<ApplicationUser>   userManager,
+        SignInManager<ApplicationUser> signInManager,
+        IEmailService  email,
+        IAppLogService log,
+        IConfiguration config)
     {
-        _userManager = userManager;
+        _userManager   = userManager;
         _signInManager = signInManager;
+        _email         = email;
+        _log           = log;
+        _config        = config;
     }
 
     [HttpGet]
@@ -48,6 +58,18 @@ public class AccountController : Controller
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
+                await _log.LogAsync(AppLogLevel.Info, "Account", $"Registered: {model.Email}", userId: user.Id);
+
+                // Fire-and-forget admin notification
+                var adminEmail = _config["Email:AdminEmail"] ?? "";
+                if (!string.IsNullOrEmpty(adminEmail))
+                    _ = Task.Run(async () =>
+                    {
+                        try { await _email.SendAsync(adminEmail, $"New user: {model.Email}",
+                            $"<p>A new user has registered: <strong>{model.Email}</strong></p>"); }
+                        catch { /* best-effort */ }
+                    });
+
                 return RedirectToAction("Index", "Home");
             }
 
@@ -84,6 +106,8 @@ public class AccountController : Controller
 
             if (result.Succeeded)
             {
+                var loggedIn = await _userManager.FindByEmailAsync(model.Email);
+                await _log.LogAsync(AppLogLevel.Info, "Account", $"Login: {model.Email}", userId: loggedIn?.Id);
                 return RedirectToLocal(returnUrl);
             }
 
@@ -207,7 +231,10 @@ public class AccountController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Logout()
     {
+        var userId = _userManager.GetUserId(User);
+        var email  = User.Identity?.Name;
         await _signInManager.SignOutAsync();
+        await _log.LogAsync(AppLogLevel.Info, "Account", $"Logout: {email}", userId: userId);
         return RedirectToAction("Index", "Home");
     }
 

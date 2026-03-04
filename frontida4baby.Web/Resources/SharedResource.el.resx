@@ -11,6 +11,8 @@
   <data name="NavRegister"     xml:space="preserve"><value>Εγγραφή</value></data>
   <data name="NavLogout"       xml:space="preserve"><value>Αποσύνδεση</value></data>
   <data name="NavModeration"   xml:space="preserve"><value>Διαχείριση</value></data>
+  <data name="NavDashboard"    xml:space="preserve"><value>Ο λογαριασμός μου</value></data>
+  <data name="NavSubscription" xml:space="preserve"><value>Συνδρομή</value></data>
 
   <!-- Hero -->
   <data name="HeroTitle"       xml:space="preserve"><value>Βρείτε Αξιόπιστους Φροντιστές</value></data>
@@ -63,8 +65,8 @@
   <data name="TrustTitle"         xml:space="preserve"><value>Γιατί να μας Επιλέξετε;</value></data>
   <data name="TrustVerifiedTitle" xml:space="preserve"><value>Επαληθευμένα Προφίλ</value></data>
   <data name="TrustVerifiedDesc"  xml:space="preserve"><value>Όλοι οι φροντιστές ελέγχονται για ταυτότητα και υπόβαθρο.</value></data>
-  <data name="TrustSafeTitle"     xml:space="preserve"><value>Ασφαλές Περιβάλλον</value></data>
-  <data name="TrustSafeDesc"      xml:space="preserve"><value>Όλο το περιεχόμενο ελέγχεται για ασφαλή κοινότητα.</value></data>
+  <data name="TrustSafeTitle"     xml:space="preserve"><value>Έλεγχος με Claude AI</value></data>
+  <data name="TrustSafeDesc"      xml:space="preserve"><value>Κάθε ανάρτηση και απάντηση ελέγχεται αυτόματα από το Claude AI για σεβασμό και ασφάλεια στην κοινότητα.</value></data>
   <data name="Trust24Title"       xml:space="preserve"><value>Υποστήριξη 24/7</value></data>
   <data name="Trust24Desc"        xml:space="preserve"><value>Η ομάδα μας είναι διαθέσιμη ανά πάσα στιγμή.</value></data>
 
@@ -120,4 +122,133 @@
   <!-- Πίνακας αναρτήσεων -->
   <data name="PostBoardTitle"    xml:space="preserve"><value>Κοινοτικό Forum</value></data>
   <data name="PostBoardSubtitle" xml:space="preserve"><value>Δημοσιεύστε αίτημα ή δείτε τι αναζητούν άλλοι.</value></data>
+
+  <!-- Κοινά στοιχεία UI -->
+  <data name="BtnCancel"         xml:space="preserve"><value>Ακύρωση</value></data>
+  <data name="BtnSave"           xml:space="preserve"><value>Αποθήκευση</value></data>
+  <data name="BtnSaved"          xml:space="preserve"><value>Αποθηκευμένο</value></data>
+  <data name="BtnEdit"           xml:space="preserve"><value>Επεξεργασία</value></data>
+  <data name="SelectOptional"    xml:space="preserve"><value>-- Προαιρετικό --</value></data>
+
+  <!-- Ειδοποίηση AI (Λίστα αναρτήσεων) -->
+  <data name="AiModerationBadge" xml:space="preserve"><value>Τεχνολογία Claude AI</value></data>
+  <data name="AiModerationDesc"  xml:space="preserve"><value>Όλες οι αναρτήσεις και απαντήσεις ελέγχονται αυτόματα από το Claude AI (Anthropic) για ασφαλή, σεβαστή και συναφή κοινότητα.</value></data>
+
+  <!-- Αναρτήσεις - Λίστα -->
+  <data name="PostCaregiverRequests" xml:space="preserve"><value>Αιτήματα Φροντίδας</value></data>
+  <data name="PostNewRequest"        xml:space="preserve"><value>+ Δημοσίευση Αιτήματος</value></data>
+  <data name="PostLoginToPost"       xml:space="preserve"><value>Συνδεθείτε για να δημοσιεύσετε αίτημα</value></data>
+  <data name="PostPendingNotice"     xml:space="preserve"><value>Η ανάρτησή σας βρίσκεται υπό εξέταση και θα εμφανιστεί μετά την έγκριση από συντονιστή.</value></data>
+  <data name="PostAllServiceTypes"   xml:space="preserve"><value>Όλοι οι τύποι υπηρεσιών</value></data>
+  <data name="PostNoResults"         xml:space="preserve"><value>Δεν βρέθηκαν αιτήματα.</value></data>
+  <data name="PostBeFirst"           xml:space="preserve"><value>Γίνετε ο πρώτος που θα δημοσιεύσει</value></data>
+  <data name="PostReplySingular"     xml:space="preserve"><value>απάντηση</value></data>
+  <data name="PostReplyPlural"       xml:space="preserve"><value>απαντήσεις</value></data>
+
+  <!-- Αναρτήσεις - Δημιουργία -->
+  <data name="CreatePostTitle"            xml:space="preserve"><value>Δημοσίευση Αιτήματος</value></data>
+  <data name="CreatePostHeading"          xml:space="preserve"><value>Δημοσιεύστε Αίτημα Φροντίδας</value></data>
+  <data name="CreatePolicyTitle"          xml:space="preserve"><value>Κοινοτική Πολιτική</value></data>
+  <data name="CreatePolicyBody"           xml:space="preserve"><value>Όλες οι αναρτήσεις ελέγχονται αυτόματα από το Claude AI πριν τη δημοσίευση. Περιεχόμενο με βωμολοχίες, απειλές, ρατσιστικό λόγο ή παράνομες προσφορές θα αποκλείεται. Επαναλαμβανόμενες παραβιάσεις μπορεί να οδηγήσουν σε αναστολή λογαριασμού. Να είστε ευγενικοί.</value></data>
+  <data name="CreatePostSubmit"           xml:space="preserve"><value>Δημοσίευση Αιτήματος</value></data>
+  <data name="CreatePostTitlePlaceholder" xml:space="preserve"><value>π.χ. Ψάχνω μπέιμπι σίτερ στην Αθήνα</value></data>
+  <data name="CreatePostBodyPlaceholder"  xml:space="preserve"><value>Περιγράψτε τι χρειάζεστε, πρόγραμμα, τυχόν απαιτήσεις…</value></data>
+
+  <!-- Αναρτήσεις - Επεξεργασία -->
+  <data name="EditPostTitle"   xml:space="preserve"><value>Επεξεργασία Αγγελίας</value></data>
+  <data name="EditLastEdited"  xml:space="preserve"><value>Τελευταία επεξεργασία:</value></data>
+  <data name="EditPolicyBody"  xml:space="preserve"><value>Οι αλλαγές ελέγχονται αυτόματα από το Claude AI πριν τη δημοσίευση.</value></data>
+  <data name="EditPostSubmit"  xml:space="preserve"><value>Αποθήκευση Αλλαγών</value></data>
+
+  <!-- Αναρτήσεις - Λεπτομέρειες -->
+  <data name="PostBy"               xml:space="preserve"><value>Από</value></data>
+  <data name="PostEditedLabel"      xml:space="preserve"><value>(επεξεργάστηκε)</value></data>
+  <data name="PostClose"            xml:space="preserve"><value>Κλείσιμο</value></data>
+  <data name="PostViewProfile"      xml:space="preserve"><value>Δες Προφίλ</value></data>
+  <data name="PostCloseConfirm"     xml:space="preserve"><value>Κλείσιμο αυτού του αιτήματος;</value></data>
+  <data name="PostNoReplies"        xml:space="preserve"><value>Δεν υπάρχουν απαντήσεις ακόμα. Γίνετε ο πρώτος που θα απαντήσει!</value></data>
+  <data name="PostLeaveReply"       xml:space="preserve"><value>Αφήστε Απάντηση</value></data>
+  <data name="PostModerationNotice" xml:space="preserve"><value>Οι απαντήσεις ελέγχονται αυτόματα από το Claude AI. Παρακαλώ να είστε ευγενικοί και σχετικοί.</value></data>
+  <data name="PostReplyPlaceholder" xml:space="preserve"><value>Γράψτε την απάντησή σας…</value></data>
+  <data name="PostSubmitReply"      xml:space="preserve"><value>Δημοσίευση Απάντησης</value></data>
+  <data name="PostToReply"          xml:space="preserve"><value>για να απαντήσετε.</value></data>
+  <data name="PostClosedMsg"        xml:space="preserve"><value>Αυτό το αίτημα έχει κλείσει.</value></data>
+  <data name="PostBackToAll"        xml:space="preserve"><value>← Πίσω σε όλα τα αιτήματα</value></data>
+  <data name="PostReplyApproved"    xml:space="preserve"><value>Η απάντησή σας δημοσιεύθηκε.</value></data>
+  <data name="PostReplyPending"     xml:space="preserve"><value>Η απάντησή σας βρίσκεται υπό εξέταση και θα εμφανιστεί μετά την έγκριση.</value></data>
+
+  <!-- Συνδρομή - Κύρια σελίδα -->
+  <data name="SubTitle"            xml:space="preserve"><value>Πλάνα Συνδρομής</value></data>
+  <data name="SubHeading"          xml:space="preserve"><value>Επιλέξτε Πλάνο</value></data>
+  <data name="SubSubtitle"         xml:space="preserve"><value>Ξεκινήστε δωρεάν ή αναβαθμίστε για απεριόριστη πρόσβαση</value></data>
+  <data name="SubPerMonth"         xml:space="preserve"><value>/μήνα</value></data>
+  <data name="SubFreePlanName"     xml:space="preserve"><value>Δωρεάν</value></data>
+  <data name="SubFreeFeature1"     xml:space="preserve"><value>Έως 5 αγγελίες/μήνα</value></data>
+  <data name="SubFreeFeature2"     xml:space="preserve"><value>Έως 20 απαντήσεις/μήνα</value></data>
+  <data name="SubFreeFeature3"     xml:space="preserve"><value>Έως 10 reactions/μήνα</value></data>
+  <data name="SubFreeFeature4"     xml:space="preserve"><value>Τηλέφωνα χρηστών</value></data>
+  <data name="SubCurrentPlan"      xml:space="preserve"><value>Τρέχον Πλάνο</value></data>
+  <data name="SubBasicLabel"       xml:space="preserve"><value>Βασικό</value></data>
+  <data name="SubPaidFeature1"     xml:space="preserve"><value>Απεριόριστες αγγελίες</value></data>
+  <data name="SubPaidFeature2"     xml:space="preserve"><value>Απεριόριστες απαντήσεις</value></data>
+  <data name="SubPaidFeature3"     xml:space="preserve"><value>Απεριόριστα reactions</value></data>
+  <data name="SubPaidFeature4"     xml:space="preserve"><value>Εμφάνιση τηλεφώνων</value></data>
+  <data name="SubUpgradeBtn"       xml:space="preserve"><value>Αναβάθμιση σε Premium</value></data>
+  <data name="SubLoginToUpgrade"   xml:space="preserve"><value>Συνδεθείτε για Αναβάθμιση</value></data>
+
+  <!-- Συνδρομή - Επιτυχία -->
+  <data name="SubSuccessTitle"     xml:space="preserve"><value>Επιτυχής Συνδρομή</value></data>
+  <data name="SubSuccessHeading"   xml:space="preserve"><value>Η συνδρομή σας ενεργοποιήθηκε!</value></data>
+  <data name="SubSuccessThankYou"  xml:space="preserve"><value>Ευχαριστούμε για την αναβάθμισή σας στο Premium πλάνο.</value></data>
+  <data name="SubSuccessUnlimited" xml:space="preserve"><value>Τώρα έχετε απεριόριστη πρόσβαση σε όλες τις λειτουργίες.</value></data>
+  <data name="SubMyDashboard"      xml:space="preserve"><value>Το Dashboard μου</value></data>
+  <data name="SubViewPosts"        xml:space="preserve"><value>Αγγελίες</value></data>
+
+  <!-- Συνδρομή - Ακύρωση -->
+  <data name="SubCancelTitle"      xml:space="preserve"><value>Ακύρωση Συνδρομής</value></data>
+  <data name="SubCancelHeading"    xml:space="preserve"><value>Η αγορά ακυρώθηκε</value></data>
+  <data name="SubCancelMsg"        xml:space="preserve"><value>Δεν έγινε χρέωση. Μπορείτε να αναβαθμίσετε οποιαδήποτε στιγμή.</value></data>
+  <data name="SubViewPlans"        xml:space="preserve"><value>Δείτε τα Πλάνα</value></data>
+
+  <!-- Κοινό κουμπί -->
+  <data name="BtnBack"           xml:space="preserve"><value>Πίσω</value></data>
+
+  <!-- Dashboard - Κύρια σελίδα -->
+  <data name="DashTitle"            xml:space="preserve"><value>Dashboard</value></data>
+  <data name="DashPremiumBadge"     xml:space="preserve"><value>⭐ Premium</value></data>
+  <data name="DashFreeBadge"        xml:space="preserve"><value>Δωρεάν</value></data>
+  <data name="DashUpgradePre"       xml:space="preserve"><value>Αναβαθμίστε σε </value></data>
+  <data name="DashUpgradePlan"      xml:space="preserve"><value>Premium (€10/μήνα)</value></data>
+  <data name="DashUpgradePost"      xml:space="preserve"><value>για απεριόριστες αγγελίες, απαντήσεις και reactions.</value></data>
+  <data name="DashTabPosts"         xml:space="preserve"><value>Οι Αγγελίες μου</value></data>
+  <data name="DashTabReplies"       xml:space="preserve"><value>Οι Απαντήσεις μου</value></data>
+  <data name="DashTabReactions"     xml:space="preserve"><value>Αγαπημένα</value></data>
+  <data name="DashTabSaved"         xml:space="preserve"><value>Αποθηκευμένα</value></data>
+  <data name="DashTabSettings"      xml:space="preserve"><value>Ρυθμίσεις</value></data>
+  <data name="DashNoPostsMsg"       xml:space="preserve"><value>Δεν έχετε δημοσιεύσει αγγελίες.</value></data>
+  <data name="DashCreateFirstPost"  xml:space="preserve"><value>Δημιουργήστε την πρώτη σας αγγελία</value></data>
+  <data name="DashNoRepliesMsg"     xml:space="preserve"><value>Δεν έχετε απαντήσει σε καμία αγγελία.</value></data>
+  <data name="DashNoReactionsMsg"   xml:space="preserve"><value>Δεν έχετε κάνει like σε καμία αγγελία.</value></data>
+  <data name="DashNoSavedMsg"       xml:space="preserve"><value>Δεν έχετε αποθηκεύσει καμία αγγελία.</value></data>
+
+  <!-- Dashboard - Ρυθμίσεις -->
+  <data name="DashSettingsTitle"          xml:space="preserve"><value>Ρυθμίσεις Λογαριασμού</value></data>
+  <data name="DashSettingsHeading"        xml:space="preserve"><value>Ρυθμίσεις</value></data>
+  <data name="DashSettingsSaved"          xml:space="preserve"><value>Οι αλλαγές αποθηκεύτηκαν.</value></data>
+  <data name="DashPhotoLabel"             xml:space="preserve"><value>Φωτογραφία προφίλ (JPG, PNG, WEBP · μέγ. 5 MB)</value></data>
+  <data name="DashBioPlaceholder"         xml:space="preserve"><value>Παρουσιάστε τον εαυτό σας…</value></data>
+  <data name="DashCaregiverInfoTitle"     xml:space="preserve"><value>Πληροφορίες Φροντιστή</value></data>
+  <data name="DashHourlyRatePlaceholder"  xml:space="preserve"><value>π.χ. 12.00</value></data>
+  <data name="DashExperiencePlaceholder"  xml:space="preserve"><value>π.χ. 3</value></data>
+  <data name="DashLanguagesPlaceholder"   xml:space="preserve"><value>π.χ. Ελληνικά, Αγγλικά</value></data>
+  <data name="DashLanguagesHint"          xml:space="preserve"><value>Χωρίστε τις γλώσσες με κόμμα.</value></data>
+
+  <!-- Προφίλ -->
+  <data name="ProfileCaregiver"    xml:space="preserve"><value>Φροντιστής</value></data>
+  <data name="ProfileFamily"       xml:space="preserve"><value>Οικογένεια</value></data>
+  <data name="ProfileAbout"        xml:space="preserve"><value>Σχετικά</value></data>
+  <data name="ProfilePhone"        xml:space="preserve"><value>Τηλέφωνο</value></data>
+  <data name="ProfileRecentPosts"  xml:space="preserve"><value>Πρόσφατες Αναρτήσεις</value></data>
+  <data name="ProfileNoPosts"      xml:space="preserve"><value>Δεν υπάρχουν δημοσιευμένες αναρτήσεις.</value></data>
+  <data name="ProfileBackToPosts"  xml:space="preserve"><value>← Πίσω στις αναρτήσεις</value></data>
 </root>

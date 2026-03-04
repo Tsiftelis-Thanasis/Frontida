@@ -11,6 +11,8 @@
   <data name="NavRegister"     xml:space="preserve"><value>Register</value></data>
   <data name="NavLogout"       xml:space="preserve"><value>Log out</value></data>
   <data name="NavModeration"   xml:space="preserve"><value>Moderation</value></data>
+  <data name="NavDashboard"    xml:space="preserve"><value>My Dashboard</value></data>
+  <data name="NavSubscription" xml:space="preserve"><value>Subscription</value></data>
 
   <!-- Hero -->
   <data name="HeroTitle"       xml:space="preserve"><value>Find Trusted Caregivers</value></data>
@@ -63,8 +65,8 @@
   <data name="TrustTitle"         xml:space="preserve"><value>Why Choose Us?</value></data>
   <data name="TrustVerifiedTitle" xml:space="preserve"><value>Verified Profiles</value></data>
   <data name="TrustVerifiedDesc"  xml:space="preserve"><value>All caregivers go through an identity and background check.</value></data>
-  <data name="TrustSafeTitle"     xml:space="preserve"><value>Safe &amp; Secure</value></data>
-  <data name="TrustSafeDesc"      xml:space="preserve"><value>All content is moderated to maintain a safe community.</value></data>
+  <data name="TrustSafeTitle"     xml:space="preserve"><value>AI-Powered Moderation</value></data>
+  <data name="TrustSafeDesc"      xml:space="preserve"><value>Every post and reply is automatically reviewed by Claude AI to keep the community respectful and safe.</value></data>
   <data name="Trust24Title"       xml:space="preserve"><value>24/7 Support</value></data>
   <data name="Trust24Desc"        xml:space="preserve"><value>Our team is available around the clock to help you.</value></data>
 
@@ -120,4 +122,133 @@
   <!-- Posts board -->
   <data name="PostBoardTitle"    xml:space="preserve"><value>Community Board</value></data>
   <data name="PostBoardSubtitle" xml:space="preserve"><value>Post a request or browse what others are looking for.</value></data>
+
+  <!-- Shared UI -->
+  <data name="BtnCancel"         xml:space="preserve"><value>Cancel</value></data>
+  <data name="BtnSave"           xml:space="preserve"><value>Save</value></data>
+  <data name="BtnSaved"          xml:space="preserve"><value>Saved</value></data>
+  <data name="BtnEdit"           xml:space="preserve"><value>Edit</value></data>
+  <data name="SelectOptional"    xml:space="preserve"><value>-- Select (optional) --</value></data>
+
+  <!-- AI moderation notice (Posts board) -->
+  <data name="AiModerationBadge" xml:space="preserve"><value>Powered by Claude AI</value></data>
+  <data name="AiModerationDesc"  xml:space="preserve"><value>All posts and replies are automatically screened by Claude AI (Anthropic) to keep this community safe, respectful, and on-topic.</value></data>
+
+  <!-- Posts - Index -->
+  <data name="PostCaregiverRequests" xml:space="preserve"><value>Caregiver Requests</value></data>
+  <data name="PostNewRequest"        xml:space="preserve"><value>+ Post a Request</value></data>
+  <data name="PostLoginToPost"       xml:space="preserve"><value>Log in to post a request</value></data>
+  <data name="PostPendingNotice"     xml:space="preserve"><value>Your post is under review and will appear once approved by a moderator.</value></data>
+  <data name="PostAllServiceTypes"   xml:space="preserve"><value>All service types</value></data>
+  <data name="PostNoResults"         xml:space="preserve"><value>No requests found.</value></data>
+  <data name="PostBeFirst"           xml:space="preserve"><value>Be the first to post</value></data>
+  <data name="PostReplySingular"     xml:space="preserve"><value>reply</value></data>
+  <data name="PostReplyPlural"       xml:space="preserve"><value>replies</value></data>
+
+  <!-- Posts - Create -->
+  <data name="CreatePostTitle"            xml:space="preserve"><value>Post a Request</value></data>
+  <data name="CreatePostHeading"          xml:space="preserve"><value>Post a Caregiving Request</value></data>
+  <data name="CreatePolicyTitle"          xml:space="preserve"><value>Community Policy</value></data>
+  <data name="CreatePolicyBody"           xml:space="preserve"><value>All posts are automatically reviewed by Claude AI before publication. Content containing profanity, threats, hate speech, or illegal offers will be blocked. Repeated violations may result in account suspension. Keep it respectful.</value></data>
+  <data name="CreatePostSubmit"           xml:space="preserve"><value>Publish Request</value></data>
+  <data name="CreatePostTitlePlaceholder" xml:space="preserve"><value>e.g. Looking for a babysitter in Athens</value></data>
+  <data name="CreatePostBodyPlaceholder"  xml:space="preserve"><value>Describe what you need, schedule, any requirements…</value></data>
+
+  <!-- Posts - Edit -->
+  <data name="EditPostTitle"   xml:space="preserve"><value>Edit Post</value></data>
+  <data name="EditLastEdited"  xml:space="preserve"><value>Last edited:</value></data>
+  <data name="EditPolicyBody"  xml:space="preserve"><value>Changes are automatically reviewed by Claude AI before publishing.</value></data>
+  <data name="EditPostSubmit"  xml:space="preserve"><value>Save Changes</value></data>
+
+  <!-- Posts - Details -->
+  <data name="PostBy"               xml:space="preserve"><value>By</value></data>
+  <data name="PostEditedLabel"      xml:space="preserve"><value>(edited)</value></data>
+  <data name="PostClose"            xml:space="preserve"><value>Close</value></data>
+  <data name="PostViewProfile"      xml:space="preserve"><value>View Profile</value></data>
+  <data name="PostCloseConfirm"     xml:space="preserve"><value>Close this request?</value></data>
+  <data name="PostNoReplies"        xml:space="preserve"><value>No replies yet. Be the first to reply!</value></data>
+  <data name="PostLeaveReply"       xml:space="preserve"><value>Leave a Reply</value></data>
+  <data name="PostModerationNotice" xml:space="preserve"><value>Replies are automatically reviewed by Claude AI. Please be respectful and on-topic.</value></data>
+  <data name="PostReplyPlaceholder" xml:space="preserve"><value>Write your reply…</value></data>
+  <data name="PostSubmitReply"      xml:space="preserve"><value>Submit Reply</value></data>
+  <data name="PostToReply"          xml:space="preserve"><value>to reply.</value></data>
+  <data name="PostClosedMsg"        xml:space="preserve"><value>This request is closed.</value></data>
+  <data name="PostBackToAll"        xml:space="preserve"><value>← Back to all requests</value></data>
+  <data name="PostReplyApproved"    xml:space="preserve"><value>Your reply has been published.</value></data>
+  <data name="PostReplyPending"     xml:space="preserve"><value>Your reply is under review and will appear once approved.</value></data>
+
+  <!-- Subscription - Index -->
+  <data name="SubTitle"            xml:space="preserve"><value>Subscription Plans</value></data>
+  <data name="SubHeading"          xml:space="preserve"><value>Choose a Plan</value></data>
+  <data name="SubSubtitle"         xml:space="preserve"><value>Start for free or upgrade for unlimited access</value></data>
+  <data name="SubPerMonth"         xml:space="preserve"><value>/month</value></data>
+  <data name="SubFreePlanName"     xml:space="preserve"><value>Free</value></data>
+  <data name="SubFreeFeature1"     xml:space="preserve"><value>Up to 5 posts/month</value></data>
+  <data name="SubFreeFeature2"     xml:space="preserve"><value>Up to 20 replies/month</value></data>
+  <data name="SubFreeFeature3"     xml:space="preserve"><value>Up to 10 reactions/month</value></data>
+  <data name="SubFreeFeature4"     xml:space="preserve"><value>User phone numbers</value></data>
+  <data name="SubCurrentPlan"      xml:space="preserve"><value>Current Plan</value></data>
+  <data name="SubBasicLabel"       xml:space="preserve"><value>Basic</value></data>
+  <data name="SubPaidFeature1"     xml:space="preserve"><value>Unlimited posts</value></data>
+  <data name="SubPaidFeature2"     xml:space="preserve"><value>Unlimited replies</value></data>
+  <data name="SubPaidFeature3"     xml:space="preserve"><value>Unlimited reactions</value></data>
+  <data name="SubPaidFeature4"     xml:space="preserve"><value>View phone numbers</value></data>
+  <data name="SubUpgradeBtn"       xml:space="preserve"><value>Upgrade to Premium</value></data>
+  <data name="SubLoginToUpgrade"   xml:space="preserve"><value>Log in to Upgrade</value></data>
+
+  <!-- Subscription - Success -->
+  <data name="SubSuccessTitle"     xml:space="preserve"><value>Subscription Activated</value></data>
+  <data name="SubSuccessHeading"   xml:space="preserve"><value>Your subscription is now active!</value></data>
+  <data name="SubSuccessThankYou"  xml:space="preserve"><value>Thank you for upgrading to the Premium plan.</value></data>
+  <data name="SubSuccessUnlimited" xml:space="preserve"><value>You now have unlimited access to all features.</value></data>
+  <data name="SubMyDashboard"      xml:space="preserve"><value>My Dashboard</value></data>
+  <data name="SubViewPosts"        xml:space="preserve"><value>Posts</value></data>
+
+  <!-- Subscription - Cancel -->
+  <data name="SubCancelTitle"      xml:space="preserve"><value>Purchase Cancelled</value></data>
+  <data name="SubCancelHeading"    xml:space="preserve"><value>Purchase cancelled</value></data>
+  <data name="SubCancelMsg"        xml:space="preserve"><value>No charge was made. You can upgrade at any time.</value></data>
+  <data name="SubViewPlans"        xml:space="preserve"><value>View Plans</value></data>
+
+  <!-- Dashboard - shared button -->
+  <data name="BtnBack"           xml:space="preserve"><value>Back</value></data>
+
+  <!-- Dashboard - Index -->
+  <data name="DashTitle"            xml:space="preserve"><value>Dashboard</value></data>
+  <data name="DashPremiumBadge"     xml:space="preserve"><value>⭐ Premium</value></data>
+  <data name="DashFreeBadge"        xml:space="preserve"><value>Free</value></data>
+  <data name="DashUpgradePre"       xml:space="preserve"><value>Upgrade to </value></data>
+  <data name="DashUpgradePlan"      xml:space="preserve"><value>Premium (€10/month)</value></data>
+  <data name="DashUpgradePost"      xml:space="preserve"><value>for unlimited posts, replies and reactions.</value></data>
+  <data name="DashTabPosts"         xml:space="preserve"><value>My Posts</value></data>
+  <data name="DashTabReplies"       xml:space="preserve"><value>My Replies</value></data>
+  <data name="DashTabReactions"     xml:space="preserve"><value>Favourites</value></data>
+  <data name="DashTabSaved"         xml:space="preserve"><value>Saved</value></data>
+  <data name="DashTabSettings"      xml:space="preserve"><value>Settings</value></data>
+  <data name="DashNoPostsMsg"       xml:space="preserve"><value>You have not posted any requests yet.</value></data>
+  <data name="DashCreateFirstPost"  xml:space="preserve"><value>Create your first post</value></data>
+  <data name="DashNoRepliesMsg"     xml:space="preserve"><value>You have not replied to any posts.</value></data>
+  <data name="DashNoReactionsMsg"   xml:space="preserve"><value>You have not liked any posts.</value></data>
+  <data name="DashNoSavedMsg"       xml:space="preserve"><value>You have not saved any posts.</value></data>
+
+  <!-- Dashboard - Settings -->
+  <data name="DashSettingsTitle"          xml:space="preserve"><value>Account Settings</value></data>
+  <data name="DashSettingsHeading"        xml:space="preserve"><value>Settings</value></data>
+  <data name="DashSettingsSaved"          xml:space="preserve"><value>Your changes have been saved.</value></data>
+  <data name="DashPhotoLabel"             xml:space="preserve"><value>Profile photo (JPG, PNG, WEBP · max 5 MB)</value></data>
+  <data name="DashBioPlaceholder"         xml:space="preserve"><value>Introduce yourself…</value></data>
+  <data name="DashCaregiverInfoTitle"     xml:space="preserve"><value>Caregiver Information</value></data>
+  <data name="DashHourlyRatePlaceholder"  xml:space="preserve"><value>e.g. 12.00</value></data>
+  <data name="DashExperiencePlaceholder"  xml:space="preserve"><value>e.g. 3</value></data>
+  <data name="DashLanguagesPlaceholder"   xml:space="preserve"><value>e.g. Greek, English</value></data>
+  <data name="DashLanguagesHint"          xml:space="preserve"><value>Separate languages with a comma.</value></data>
+
+  <!-- Profile -->
+  <data name="ProfileCaregiver"    xml:space="preserve"><value>Caregiver</value></data>
+  <data name="ProfileFamily"       xml:space="preserve"><value>Family</value></data>
+  <data name="ProfileAbout"        xml:space="preserve"><value>About</value></data>
+  <data name="ProfilePhone"        xml:space="preserve"><value>Phone</value></data>
+  <data name="ProfileRecentPosts"  xml:space="preserve"><value>Recent Posts</value></data>
+  <data name="ProfileNoPosts"      xml:space="preserve"><value>No published posts.</value></data>
+  <data name="ProfileBackToPosts"  xml:space="preserve"><value>← Back to posts</value></data>
 </root>

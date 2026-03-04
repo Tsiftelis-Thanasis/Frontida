@@ -13,16 +13,26 @@
 </div>
 
 <div class="container pb-5">
+
+@* ─── AI Moderation Notice ──────────────────────────────────────────────── *@
+<div class="d-flex align-items-center gap-3 rounded-3 border border-primary-subtle bg-primary-subtle p-3 mb-4">
+    <i class="fa-solid fa-robot fa-lg text-primary flex-shrink-0"></i>
+    <div class="small">
+        <span class="fw-semibold text-primary">@L["AiModerationBadge"]</span>
+        &mdash; @L["AiModerationDesc"]
+    </div>
+</div>
+
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="mb-0">Caregiver Requests</h2>
+    <h2 class="mb-0">@L["PostCaregiverRequests"]</h2>
     @if (User.Identity?.IsAuthenticated == true)
     {
-        <a asp-action="Create" class="btn btn-primary">+ Post a Request</a>
+        <a asp-action="Create" class="btn btn-primary">@L["PostNewRequest"]</a>
     }
     else
     {
         <a asp-controller="Account" asp-action="Login" class="btn btn-outline-primary">
-            Log in to post a request
+            @L["PostLoginToPost"]
         </a>
     }
 </div>
@@ -30,26 +40,26 @@
 @if (TempData["PostStatus"] as string == "Pending")
 {
     <div class="alert alert-info">
-        Your post is under review and will appear once approved by a moderator.
+        @L["PostPendingNotice"]
     </div>
 }
 
 <form method="get" class="row g-2 mb-4">
     <div class="col-sm-4">
         <select name="ServiceType" class="form-select" asp-items="Html.GetEnumSelectList<ServiceType>()">
-            <option value="">All service types</option>
+            <option value="">@L["PostAllServiceTypes"]</option>
         </select>
     </div>
     <div class="col-sm-4">
-        <input name="City" value="@Model.City" placeholder="City" class="form-control" />
+        <input name="City" value="@Model.City" placeholder="@L["FilterCity"]" class="form-control" />
     </div>
     <div class="col-sm-2">
-        <button type="submit" class="btn btn-outline-secondary w-100">Search</button>
+        <button type="submit" class="btn btn-outline-secondary w-100">@L["HeroBtnSearch"]</button>
     </div>
     @if (Model.ServiceType.HasValue || !string.IsNullOrEmpty(Model.City))
     {
         <div class="col-sm-2">
-            <a asp-action="Index" class="btn btn-link w-100">Clear</a>
+            <a asp-action="Index" class="btn btn-link w-100">@L["FilterClear"]</a>
         </div>
     }
 </form>
@@ -57,10 +67,10 @@
 @if (!Model.Posts.Any())
 {
     <div class="text-muted text-center py-5">
-        <p class="fs-5">No requests found.</p>
+        <p class="fs-5">@L["PostNoResults"]</p>
         @if (User.Identity?.IsAuthenticated == true)
         {
-            <a asp-action="Create" class="btn btn-primary">Be the first to post</a>
+            <a asp-action="Create" class="btn btn-primary">@L["PostBeFirst"]</a>
         }
     </div>
 }
@@ -76,6 +86,11 @@ else
                         <h6 class="mb-1 fw-semibold">@post.Title</h6>
                         <small class="text-muted">
                             @post.AuthorName
+                            @if (post.AuthorIsCaregiver && post.AuthorAverageRating > 0)
+                            {
+                                @await Html.PartialAsync("_StarRating", post.AuthorAverageRating,
+                                    new ViewDataDictionary(ViewData) { ["StarCount"] = post.AuthorReviewCount })
+                            }
                             @if (post.ServiceType.HasValue)
                             {
                                 <span class="badge bg-secondary ms-1">@post.ServiceType</span>
@@ -92,7 +107,7 @@ else
                         </small>
                         <small class="text-muted">
                             @post.ReplyCount
-                            @(post.ReplyCount == 1 ? "reply" : "replies")
+                            @(post.ReplyCount == 1 ? L["PostReplySingular"].Value : L["PostReplyPlural"].Value)
                         </small>
                     </div>
                 </div>

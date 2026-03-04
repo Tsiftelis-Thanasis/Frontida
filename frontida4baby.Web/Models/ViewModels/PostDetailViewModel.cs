@@ -18,7 +18,14 @@ public class PostDetailViewModel
     public int          ReactionCount     { get; set; }
     public bool         CurrentUserLiked  { get; set; }
     public bool         CurrentUserSaved  { get; set; }
-    public bool         CanEdit           { get; set; }
+    public bool         CanEdit              { get; set; }
+    public bool         CanViewAuthorProfile { get; set; }
+    public bool         ViewerIsCaregiver    { get; set; }
+    public bool         AuthorIsCaregiver    { get; set; }
+    public double       AuthorAverageRating  { get; set; }
+    public int          AuthorReviewCount    { get; set; }
+    public bool         CanSeeRatingDetails  { get; set; }
+    public List<ReviewDetailItem> AuthorReviews { get; set; } = new();
 
     public List<ReplyItemViewModel> Replies { get; set; } = new();
 
@@ -32,11 +39,22 @@ public class PostDetailViewModel
 
 public class ReplyItemViewModel
 {
-    public int       Id         { get; set; }
-    public string    AuthorName { get; set; } = string.Empty;
-    public string    AuthorId   { get; set; } = string.Empty;
-    public string    Body       { get; set; } = string.Empty;
-    public DateTime  CreatedAt  { get; set; }
-    public DateTime? EditedAt   { get; set; }
-    public bool      CanEdit    { get; set; }
+    public int       Id                  { get; set; }
+    public string    AuthorName          { get; set; } = string.Empty;
+    public string    AuthorId            { get; set; } = string.Empty;
+    public bool      AuthorIsCaregiver   { get; set; }
+    public double    AuthorAverageRating { get; set; }
+    public int       AuthorReviewCount   { get; set; }
+    public string    Body                { get; set; } = string.Empty;
+    public DateTime  CreatedAt           { get; set; }
+    public DateTime? EditedAt            { get; set; }
+    public bool      CanEdit             { get; set; }
+}
+
+public class ReviewDetailItem
+{
+    public string    ReviewerName { get; set; } = string.Empty;
+    public int       Rating       { get; set; }
+    public string?   Comment      { get; set; }
+    public DateTime  CreatedAt    { get; set; }
 }

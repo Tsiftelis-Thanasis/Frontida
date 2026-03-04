@@ -35,7 +35,8 @@ public class SubscriptionController : Controller
         var userId = _userManager.GetUserId(User);
         SubscriptionPlan plan = SubscriptionPlan.Free;
         if (userId != null) plan = await _subscription.GetPlanAsync(userId);
-        ViewBag.CurrentPlan = plan;
+        ViewBag.CurrentPlan   = plan;
+        ViewBag.StripeEnabled = _config.GetValue<bool>("Stripe:Enabled");
         return View();
     }
 
@@ -44,6 +45,12 @@ public class SubscriptionController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Checkout()
     {
+        if (!_config.GetValue<bool>("Stripe:Enabled"))
+        {
+            TempData["SubscriptionError"] = "Οι πληρωμές δεν είναι διαθέσιμες αυτή τη στιγμή.";
+            return RedirectToAction(nameof(Index));
+        }
+
         StripeConfiguration.ApiKey = _config["Stripe:SecretKey"];
         var userId = _userManager.GetUserId(User)!;
         var user = await _userManager.FindByIdAsync(userId);

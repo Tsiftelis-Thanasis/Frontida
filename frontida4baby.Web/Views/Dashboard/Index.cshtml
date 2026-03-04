@@ -1,14 +1,14 @@
 @model frontida4baby.Web.Models.ViewModels.DashboardViewModel
 @using frontida4baby.Web.Models.Entities
 @{
-    ViewData["Title"] = "Dashboard";
+    ViewData["Title"] = L["DashTitle"].Value;
 }
 
 <div class="container py-4">
     <div class="d-flex align-items-center justify-content-between mb-4">
-        <h2 class="mb-0"><i class="fas fa-tachometer-alt me-2 text-primary"></i>Dashboard</h2>
+        <h2 class="mb-0"><i class="fas fa-tachometer-alt me-2 text-primary"></i>@L["DashTitle"]</h2>
         <span class="badge @(Model.CurrentPlan == SubscriptionPlan.Paid ? "bg-warning text-dark" : "bg-secondary") fs-6">
-            @(Model.CurrentPlan == SubscriptionPlan.Paid ? "⭐ Premium" : "Free")
+            @(Model.CurrentPlan == SubscriptionPlan.Paid ? L["DashPremiumBadge"].Value : L["DashFreeBadge"].Value)
         </span>
     </div>
 
@@ -16,8 +16,8 @@
     {
         <div class="alert alert-info mb-4">
             <i class="fas fa-crown me-2"></i>
-            Αναβαθμίστε σε <a asp-controller="Subscription" asp-action="Index" class="alert-link">Premium (€10/μήνα)</a>
-            για απεριόριστες αγγελίες, απαντήσεις και reactions.
+            @L["DashUpgradePre"]<a asp-controller="Subscription" asp-action="Index" class="alert-link">@L["DashUpgradePlan"]</a>
+            @L["DashUpgradePost"]
         </div>
     }
 
@@ -25,30 +25,30 @@
         <li class="nav-item">
             <a class="nav-link @(Model.ActiveTab == "posts" ? "active" : "")"
                asp-action="Index" asp-route-tab="posts">
-                <i class="fas fa-file-alt me-1"></i>Οι Αγγελίες μου
+                <i class="fas fa-file-alt me-1"></i>@L["DashTabPosts"]
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link @(Model.ActiveTab == "replies" ? "active" : "")"
                asp-action="Index" asp-route-tab="replies">
-                <i class="fas fa-reply me-1"></i>Οι Απαντήσεις μου
+                <i class="fas fa-reply me-1"></i>@L["DashTabReplies"]
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link @(Model.ActiveTab == "reactions" ? "active" : "")"
                asp-action="Index" asp-route-tab="reactions">
-                <i class="fas fa-heart me-1"></i>Αγαπημένα
+                <i class="fas fa-heart me-1"></i>@L["DashTabReactions"]
             </a>
         </li>
         <li class="nav-item">
             <a class="nav-link @(Model.ActiveTab == "saved" ? "active" : "")"
                asp-action="Index" asp-route-tab="saved">
-                <i class="fas fa-bookmark me-1"></i>Αποθηκευμένα
+                <i class="fas fa-bookmark me-1"></i>@L["DashTabSaved"]
             </a>
         </li>
         <li class="nav-item ms-auto">
             <a class="nav-link" asp-action="Settings">
-                <i class="fas fa-cog me-1"></i>Ρυθμίσεις
+                <i class="fas fa-cog me-1"></i>@L["DashTabSettings"]
             </a>
         </li>
     </ul>
@@ -59,8 +59,8 @@
         {
             <div class="text-muted py-4 text-center">
                 <i class="fas fa-file-alt fa-2x mb-2 d-block"></i>
-                Δεν έχετε δημοσιεύσει αγγελίες.
-                <a asp-controller="Posts" asp-action="Create" class="d-block mt-2">Δημιουργήστε την πρώτη σας αγγελία</a>
+                @L["DashNoPostsMsg"]
+                <a asp-controller="Posts" asp-action="Create" class="d-block mt-2">@L["DashCreateFirstPost"]</a>
             </div>
         }
         else
@@ -80,7 +80,10 @@
                             </div>
                             <small class="text-muted">@post.CreatedAt.ToLocalTime().ToString("dd MMM yyyy")</small>
                         </div>
-                        <small class="text-muted"><i class="fas fa-reply me-1"></i>@post.ReplyCount απαντήσεις</small>
+                        <small class="text-muted">
+                            <i class="fas fa-reply me-1"></i>@post.ReplyCount
+                            @(post.ReplyCount == 1 ? L["PostReplySingular"].Value : L["PostReplyPlural"].Value)
+                        </small>
                     </a>
                 }
             </div>
@@ -90,7 +93,7 @@
     {
         @if (!Model.MyReplies.Any())
         {
-            <p class="text-muted text-center py-4">Δεν έχετε απαντήσει σε καμία αγγελία.</p>
+            <p class="text-muted text-center py-4">@L["DashNoRepliesMsg"]</p>
         }
         else
         {
@@ -113,7 +116,7 @@
     {
         @if (!Model.ReactedPosts.Any())
         {
-            <p class="text-muted text-center py-4">Δεν έχετε κάνει like σε καμία αγγελία.</p>
+            <p class="text-muted text-center py-4">@L["DashNoReactionsMsg"]</p>
         }
         else
         {
@@ -133,7 +136,7 @@
     {
         @if (!Model.SavedPosts.Any())
         {
-            <p class="text-muted text-center py-4">Δεν έχετε αποθηκεύσει καμία αγγελία.</p>
+            <p class="text-muted text-center py-4">@L["DashNoSavedMsg"]</p>
         }
         else
         {

@@ -13,14 +13,14 @@
         @if (TempData["ReplyStatus"] as string == "Approved")
         {
             <div class="alert alert-success alert-dismissible fade show">
-                Η απάντησή σας δημοσιεύθηκε.
+                @L["PostReplyApproved"]
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         }
         @if (TempData["ReplyStatus"] as string == "Pending")
         {
             <div class="alert alert-info alert-dismissible fade show">
-                Η απάντησή σας βρίσκεται υπό εξέταση και θα εμφανιστεί μετά την έγκριση.
+                @L["PostReplyPending"]
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         }
@@ -48,13 +48,38 @@
                 </div>
                 <p class="card-text" style="white-space: pre-wrap">@Model.Body</p>
                 <small class="text-muted">
-                    Από @Model.AuthorName ·
-                    @Model.CreatedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")
+                    @L["PostBy"] @Model.AuthorName
+                    @if (Model.AuthorIsCaregiver && Model.AuthorAverageRating > 0)
+                    {
+                        @await Html.PartialAsync("_StarRating", Model.AuthorAverageRating,
+                            new ViewDataDictionary(ViewData) { ["StarCount"] = Model.AuthorReviewCount })
+                    }
+                    · @Model.CreatedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")
                     @if (Model.EditedAt.HasValue)
                     {
-                        <span class="ms-1 fst-italic">(επεξεργάστηκε)</span>
+                        <span class="ms-1 fst-italic">@L["PostEditedLabel"]</span>
                     }
                 </small>
+
+                @if (Model.AuthorIsCaregiver && Model.CanSeeRatingDetails && Model.AuthorReviews.Any())
+                {
+                    <div class="mt-3 border-top pt-3">
+                        <p class="small fw-semibold text-muted mb-2">Αξιολογήσεις φροντιστή</p>
+                        @foreach (var rv in Model.AuthorReviews)
+                        {
+                            <div class="mb-2">
+                                @await Html.PartialAsync("_StarRating", (double)rv.Rating,
+                                    new ViewDataDictionary(ViewData))
+                                <span class="small ms-1 fw-semibold">@rv.ReviewerName</span>
+                                <span class="small text-muted ms-1">· @rv.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy")</span>
+                                @if (!string.IsNullOrEmpty(rv.Comment))
+                                {
+                                    <div class="small text-muted fst-italic ms-1">@rv.Comment</div>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
 
                 <div class="d-flex align-items-center gap-2 mt-3 flex-wrap">
                     @* Reaction button *@
@@ -69,7 +94,7 @@
                         <button id="save-btn" class="btn btn-sm @(Model.CurrentUserSaved ? "btn-warning" : "btn-outline-warning")"
                                 data-post-id="@Model.PostId" data-saved="@Model.CurrentUserSaved.ToString().ToLower()">
                             <i class="fas fa-bookmark me-1"></i>
-                            @(Model.CurrentUserSaved ? "Αποθηκευμένο" : "Αποθήκευση")
+                            @(Model.CurrentUserSaved ? L["BtnSaved"].Value : L["BtnSave"].Value)
                         </button>
                     }
                     else
@@ -84,7 +109,7 @@
                     {
                         <a asp-action="Edit" asp-route-id="@Model.PostId"
                            class="btn btn-sm btn-outline-secondary">
-                            <i class="fas fa-edit me-1"></i>Επεξεργασία
+                            <i class="fas fa-edit me-1"></i>@L["BtnEdit"]
                         </a>
                     }
 
@@ -93,20 +118,30 @@
                     {
                         <form asp-action="Close" asp-route-id="@Model.PostId"
                               method="post" class="d-inline"
-                              onsubmit="return confirm('Κλείσιμο αυτού του αιτήματος;')">
-                            <button class="btn btn-sm btn-outline-secondary">Κλείσιμο</button>
+                              onsubmit="return confirm('@L["PostCloseConfirm"]')">
+                            <button class="btn btn-sm btn-outline-secondary">@L["PostClose"]</button>
                         </form>
+                    }
+
+                    @* View Profile (caregivers who have reacted) *@
+                    @if (Model.ViewerIsCaregiver && Model.AuthorId != currentUserId)
+                    {
+                        <a id="view-profile-btn"
+                           href="/profile/@Model.AuthorId"
+                           class="btn btn-sm btn-outline-info @(Model.CanViewAuthorProfile ? "" : "d-none")">
+                            <i class="fa-solid fa-user me-1"></i>@L["PostViewProfile"]
+                        </a>
                     }
                 </div>
             </div>
         </div>
 
         @* Replies *@
-        <h5 class="mb-3">@Model.Replies.Count @(Model.Replies.Count == 1 ? "Απάντηση" : "Απαντήσεις")</h5>
+        <h5 class="mb-3">@Model.Replies.Count @(Model.Replies.Count == 1 ? L["PostReplySingular"].Value : L["PostReplyPlural"].Value)</h5>
 
         @if (!Model.Replies.Any())
         {
-            <p class="text-muted">Δεν υπάρχουν απαντήσεις ακόμα. Γίνετε ο πρώτος που θα απαντήσει!</p>
+            <p class="text-muted">@L["PostNoReplies"]</p>
         }
 
         @foreach (var reply in Model.Replies)
@@ -118,18 +153,23 @@
                         <p class="mb-1" style="white-space: pre-wrap">@reply.Body</p>
                         <div class="d-flex align-items-center justify-content-between">
                             <small class="text-muted">
-                                @reply.AuthorName ·
-                                @reply.CreatedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")
+                                @reply.AuthorName
+                                @if (reply.AuthorIsCaregiver && reply.AuthorAverageRating > 0)
+                                {
+                                    @await Html.PartialAsync("_StarRating", reply.AuthorAverageRating,
+                                        new ViewDataDictionary(ViewData) { ["StarCount"] = reply.AuthorReviewCount })
+                                }
+                                · @reply.CreatedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")
                                 @if (reply.EditedAt.HasValue)
                                 {
-                                    <span class="fst-italic">(επεξεργάστηκε)</span>
+                                    <span class="fst-italic">@L["PostEditedLabel"]</span>
                                 }
                             </small>
                             @if (reply.CanEdit)
                             {
                                 <button class="btn btn-sm btn-link text-muted p-0"
                                         onclick="showReplyEdit(@reply.Id, @Html.Raw(System.Text.Json.JsonSerializer.Serialize(reply.Body)))">
-                                    <i class="fas fa-edit"></i> Επεξεργασία
+                                    <i class="fas fa-edit"></i> @L["BtnEdit"]
                                 </button>
                             }
                         </div>
@@ -141,9 +181,9 @@
                             <form asp-action="ReplyEdit" asp-route-replyId="@reply.Id" method="post">
                                 @Html.AntiForgeryToken()
                                 <textarea name="body" class="form-control mb-2" rows="3">@reply.Body</textarea>
-                                <button type="submit" class="btn btn-sm btn-primary me-1">Αποθήκευση</button>
+                                <button type="submit" class="btn btn-sm btn-primary me-1">@L["BtnSave"]</button>
                                 <button type="button" class="btn btn-sm btn-outline-secondary"
-                                        onclick="hideReplyEdit(@reply.Id)">Ακύρωση</button>
+                                        onclick="hideReplyEdit(@reply.Id)">@L["BtnCancel"]</button>
                             </form>
                         </div>
                     }
@@ -158,20 +198,20 @@
             {
                 <div class="card mt-4">
                     <div class="card-body">
-                        <h6 class="card-title">Αφήστε Απάντηση</h6>
+                        <h6 class="card-title">@L["PostLeaveReply"]</h6>
 
                         <div class="alert alert-light border small mb-3" role="alert">
-                            Οι απαντήσεις ελέγχονται αυτόματα. Παρακαλώ να είστε ευγενικοί και σχετικοί.
+                            @L["PostModerationNotice"]
                         </div>
 
                         <form asp-action="Reply" asp-route-id="@Model.PostId" method="post">
                             <div asp-validation-summary="ModelOnly" class="alert alert-danger small"></div>
                             <div class="mb-3">
                                 <textarea asp-for="ReplyBody" class="form-control" rows="4"
-                                          placeholder="Γράψτε την απάντησή σας…"></textarea>
+                                          placeholder="@L["PostReplyPlaceholder"]"></textarea>
                                 <span asp-validation-for="ReplyBody" class="text-danger small"></span>
                             </div>
-                            <button type="submit" class="btn btn-primary btn-sm">Δημοσίευση Απάντησης</button>
+                            <button type="submit" class="btn btn-primary btn-sm">@L["PostSubmitReply"]</button>
                         </form>
                     </div>
                 </div>
@@ -179,17 +219,17 @@
             else
             {
                 <div class="alert alert-light border mt-4">
-                    <a asp-controller="Account" asp-action="Login">Συνδεθείτε</a> για να απαντήσετε.
+                    <a asp-controller="Account" asp-action="Login">@L["NavLogin"]</a> @L["PostToReply"]
                 </div>
             }
         }
         else
         {
-            <div class="alert alert-secondary mt-4">Αυτό το αίτημα έχει κλείσει.</div>
+            <div class="alert alert-secondary mt-4">@L["PostClosedMsg"]</div>
         }
 
         <div class="mt-3">
-            <a asp-action="Index" class="text-muted small">← Πίσω σε όλα τα αιτήματα</a>
+            <a asp-action="Index" class="text-muted small">@L["PostBackToAll"]</a>
         </div>
     </div>
 </div>
@@ -225,6 +265,8 @@
             if (data.liked) {
                 btn.classList.remove('btn-outline-primary');
                 btn.classList.add('btn-primary');
+                // Unlock "View Profile" button once reacted (keep unlocked even if unliked later)
+                document.getElementById('view-profile-btn')?.classList.remove('d-none');
             } else {
                 btn.classList.remove('btn-primary');
                 btn.classList.add('btn-outline-primary');
@@ -250,11 +292,11 @@
             if (data.saved) {
                 btn.classList.remove('btn-outline-warning');
                 btn.classList.add('btn-warning');
-                btn.querySelector('i').nextSibling.textContent = ' Αποθηκευμένο';
+                btn.querySelector('i').nextSibling.textContent = ' @L["BtnSaved"]';
             } else {
                 btn.classList.remove('btn-warning');
                 btn.classList.add('btn-outline-warning');
-                btn.querySelector('i').nextSibling.textContent = ' Αποθήκευση';
+                btn.querySelector('i').nextSibling.textContent = ' @L["BtnSave"]';
             }
         });
         </script>

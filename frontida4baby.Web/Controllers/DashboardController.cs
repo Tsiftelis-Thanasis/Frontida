@@ -15,15 +15,18 @@ public class DashboardController : Controller
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ISubscriptionService _subscription;
+    private readonly IWebHostEnvironment _env;
 
     public DashboardController(
         ApplicationDbContext db,
         UserManager<ApplicationUser> userManager,
-        ISubscriptionService subscription)
+        ISubscriptionService subscription,
+        IWebHostEnvironment env)
     {
         _db = db;
         _userManager = userManager;
         _subscription = subscription;
+        _env = env;
     }
 
     public async Task<IActionResult> Index(string tab = "posts")
@@ -118,11 +121,16 @@ public class DashboardController : Controller
 
         var vm = new UserSettingsViewModel
         {
-            FirstName = user.FirstName,
-            LastName  = user.LastName,
-            Phone     = user.PhoneNumber,
-            City      = user.City,
-            Bio       = profile?.Bio,
+            FirstName         = user.FirstName,
+            LastName          = user.LastName,
+            Phone             = user.PhoneNumber,
+            City              = user.City,
+            Bio               = profile?.Bio,
+            IsCaregiver       = user.IsCaregiver,
+            ProfileImageUrl   = profile?.ProfileImageUrl,
+            HourlyRate        = profile?.HourlyRate,
+            YearsOfExperience = profile?.YearsOfExperience,
+            Languages         = profile?.Languages,
         };
         return View(vm);
     }
@@ -131,7 +139,11 @@ public class DashboardController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Settings(UserSettingsViewModel model)
     {
-        if (!ModelState.IsValid) return View(model);
+        if (!ModelState.IsValid)
+        {
+            model.IsCaregiver = (await _userManager.GetUserAsync(User))?.IsCaregiver ?? false;
+            return View(model);
+        }
 
         var user = await _userManager.GetUserAsync(User);
         if (user == null) return NotFound();
@@ -140,16 +152,61 @@ public class DashboardController : Controller
         user.LastName    = model.LastName;
         user.PhoneNumber = model.Phone;
         user.City        = model.City;
-
         await _userManager.UpdateAsync(user);
 
-        // Update profile bio
+        // Upsert profile
         var profile = await _db.Profiles.FirstOrDefaultAsync(p => p.UserId == user.Id);
-        if (profile != null)
+        if (profile == null)
         {
-            profile.Bio = model.Bio;
-            await _db.SaveChangesAsync();
+            profile = new Profile { UserId = user.Id };
+            _db.Profiles.Add(profile);
         }
+
+        profile.Bio = model.Bio;
+
+        if (user.IsCaregiver)
+        {
+            profile.HourlyRate        = model.HourlyRate;
+            profile.YearsOfExperience = model.YearsOfExperience;
+            profile.Languages         = model.Languages;
+        }
+
+        // Handle photo upload
+        if (model.ProfileImage != null && model.ProfileImage.Length > 0)
+        {
+            var ext = Path.GetExtension(model.ProfileImage.FileName).ToLowerInvariant();
+            var allowed = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+            if (!allowed.Contains(ext))
+            {
+                ModelState.AddModelError(nameof(model.ProfileImage),
+                    "Μόνο εικόνες JPG, PNG ή WEBP γίνονται αποδεκτές.");
+                model.IsCaregiver     = user.IsCaregiver;
+                model.ProfileImageUrl = profile.ProfileImageUrl;
+                return View(model);
+            }
+
+            var uploadsDir = Path.Combine(_env.WebRootPath, "uploads", "profiles");
+            Directory.CreateDirectory(uploadsDir);
+
+            // Delete old file if it was one we stored
+            if (!string.IsNullOrEmpty(profile.ProfileImageUrl)
+                && profile.ProfileImageUrl.StartsWith("/uploads/profiles/"))
+            {
+                var oldPath = Path.Combine(_env.WebRootPath,
+                    profile.ProfileImageUrl.TrimStart('/').Replace('/', Path.DirectorySeparatorChar));
+                if (System.IO.File.Exists(oldPath))
+                    System.IO.File.Delete(oldPath);
+            }
+
+            var fileName = $"{user.Id}{ext}";
+            var filePath = Path.Combine(uploadsDir, fileName);
+            using var stream = new FileStream(filePath, FileMode.Create);
+            await model.ProfileImage.CopyToAsync(stream);
+
+            profile.ProfileImageUrl = $"/uploads/profiles/{fileName}";
+        }
+
+        await _db.SaveChangesAsync();
 
         TempData["SettingsSaved"] = true;
         return RedirectToAction(nameof(Settings));

@@ -1,0 +1,18 @@
+@* Model: double (average rating 0–5). Pass ReviewCount via ViewData["StarCount"]. *@
+@model double
+@{
+    int count  = ViewData["StarCount"] is int c ? c : 0;
+    int filled = (int)Math.Round(Model);
+    int empty  = 5 - filled;
+}
+@if (Model > 0)
+{
+    <span class="rating-stars text-nowrap" title="@Model.ToString("0.1") / 5">
+        @for (int i = 0; i < filled; i++) { <i class="fa-solid fa-star"></i> }
+        @for (int i = 0; i < empty;  i++) { <i class="fa-regular fa-star text-muted"></i> }
+        @if (count > 0)
+        {
+            <small class="text-muted ms-1">(@count)</small>
+        }
+    </span>
+}

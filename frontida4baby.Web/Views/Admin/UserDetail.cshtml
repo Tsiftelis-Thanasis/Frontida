@@ -7,7 +7,8 @@
 
 <div class="container py-4">
     <a asp-action="Users" class="btn btn-outline-secondary btn-sm mb-3">← Χρήστες</a>
-    <h2 class="mb-4">@Model.FirstName @Model.LastName</h2>
+    <h2 class="mb-1">@Model.FirstName @Model.LastName</h2>
+    <p class="text-muted mb-4">ID: <code>@Model.Id</code></p>
 
     @if (TempData["AdminMsg"] != null)
     {
@@ -15,30 +16,102 @@
     }
 
     <div class="row g-4">
+
+        
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">Στοιχεία Χρήστη</div>
+            <div class="card h-100">
+                <div class="card-header fw-semibold">Στοιχεία Λογαριασμού</div>
                 <div class="card-body">
-                    <p><strong>Email:</strong> @Model.Email</p>
+                    <p><strong>Email:</strong> @Model.Email
+                        @if (Model.EmailConfirmed)
+                        {
+                            <span class="badge bg-success ms-1">Επιβεβαιωμένο</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark ms-1">Μη επιβεβαιωμένο</span>
+                        }
+                    </p>
+                    <p><strong>Username:</strong> @Model.UserName</p>
+                    <p><strong>Τηλέφωνο:</strong> @(Model.PhoneNumber ?? "-")
+                        @if (Model.PhoneNumberConfirmed)
+                        {
+                            <span class="badge bg-success ms-1">Επιβεβαιωμένο</span>
+                        }
+                    </p>
+                    <p><strong>Ημ. Γέννησης:</strong> @(Model.DateOfBirth == default ? "-" : Model.DateOfBirth.ToString("dd/MM/yyyy"))</p>
+                    <p><strong>Διεύθυνση:</strong> @(Model.Address ?? "-")</p>
                     <p><strong>Πόλη:</strong> @(Model.City ?? "-")</p>
+                    <p><strong>ΤΚ:</strong> @(Model.PostalCode ?? "-")</p>
                     <p><strong>Φροντιστής:</strong> @(Model.IsCaregiver ? "Ναι" : "Όχι")</p>
-                    <p><strong>Ρόλοι:</strong> @string.Join(", ", roles)</p>
+                    <p><strong>Ρόλοι:</strong>
+                        @if (roles.Any())
+                        {
+                            @foreach (var r in roles)
+                            {
+                                <span class="badge bg-primary me-1">@r</span>
+                            }
+                        }
+                        else
+                        {
+                            <span class="text-muted">-</span>
+                        }
+                    </p>
                     <p><strong>Εγγραφή:</strong> @Model.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</p>
+                    <p><strong>Τελ. Ενημέρωση:</strong> @(Model.UpdatedAt.HasValue ? Model.UpdatedAt.Value.ToLocalTime().ToString("dd/MM/yyyy HH:mm") : "-")</p>
                 </div>
             </div>
         </div>
 
+        
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">Συνδρομή</div>
+            <div class="card h-100">
+                <div class="card-header fw-semibold">Ασφάλεια & Κατάσταση</div>
                 <div class="card-body">
-                    <p>
-                        <strong>Τρέχον Πλάνο:</strong>
-                        <span class="badge @(Model.Subscription?.Plan == SubscriptionPlan.Paid ? "bg-warning text-dark" : "bg-secondary")">
-                            @(Model.Subscription?.Plan.ToString() ?? "Free")
+                    <p><strong>2FA:</strong>
+                        <span class="badge @(Model.TwoFactorEnabled ? "bg-success" : "bg-secondary")">
+                            @(Model.TwoFactorEnabled ? "Ενεργό" : "Ανενεργό")
                         </span>
                     </p>
-                    <p><strong>Status:</strong> @(Model.Subscription?.Status.ToString() ?? "-")</p>
+                    <p><strong>Lockout:</strong>
+                        @if (Model.LockoutEnd.HasValue && Model.LockoutEnd.Value > DateTimeOffset.UtcNow)
+                        {
+                            <span class="badge bg-danger">Κλειδωμένος έως @Model.LockoutEnd.Value.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success">Ελεύθερος</span>
+                        }
+                    </p>
+                    <p><strong>Αποτυχημένες Συνδέσεις:</strong> @Model.AccessFailedCount</p>
+                    <p><strong>Lockout Enabled:</strong> @(Model.LockoutEnabled ? "Ναι" : "Όχι")</p>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header fw-semibold">Συνδρομή</div>
+                <div class="card-body">
+                    @if (Model.Subscription != null)
+                    {
+                        <p><strong>Πλάνο:</strong>
+                            <span class="badge @(Model.Subscription.Plan == SubscriptionPlan.Paid ? "bg-warning text-dark" : "bg-secondary")">
+                                @Model.Subscription.Plan
+                            </span>
+                        </p>
+                        <p><strong>Status:</strong> @Model.Subscription.Status</p>
+                        <p><strong>Έναρξη:</strong> @Model.Subscription.StartDate.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</p>
+                        <p><strong>Λήξη:</strong> @(Model.Subscription.EndDate.HasValue ? Model.Subscription.EndDate.Value.ToLocalTime().ToString("dd/MM/yyyy HH:mm") : "-")</p>
+                        <p><strong>Stripe Customer:</strong> <code>@(Model.Subscription.StripeCustomerId ?? "-")</code></p>
+                        <p><strong>Stripe Subscription:</strong> <code>@(Model.Subscription.StripeSubscriptionId ?? "-")</code></p>
+                        <p><strong>Δημιουργία:</strong> @Model.Subscription.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</p>
+                    }
+                    else
+                    {
+                        <p class="text-muted">Χωρίς εγγραφή συνδρομής (Free).</p>
+                    }
 
                     <form asp-action="SetPlan" asp-route-id="@Model.Id" method="post" class="d-flex gap-2 mt-3">
                         @Html.AntiForgeryToken()
@@ -51,20 +124,125 @@
                 </div>
             </div>
         </div>
+
+        
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header fw-semibold">Σύνοψη Δραστηριότητας</div>
+                <div class="card-body">
+                    <p><strong>Αγγελίες:</strong> @Model.Posts.Count</p>
+                    <p><strong>Απαντήσεις:</strong> @Model.Replies.Count</p>
+                    <p><strong>Approved αγγελίες:</strong> @Model.Posts.Count(p => p.ModerationStatus == ModerationStatus.Approved)</p>
+                    <p><strong>Pending αγγελίες:</strong> @Model.Posts.Count(p => p.ModerationStatus == ModerationStatus.PendingReview)</p>
+                    <p><strong>Rejected αγγελίες:</strong> @Model.Posts.Count(p => p.ModerationStatus == ModerationStatus.Rejected)</p>
+                </div>
+            </div>
+        </div>
     </div>
 
+    
     <div class="mt-4">
         <h5>Αγγελίες (@Model.Posts.Count)</h5>
-        <div class="list-group">
-            @foreach (var post in Model.Posts.OrderByDescending(p => p.CreatedAt).Take(10))
-            {
-                <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.Id"
-                   class="list-group-item list-group-item-action">
-                    @post.Title
-                    <span class="badge bg-secondary ms-1">@post.ModerationStatus</span>
-                    <small class="text-muted float-end">@post.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy")</small>
-                </a>
-            }
-        </div>
+        @if (Model.Posts.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Τίτλος</th>
+                            <th>Τύπος</th>
+                            <th>Πόλη</th>
+                            <th>Status</th>
+                            <th>Moderation</th>
+                            <th>Λόγος</th>
+                            <th>Δημιουργία</th>
+                            <th>Επεξεργασία</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var post in Model.Posts.OrderByDescending(p => p.CreatedAt))
+                        {
+                            <tr>
+                                <td>
+                                    <a asp-controller="Posts" asp-action="Details" asp-route-id="@post.Id">@post.Id</a>
+                                </td>
+                                <td>@post.Title</td>
+                                <td>@(post.ServiceType?.ToString() ?? "-")</td>
+                                <td>@(post.City ?? "-")</td>
+                                <td>
+                                    <span class="badge @(post.Status == PostStatus.Active ? "bg-success" : post.Status == PostStatus.Closed ? "bg-secondary" : "bg-danger")">
+                                        @post.Status
+                                    </span>
+                                </td>
+                                <td>
+                                    <span class="badge @(post.ModerationStatus == ModerationStatus.Approved ? "bg-success" : post.ModerationStatus == ModerationStatus.Rejected ? "bg-danger" : "bg-warning text-dark")">
+                                        @post.ModerationStatus
+                                    </span>
+                                </td>
+                                <td><small class="text-muted">@(post.ModerationReason ?? "-")</small></td>
+                                <td><small>@post.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</small></td>
+                                <td><small>@(post.EditedAt.HasValue ? post.EditedAt.Value.ToLocalTime().ToString("dd/MM/yyyy HH:mm") : "-")</small></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">Δεν υπάρχουν αγγελίες.</p>
+        }
+    </div>
+
+    
+    <div class="mt-4">
+        <h5>Απαντήσεις (@Model.Replies.Count)</h5>
+        @if (Model.Replies.Any())
+        {
+            <div class="table-responsive">
+                <table class="table table-sm table-bordered align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>#</th>
+                            <th>Αγγελία</th>
+                            <th>Κείμενο</th>
+                            <th>Moderation</th>
+                            <th>Λόγος</th>
+                            <th>Δημιουργία</th>
+                            <th>Επεξεργασία</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var reply in Model.Replies.OrderByDescending(r => r.CreatedAt))
+                        {
+                            <tr>
+                                <td>@reply.Id</td>
+                                <td>
+                                    <a asp-controller="Posts" asp-action="Details" asp-route-id="@reply.PostId">
+                                        #@reply.PostId @reply.Post.Title
+                                    </a>
+                                </td>
+                                <td>
+                                    <small>@(reply.Body.Length > 100 ? reply.Body[..100] + "…" : reply.Body)</small>
+                                </td>
+                                <td>
+                                    <span class="badge @(reply.ModerationStatus == ModerationStatus.Approved ? "bg-success" : reply.ModerationStatus == ModerationStatus.Rejected ? "bg-danger" : "bg-warning text-dark")">
+                                        @reply.ModerationStatus
+                                    </span>
+                                </td>
+                                <td><small class="text-muted">@(reply.ModerationReason ?? "-")</small></td>
+                                <td><small>@reply.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</small></td>
+                                <td><small>@(reply.EditedAt.HasValue ? reply.EditedAt.Value.ToLocalTime().ToString("dd/MM/yyyy HH:mm") : "-")</small></td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        }
+        else
+        {
+            <p class="text-muted">Δεν υπάρχουν απαντήσεις.</p>
+        }
     </div>
 </div>

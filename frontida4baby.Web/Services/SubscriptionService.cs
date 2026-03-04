@@ -50,4 +50,26 @@ public class SubscriptionService : ISubscriptionService
         var plan = await GetPlanAsync(viewerUserId);
         return plan == SubscriptionPlan.Paid;
     }
+
+    public async Task<bool> CanViewProfileAsync(string caregiverUserId, string targetUserId)
+    {
+        // Must have reacted to at least one post by the target user
+        var hasReacted = await _db.PostReactions
+            .AnyAsync(r => r.UserId == caregiverUserId
+                        && r.Post.AuthorUserId == targetUserId);
+        if (!hasReacted) return false;
+
+        // Paid plan = always access
+        var plan = await GetPlanAsync(caregiverUserId);
+        if (plan == SubscriptionPlan.Paid) return true;
+
+        // Free: count distinct post owners reacted to this month
+        var monthStart = new DateTime(DateTime.UtcNow.Year, DateTime.UtcNow.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+        var distinctOwners = await _db.PostReactions
+            .Where(r => r.UserId == caregiverUserId && r.CreatedAt >= monthStart)
+            .Select(r => r.Post.AuthorUserId)
+            .Distinct()
+            .CountAsync();
+        return distinctOwners <= 5;
+    }
 }

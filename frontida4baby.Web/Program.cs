@@ -73,6 +73,8 @@ builder.Services.AddHttpClient<ClaudeModerationService>();
 builder.Services.AddScoped<IContentModerationService, ContentModerationService>();
 builder.Services.AddScoped<ContentModerationService>(); // needed for LogAsync
 
+builder.Services.AddHostedService<PendingModerationJob>();
+
 // ── Subscription service ──────────────────────────────────────────────────────
 builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 
@@ -105,6 +107,32 @@ using (var scope = app.Services.CreateScope())
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
     if (!await roleManager.RoleExistsAsync("Admin"))
         await roleManager.CreateAsync(new IdentityRole("Admin"));
+
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    const string adminEmail    = "admin@frontida4baby.gr";
+    const string adminPassword = "Admin1234!";
+    if (await userManager.FindByEmailAsync(adminEmail) is null)
+    {
+        var adminUser = new ApplicationUser
+        {
+            UserName       = adminEmail,
+            Email          = adminEmail,
+            EmailConfirmed = true,
+            FirstName      = "Admin",
+            LastName       = "Admin",
+        };
+        var created = await userManager.CreateAsync(adminUser, adminPassword);
+        if (created.Succeeded)
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+    }
+
+    // ── Dev seed data (demo users, posts, replies) ────────────────────────
+    if (app.Environment.IsDevelopment())
+    {
+        var seederLogger = scope.ServiceProvider
+            .GetRequiredService<ILogger<Program>>();
+        await DevDataSeeder.SeedAsync(scope.ServiceProvider, seederLogger);
+    }
 }
 
 // ── HTTP pipeline ─────────────────────────────────────────────────────────────

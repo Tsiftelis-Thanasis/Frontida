@@ -1,0 +1,32 @@
+# ── Build stage ───────────────────────────────────────────────────────────────
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
+WORKDIR /src
+
+# Restore — separate layer so it's cached unless .csproj changes
+COPY frontida4baby.Web/frontida4baby.Web.csproj frontida4baby.Web/
+RUN dotnet restore frontida4baby.Web/frontida4baby.Web.csproj
+
+# Copy source and publish
+COPY frontida4baby.Web/ frontida4baby.Web/
+WORKDIR /src/frontida4baby.Web
+RUN dotnet publish -c Release -o /app/publish --no-restore
+
+# ── Runtime stage ─────────────────────────────────────────────────────────────
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
+WORKDIR /app
+
+COPY --from=build /app/publish .
+
+# Ensure upload directory exists and is writable
+RUN mkdir -p wwwroot/uploads/profiles
+
+# Run as non-root
+RUN adduser --disabled-password --gecos "" appuser \
+    && chown -R appuser:appuser /app
+USER appuser
+
+EXPOSE 8080
+ENV ASPNETCORE_URLS=http://+:8080
+ENV ASPNETCORE_ENVIRONMENT=Production
+
+ENTRYPOINT ["dotnet", "frontida4baby.Web.dll"]

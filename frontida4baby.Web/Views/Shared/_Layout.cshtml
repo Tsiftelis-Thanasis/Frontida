@@ -68,6 +68,19 @@
 
                         @if (User.Identity?.IsAuthenticated == true)
                         {
+                            @if (!User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Dashboard" asp-action="Index">
+                                        <i class="fa-solid fa-gauge-high me-1"></i>@L["NavDashboard"]
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" asp-controller="Subscription" asp-action="Index">
+                                        <i class="fa-solid fa-star me-1"></i>@L["NavSubscription"]
+                                    </a>
+                                </li>
+                            }
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item dropdown">

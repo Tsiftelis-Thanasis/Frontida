@@ -58,6 +58,7 @@ public class AdminController : Controller
         var user = await _db.Users
             .Include(u => u.Subscription)
             .Include(u => u.Posts)
+            .Include(u => u.Replies).ThenInclude(r => r.Post)
             .FirstOrDefaultAsync(u => u.Id == id);
 
         if (user == null) return NotFound();

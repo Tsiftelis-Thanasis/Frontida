@@ -1,7 +1,7 @@
 @model frontida4baby.Web.Models.ViewModels.CreatePostViewModel
 @using frontida4baby.Web.Models.Entities
 @{
-    ViewData["Title"] = "Επεξεργασία Αγγελίας";
+    ViewData["Title"] = L["EditPostTitle"].Value;
     var postId = ViewBag.PostId as int? ?? 0;
     var editedAt = ViewBag.EditedAt as DateTime?;
 }
@@ -9,19 +9,19 @@
 <div class="container py-5">
 <div class="row justify-content-center">
     <div class="col-lg-7">
-        <h2 class="mb-3">Επεξεργασία Αγγελίας</h2>
+        <h2 class="mb-3">@L["EditPostTitle"]</h2>
 
         @if (editedAt.HasValue)
         {
             <div class="alert alert-secondary small">
                 <i class="fas fa-clock me-1"></i>
-                Τελευταία επεξεργασία: @editedAt.Value.ToLocalTime().ToString("dd MMM yyyy HH:mm")
+                @L["EditLastEdited"] @editedAt.Value.ToLocalTime().ToString("dd MMM yyyy HH:mm")
             </div>
         }
 
         <div class="alert alert-warning" role="alert">
-            <strong>Κοινοτική Πολιτική</strong><br />
-            Οι αλλαγές ελέγχονται αυτόματα πριν την δημοσίευση.
+            <strong>@L["CreatePolicyTitle"]</strong><br />
+            @L["EditPolicyBody"]
         </div>
 
         <form asp-action="Edit" asp-route-id="@postId" method="post">
@@ -44,7 +44,7 @@
                     <label asp-for="ServiceType" class="form-label"></label>
                     <select asp-for="ServiceType" class="form-select"
                             asp-items="Html.GetEnumSelectList<ServiceType>()">
-                        <option value="">-- Προαιρετικό --</option>
+                        <option value="">@L["SelectOptional"]</option>
                     </select>
                 </div>
                 <div class="col-sm-6">
@@ -54,8 +54,8 @@
             </div>
 
             <div class="d-flex gap-2">
-                <button type="submit" class="btn btn-primary">Αποθήκευση Αλλαγών</button>
-                <a asp-action="Details" asp-route-id="@postId" class="btn btn-outline-secondary">Ακύρωση</a>
+                <button type="submit" class="btn btn-primary">@L["EditPostSubmit"]</button>
+                <a asp-action="Details" asp-route-id="@postId" class="btn btn-outline-secondary">@L["BtnCancel"]</a>
             </div>
         </form>
     </div>

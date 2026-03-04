@@ -9,4 +9,5 @@ public interface ISubscriptionService
     Task<bool> CanReplyAsync(string userId);
     Task<bool> CanReactAsync(string userId);
     Task<bool> IsPhoneVisibleAsync(string viewerUserId);
+    Task<bool> CanViewProfileAsync(string caregiverUserId, string targetUserId);
 }

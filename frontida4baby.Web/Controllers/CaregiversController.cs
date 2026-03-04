@@ -49,13 +49,15 @@ public class CaregiversController : Controller
                 UserId = u.Id,
                 FullName = $"{u.FirstName} {u.LastName}",
                 City = u.City,
-                ProfileImageUrl = u.Profile!.ProfileImageUrl,
-                HourlyRate = u.Profile.HourlyRate,
-                YearsOfExperience = u.Profile.YearsOfExperience,
-                IsVerified = u.Profile.IsVerified,
+                ProfileImageUrl = u.Profile != null ? u.Profile.ProfileImageUrl : null,
+                HourlyRate = u.Profile != null ? u.Profile.HourlyRate : null,
+                YearsOfExperience = u.Profile != null ? u.Profile.YearsOfExperience : null,
+                IsVerified = u.Profile != null && u.Profile.IsVerified,
                 AverageRating = u.ReceivedReviews.Any() ? u.ReceivedReviews.Average(r => r.Rating) : 0,
                 ReviewCount = u.ReceivedReviews.Count,
-                Services = u.Profile.Services.Where(s => s.IsActive).Select(s => s.ServiceType).ToList()
+                Services = u.Profile != null
+                    ? u.Profile.Services.Where(s => s.IsActive).Select(s => s.ServiceType).ToList()
+                    : new List<frontida4baby.Web.Models.Entities.ServiceType>()
             })
             .ToListAsync();
 

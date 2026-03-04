@@ -1,13 +1,23 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using frontida4baby.Web.Data;
 using frontida4baby.Web.Models;
 
 namespace frontida4baby.Web.Controllers;
 
 public class HomeController : Controller
 {
-    public IActionResult Index()
+    private readonly ApplicationDbContext _db;
+
+    public HomeController(ApplicationDbContext db)
     {
+        _db = db;
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        ViewBag.CaregiverCount = await _db.Users.CountAsync(u => u.IsCaregiver);
         return View();
     }
 
