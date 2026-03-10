@@ -7,5 +7,6 @@ public class ModerationOptions
     public int    MaxTokens         { get; set; } = 256;
     public int    TimeoutSeconds    { get; set; } = 10;
     // "Approved" | "Rejected" | "PendingReview"
-    public string FallbackOnTimeout { get; set; } = "PendingReview";
+    public string FallbackOnTimeout  { get; set; } = "PendingReview";
+    public int    BlacklistThreshold { get; set; } = 3;
 }

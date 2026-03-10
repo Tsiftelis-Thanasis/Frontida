@@ -32,6 +32,18 @@ public class HomeController : Controller
         return View();
     }
 
+    [Route("terms")]
+    public IActionResult TermsOfService()
+    {
+        return View();
+    }
+
+    [Route("ai-review-policy")]
+    public IActionResult AiReviewPolicy()
+    {
+        return View();
+    }
+
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

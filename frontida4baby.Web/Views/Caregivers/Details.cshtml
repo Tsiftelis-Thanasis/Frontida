@@ -1,0 +1,240 @@
+@model frontida4baby.Web.Models.ViewModels.CaregiverProfileViewModel
+@using frontida4baby.Web.Models.Entities
+@{
+    ViewData["Title"] = Model.FullName;
+    var initials = Model.FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                        .Take(2).Aggregate("", (s, w) => s + w[0]);
+}
+
+<div class="container py-4" style="max-width:800px">
+
+    @* ─── Back link ─────────────────────────────────────────────────────────── *@
+    <a asp-controller="Caregivers" asp-action="Index"
+       class="text-muted small d-inline-flex align-items-center gap-1 mb-4 text-decoration-none">
+        <i class="fa-solid fa-arrow-left"></i> @L["CgProfileBack"]
+    </a>
+
+    @* ─── Hero card ──────────────────────────────────────────────────────────── *@
+    <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-start gap-4 flex-wrap">
+
+                @* Avatar *@
+                @if (!string.IsNullOrEmpty(Model.ProfileImageUrl))
+                {
+                    <img src="@Model.ProfileImageUrl" alt="@Model.FullName"
+                         class="cg-profile-avatar flex-shrink-0" />
+                }
+                else
+                {
+                    <div class="cg-profile-initials flex-shrink-0">@initials</div>
+                }
+
+                <div class="flex-grow-1">
+                    <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                        <h2 class="mb-0 fw-bold" style="font-size:1.5rem">@Model.FullName</h2>
+                        @if (Model.IsVerified)
+                        {
+                            <span class="badge-verified">
+                                <i class="fa-solid fa-circle-check"></i> @L["TrustVerifiedTitle"]
+                            </span>
+                        }
+                    </div>
+
+                    @* Rating *@
+                    @if (Model.AverageRating > 0)
+                    {
+                        <div class="mb-2">
+                            @await Html.PartialAsync("_StarRating", Model.AverageRating,
+                                new ViewDataDictionary(ViewData) { ["StarCount"] = Model.ReviewCount })
+                        </div>
+                    }
+
+                    @* City *@
+                    @if (!string.IsNullOrEmpty(Model.City))
+                    {
+                        <div class="text-muted small mb-2">
+                            <i class="fa-solid fa-location-dot me-1"></i>@Model.City
+                        </div>
+                    }
+
+                    @* Service tags *@
+                    @if (Model.Services.Any())
+                    {
+                        <div class="d-flex flex-wrap gap-1">
+                            @foreach (var svc in Model.Services)
+                            {
+                                var key = svc.ServiceType switch
+                                {
+                                    ServiceType.Childcare    => "SvcChildcareTitle",
+                                    ServiceType.ElderlyCare  => "SvcElderlyTitle",
+                                    ServiceType.Tutoring     => "SvcTutoringTitle",
+                                    ServiceType.Housekeeping => "SvcHousekeepingTitle",
+                                    ServiceType.PetCare      => "SvcPetTitle",
+                                    _                        => svc.ServiceType.ToString()
+                                };
+                                <span class="service-badge">@L[key]</span>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+
+            @* ─── Stats strip ──────────────────────────────────────────────────── *@
+            @if (Model.HourlyRate.HasValue || Model.YearsOfExperience.HasValue)
+            {
+                <hr class="my-3" />
+                <div class="d-flex gap-4 flex-wrap">
+                    @if (Model.HourlyRate.HasValue)
+                    {
+                        <div class="text-center">
+                            <div class="fw-bold text-primary fs-5">€@Model.HourlyRate</div>
+                            <div class="text-muted" style="font-size:.75rem">@L["CaregiverHourly"]</div>
+                        </div>
+                    }
+                    @if (Model.YearsOfExperience.HasValue)
+                    {
+                        <div class="text-center">
+                            <div class="fw-bold fs-5">@Model.YearsOfExperience</div>
+                            <div class="text-muted" style="font-size:.75rem">@L["CgProfileYearsExp"]</div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+
+    @* ─── Bio ────────────────────────────────────────────────────────────────── *@
+    @if (!string.IsNullOrEmpty(Model.Bio))
+    {
+        <div class="card mb-4 border-0 shadow-sm">
+            <div class="card-body p-4">
+                <h6 class="fw-semibold mb-2 text-muted text-uppercase" style="font-size:.75rem;letter-spacing:.05em">
+                    @L["ProfileAbout"]
+                </h6>
+                <p class="mb-0" style="white-space:pre-wrap;line-height:1.7">@Model.Bio</p>
+            </div>
+        </div>
+    }
+
+    @* ─── Phone ──────────────────────────────────────────────────────────────── *@
+    @if (!string.IsNullOrEmpty(Model.Phone))
+    {
+        <div class="card mb-4 border-0 shadow-sm border-start border-4" style="border-color:var(--c-primary)!important">
+            <div class="card-body p-4 d-flex align-items-center gap-3">
+                <i class="fa-solid fa-phone fa-2x text-primary"></i>
+                <div>
+                    <div class="text-muted small">@L["ProfilePhone"]</div>
+                    <a href="tel:@Model.Phone" class="fs-5 fw-bold text-decoration-none">@Model.Phone</a>
+                </div>
+            </div>
+        </div>
+    }
+    else if (!Model.IsAuthenticated)
+    {
+        <div class="card mb-4 border-0 shadow-sm bg-light">
+            <div class="card-body p-4 d-flex align-items-center gap-3">
+                <i class="fa-solid fa-lock fa-xl text-muted"></i>
+                <div>
+                    <div class="fw-semibold">@L["CgProfilePhoneLoginTitle"]</div>
+                    <div class="text-muted small">@L["CgProfilePhoneLoginMsg"]</div>
+                    <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-primary mt-2">
+                        @L["NavLogin"]
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card mb-4 border-0 shadow-sm bg-light">
+            <div class="card-body p-4 d-flex align-items-center gap-3">
+                <i class="fa-solid fa-lock fa-xl text-muted"></i>
+                <div>
+                    <div class="fw-semibold">@L["CgProfilePhoneUpgradeTitle"]</div>
+                    <div class="text-muted small">@L["CgProfilePhoneUpgradeMsg"]</div>
+                    <a asp-controller="Subscription" asp-action="Index" class="btn btn-sm btn-primary mt-2">
+                        @L["NavSubscription"]
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+
+    @* ─── Reviews ────────────────────────────────────────────────────────────── *@
+    <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+            <h6 class="fw-semibold mb-3 text-muted text-uppercase" style="font-size:.75rem;letter-spacing:.05em">
+                @L["CgProfileReviews"]
+                @if (Model.ReviewCount > 0)
+                {
+                    <span class="text-dark ms-1">(@Model.ReviewCount)</span>
+                }
+            </h6>
+
+            @if (!Model.CanSeeReviews)
+            {
+                <div class="text-center py-3">
+                    <i class="fa-solid fa-star fa-2x mb-2" style="color:var(--c-border)"></i>
+                    <p class="text-muted small mb-2">@L["CgProfileReviewsUpgradeMsg"]</p>
+                    @if (Model.IsAuthenticated)
+                    {
+                        <a asp-controller="Subscription" asp-action="Index" class="btn btn-sm btn-outline-primary">
+                            @L["NavSubscription"]
+                        </a>
+                    }
+                    else
+                    {
+                        <a asp-controller="Account" asp-action="Login" class="btn btn-sm btn-outline-primary">
+                            @L["NavLogin"]
+                        </a>
+                    }
+                </div>
+            }
+            else if (!Model.Reviews.Any())
+            {
+                <p class="text-muted small mb-0">@L["CgProfileNoReviews"]</p>
+            }
+            else
+            {
+                @foreach (var rv in Model.Reviews)
+                {
+                    <div class="d-flex gap-3 py-3 border-bottom">
+                        <div class="flex-grow-1">
+                            @await Html.PartialAsync("_StarRating", (double)rv.Rating,
+                                new ViewDataDictionary(ViewData))
+                            <span class="small fw-semibold ms-1">@rv.ReviewerName</span>
+                            <span class="small text-muted ms-1">· @rv.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy")</span>
+                            @if (!string.IsNullOrEmpty(rv.Comment))
+                            {
+                                <div class="small text-muted mt-1 fst-italic">@rv.Comment</div>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+</div>
+
+<style>
+.cg-profile-avatar {
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--c-border);
+}
+.cg-profile-initials {
+    width: 90px; height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--c-primary), var(--c-dark));
+    color: #fff;
+    font-size: 1.8rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+</style>

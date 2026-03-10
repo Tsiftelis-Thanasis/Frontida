@@ -85,6 +85,45 @@
                     </p>
                     <p><strong>Αποτυχημένες Συνδέσεις:</strong> @Model.AccessFailedCount</p>
                     <p><strong>Lockout Enabled:</strong> @(Model.LockoutEnabled ? "Ναι" : "Όχι")</p>
+                    <hr />
+                    <p>
+                        <strong>Blacklist:</strong>
+                        @if (Model.IsBlacklisted)
+                        {
+                            <span class="badge bg-danger ms-1">Αποκλεισμένος</span>
+                            <small class="text-muted d-block mt-1">Λόγος: @(Model.BlacklistReason ?? "-")</small>
+                            @if (Model.BlacklistedAt.HasValue)
+                            {
+                                <small class="text-muted d-block">Από: @Model.BlacklistedAt.Value.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</small>
+                            }
+                            <form asp-action="UnblacklistUser" asp-route-id="@Model.Id" method="post" class="mt-2">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-outline-success"
+                                        onclick="return confirm('Να αρθεί ο αποκλεισμός αυτού του χρήστη;')">
+                                    <i class="fas fa-unlock me-1"></i>Άρση Αποκλεισμού
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <span class="badge bg-success ms-1">Ενεργός</span>
+                        }
+                    </p>
+                    <p>
+                        <strong>Αποδοχή Όρων:</strong>
+                        @if (Model.HasAcceptedTerms)
+                        {
+                            <span class="badge bg-success ms-1">Ναι</span>
+                            @if (Model.TermsAcceptedAt.HasValue)
+                            {
+                                <small class="text-muted ms-1">(@Model.TermsAcceptedAt.Value.ToLocalTime().ToString("dd/MM/yyyy"))</small>
+                            }
+                        }
+                        else
+                        {
+                            <span class="badge bg-warning text-dark ms-1">Όχι</span>
+                        }
+                    </p>
                 </div>
             </div>
         </div>

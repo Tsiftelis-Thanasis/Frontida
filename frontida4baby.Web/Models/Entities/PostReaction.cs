@@ -8,4 +8,8 @@ public class PostReaction
     public string UserId { get; set; } = "";
     public ApplicationUser User { get; set; } = null!;
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    // Approval by post OP
+    public bool IsApprovedByOP { get; set; } = false;
+    public DateTime? ApprovedAt { get; set; }
 }

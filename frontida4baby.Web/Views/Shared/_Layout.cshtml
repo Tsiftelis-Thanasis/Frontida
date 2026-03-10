@@ -3,7 +3,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] – frontida4baby</title>
+    <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
+    <link rel="icon" type="image/x-icon" href="~/favicon.ico" />
+    <title>@ViewData["Title"] – frontida4all</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -21,7 +23,7 @@
             <div class="container">
 
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index">
-                    frontida4baby
+                    frontida4all
                 </a>
 
                 <button class="navbar-toggler" type="button"
@@ -150,7 +152,7 @@
         <div class="container">
             <div class="row g-5">
                 <div class="col-lg-4">
-                    <div class="footer-brand">frontida4baby</div>
+                    <div class="footer-brand">frontida4all</div>
                     <p class="footer-tagline mt-2">@L["FtrTagline"]</p>
                 </div>
 
@@ -171,8 +173,11 @@
                 </div>
 
                 <div class="col-lg-3">
-                    <h6>frontida4baby</h6>
+                    <h6>frontida4all</h6>
                     <a asp-controller="Home" asp-action="Privacy">@L["FtrPrivacy"]</a>
+                    <a asp-controller="Home" asp-action="TermsOfService">Όροι Χρήσης</a>
+                    <a asp-controller="Home" asp-action="Disclaimer">Αποποίηση Ευθύνης</a>
+                    <a asp-controller="Home" asp-action="AiReviewPolicy">Πολιτική AI</a>
                     @if (!(User.Identity?.IsAuthenticated ?? false))
                     {
                         <a asp-controller="Account" asp-action="Register">@L["NavRegister"]</a>
@@ -190,5 +195,6 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @await Html.PartialAsync("_DisclaimerPartial")
+    @await Html.PartialAsync("_CookieConsentPartial")
 </body>
 </html>

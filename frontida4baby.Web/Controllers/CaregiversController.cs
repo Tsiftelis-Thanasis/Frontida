@@ -1,17 +1,27 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using frontida4baby.Web.Data;
+using frontida4baby.Web.Models.Entities;
 using frontida4baby.Web.Models.ViewModels;
+using frontida4baby.Web.Services;
 
 namespace frontida4baby.Web.Controllers;
 
 public class CaregiversController : Controller
 {
-    private readonly ApplicationDbContext _context;
+    private readonly ApplicationDbContext         _context;
+    private readonly UserManager<ApplicationUser> _userManager;
+    private readonly ISubscriptionService         _subscription;
 
-    public CaregiversController(ApplicationDbContext context)
+    public CaregiversController(
+        ApplicationDbContext         context,
+        UserManager<ApplicationUser> userManager,
+        ISubscriptionService         subscription)
     {
-        _context = context;
+        _context      = context;
+        _userManager  = userManager;
+        _subscription = subscription;
     }
 
     public async Task<IActionResult> Index(CaregiverSearchViewModel searchModel)
@@ -63,5 +73,72 @@ public class CaregiversController : Controller
 
         searchModel.Caregivers = caregivers;
         return View(searchModel);
+    }
+
+    [HttpGet("caregivers/{id}")]
+    public async Task<IActionResult> Details(string id)
+    {
+        var caregiver = await _context.Users
+            .Include(u => u.Profile)
+                .ThenInclude(p => p!.Services)
+            .Include(u => u.ReceivedReviews)
+                .ThenInclude(r => r.ReviewerUser)
+            .FirstOrDefaultAsync(u => u.Id == id && u.IsCaregiver);
+
+        if (caregiver is null) return NotFound();
+
+        bool isAuthenticated = User.Identity?.IsAuthenticated == true;
+        bool phoneVisible     = false;
+        bool canSeeReviews    = false;
+
+        if (isAuthenticated)
+        {
+            var viewer = await _userManager.GetUserAsync(User);
+            if (viewer is not null)
+            {
+                bool isAdmin = User.IsInRole("Admin");
+                phoneVisible  = isAdmin || await _subscription.IsPhoneVisibleAsync(viewer.Id);
+                canSeeReviews = isAdmin || await _subscription.GetPlanAsync(viewer.Id) == SubscriptionPlan.Paid;
+            }
+        }
+
+        var vm = new CaregiverProfileViewModel
+        {
+            UserId            = caregiver.Id,
+            FullName          = $"{caregiver.FirstName} {caregiver.LastName}".Trim(),
+            City              = caregiver.City,
+            ProfileImageUrl   = caregiver.Profile?.ProfileImageUrl,
+            Bio               = caregiver.Profile?.Bio,
+            HourlyRate        = caregiver.Profile?.HourlyRate,
+            YearsOfExperience = caregiver.Profile?.YearsOfExperience,
+            IsVerified        = caregiver.Profile?.IsVerified ?? false,
+            IsEmailVerified   = caregiver.EmailConfirmed,
+            AverageRating     = caregiver.ReceivedReviews.Any()
+                                    ? caregiver.ReceivedReviews.Average(r => (double)r.Rating) : 0,
+            ReviewCount       = caregiver.ReceivedReviews.Count,
+            Services          = caregiver.Profile?.Services
+                                    .Where(s => s.IsActive)
+                                    .Select(s => new ServiceWithDescription
+                                    {
+                                        ServiceType = s.ServiceType,
+                                        Description = s.Description
+                                    }).ToList() ?? new(),
+            Phone             = phoneVisible ? caregiver.PhoneNumber : null,
+            IsAuthenticated   = isAuthenticated,
+            CanSeeReviews     = canSeeReviews,
+            Reviews           = canSeeReviews
+                                    ? caregiver.ReceivedReviews
+                                        .OrderByDescending(r => r.CreatedAt)
+                                        .Select(r => new ReviewDetailItem
+                                        {
+                                            ReviewerName = $"{r.ReviewerUser.FirstName} {r.ReviewerUser.LastName}".Trim(),
+                                            Rating       = r.Rating,
+                                            Comment      = r.Comment,
+                                            CreatedAt    = r.CreatedAt
+                                        }).ToList()
+                                    : new()
+        };
+
+        return View(vm);
     }
 }

@@ -94,6 +94,7 @@ public class ProfileController : Controller
             Bio                 = profileUser.Profile?.Bio,
             Phone               = profileUser.PhoneNumber,
             PhoneVisible        = true,
+            IsEmailVerified     = profileUser.EmailConfirmed,
             AverageRating       = profileUser.ReceivedReviews.Any() ? profileUser.ReceivedReviews.Average(r => (double)r.Rating) : 0,
             ReviewCount         = profileUser.ReceivedReviews.Count,
             CanSeeRatingDetails = canSeeRatingDetails,

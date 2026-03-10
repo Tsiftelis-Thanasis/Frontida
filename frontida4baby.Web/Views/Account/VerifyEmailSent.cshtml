@@ -1,0 +1,55 @@
+@{
+    ViewData["Title"] = "Επιβεβαίωση Email";
+    var info = TempData["VerifyInfo"] as string;
+}
+
+<div class="auth-wrapper">
+    <div class="auth-card text-center">
+
+        <i class="fa-solid fa-envelope-open-text fa-3x text-primary mb-3 d-block"></i>
+
+        @if (info == "already")
+        {
+            <h2>Email ήδη επιβεβαιωμένο</h2>
+            <p class="subtitle">Η διεύθυνση email σου είναι ήδη επιβεβαιωμένη.</p>
+            <a asp-controller="Dashboard" asp-action="Index" class="btn btn-primary mt-3">
+                <i class="fas fa-tachometer-alt me-2"></i>Μετάβαση στο Dashboard
+            </a>
+        }
+        else
+        {
+            <h2>Έλεγξε το email σου</h2>
+            <p class="subtitle">
+                @if (info == "resent")
+                {
+                    <span>Στείλαμε ξανά το email επιβεβαίωσης.</span>
+                }
+                else
+                {
+                    <span>Στείλαμε ένα σύνδεσμο επιβεβαίωσης στο email σου.</span>
+                }
+            </p>
+
+            <div class="alert alert-light border mt-3 text-start small">
+                <i class="fas fa-circle-info me-2 text-primary"></i>
+                Άνοιξε το inbox σου και πάτα <strong>«Επιβεβαίωση Email»</strong>.
+                Αν δεν το βλέπεις, έλεγξε τον φάκελο spam.
+            </div>
+
+            @if (User.Identity?.IsAuthenticated == true)
+            {
+                <form asp-action="ResendVerification" asp-controller="Account" method="post" class="mt-3">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-rotate-right me-1"></i>Αποστολή ξανά
+                    </button>
+                </form>
+            }
+
+            <div class="mt-4">
+                <a asp-controller="Home" asp-action="Index" class="text-muted small">Μετάβαση στην Αρχική</a>
+            </div>
+        }
+
+    </div>
+</div>

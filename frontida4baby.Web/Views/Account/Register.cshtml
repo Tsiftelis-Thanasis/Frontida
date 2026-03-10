@@ -85,6 +85,19 @@
                 </div>
             </div>
 
+            <div class="mb-4">
+                <div class="form-check p-3 rounded-xl border" style="background:var(--c-light)">
+                    <input asp-for="AcceptedTerms" class="form-check-input" />
+                    <label asp-for="AcceptedTerms" class="form-check-label">
+                        Έχω διαβάσει και αποδέχομαι τους
+                        <a asp-controller="Home" asp-action="TermsOfService" target="_blank">Όρους Χρήσης</a>,
+                        την <a asp-controller="Home" asp-action="Privacy" target="_blank">Πολιτική Απορρήτου</a>
+                        και την <a asp-controller="Home" asp-action="Disclaimer" target="_blank">Αποποίηση Ευθύνης</a>.
+                    </label>
+                    <span asp-validation-for="AcceptedTerms" class="text-danger small d-block mt-1"></span>
+                </div>
+            </div>
+
             <button type="submit" class="btn-auth">@L["RegBtn"]</button>
         </form>
 

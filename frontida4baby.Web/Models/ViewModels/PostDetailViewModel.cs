@@ -29,6 +29,16 @@ public class PostDetailViewModel
 
     public List<ReplyItemViewModel> Replies { get; set; } = new();
 
+    // Reaction approval
+    public List<ReactingUserViewModel> ReactingUsers        { get; set; } = new();
+    public bool                        IsViewerApprovedReactor { get; set; }
+    public bool                        ShowOPContactInfo    { get; set; }
+
+    // OP contact info (only shown when approved)
+    public string? AuthorPhone   { get; set; }
+    public string? AuthorEmail   { get; set; }
+    public string? AuthorAddress { get; set; }
+
     // Inline reply form
     [Required(ErrorMessage = "Reply text is required.")]
     [StringLength(2000, MinimumLength = 5,
@@ -49,6 +59,18 @@ public class ReplyItemViewModel
     public DateTime  CreatedAt           { get; set; }
     public DateTime? EditedAt            { get; set; }
     public bool      CanEdit             { get; set; }
+}
+
+public class ReactingUserViewModel
+{
+    public int      ReactionId      { get; set; }
+    public string   UserId          { get; set; } = string.Empty;
+    public string   UserName        { get; set; } = string.Empty;
+    public bool     IsCaregiver     { get; set; }
+    public double   AverageRating   { get; set; }
+    public int      ReviewCount     { get; set; }
+    public bool     IsApproved      { get; set; }
+    public DateTime ReactedAt       { get; set; }
 }
 
 public class ReviewDetailItem

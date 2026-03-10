@@ -8,8 +8,9 @@ public class DashboardViewModel
     public List<ReplyDashboardItem>    MyReplies    { get; set; } = new();
     public List<PostListItemViewModel> ReactedPosts { get; set; } = new();
     public List<PostListItemViewModel> SavedPosts   { get; set; } = new();
-    public SubscriptionPlan            CurrentPlan  { get; set; }
-    public string                      ActiveTab    { get; set; } = "posts";
+    public SubscriptionPlan            CurrentPlan      { get; set; }
+    public string                      ActiveTab        { get; set; } = "posts";
+    public bool                        IsEmailVerified  { get; set; }
 }
 
 public class ReplyDashboardItem

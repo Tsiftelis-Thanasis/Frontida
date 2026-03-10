@@ -31,6 +31,10 @@ public class ReactionsController : Controller
     {
         var userId = _userManager.GetUserId(User)!;
 
+        var reactingUser = await _userManager.FindByIdAsync(userId);
+        if (reactingUser?.IsBlacklisted == true)
+            return Json(new { error = "Ο λογαριασμός σας έχει αποκλειστεί. Δεν μπορείτε να αντιδράτε σε αγγελίες." });
+
         var existing = await _db.PostReactions
             .FirstOrDefaultAsync(r => r.PostId == postId && r.UserId == userId);
 
@@ -57,5 +61,27 @@ public class ReactionsController : Controller
 
         var count = await _db.PostReactions.CountAsync(r => r.PostId == postId);
         return Json(new { liked, count });
+    }
+
+    [HttpPost("/reactions/approve/{reactionId:int}")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ApproveReaction(int reactionId)
+    {
+        var userId   = _userManager.GetUserId(User)!;
+        var reaction = await _db.PostReactions
+            .Include(r => r.Post)
+            .FirstOrDefaultAsync(r => r.Id == reactionId);
+
+        if (reaction is null) return NotFound();
+
+        // Only the OP of the post can approve reactions
+        if (reaction.Post.AuthorUserId != userId) return Forbid();
+
+        reaction.IsApprovedByOP = true;
+        reaction.ApprovedAt     = DateTime.UtcNow;
+        await _db.SaveChangesAsync();
+
+        TempData["ReactionApproved"] = true;
+        return RedirectToAction("Details", "Posts", new { id = reaction.PostId });
     }
 }

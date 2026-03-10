@@ -12,21 +12,24 @@ public class AccountController : Controller
 {
     private readonly UserManager<ApplicationUser>   _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly IEmailService  _email;
-    private readonly IAppLogService _log;
-    private readonly IConfiguration _config;
+    private readonly IEmailService       _email;
+    private readonly IAppLogService      _log;
+    private readonly INotificationService _notifications;
+    private readonly IConfiguration      _config;
 
     public AccountController(
         UserManager<ApplicationUser>   userManager,
         SignInManager<ApplicationUser> signInManager,
-        IEmailService  email,
-        IAppLogService log,
-        IConfiguration config)
+        IEmailService       email,
+        IAppLogService      log,
+        INotificationService notifications,
+        IConfiguration      config)
     {
         _userManager   = userManager;
         _signInManager = signInManager;
         _email         = email;
         _log           = log;
+        _notifications = notifications;
         _config        = config;
     }
 
@@ -50,7 +53,9 @@ public class AccountController : Controller
                 Email = model.Email,
                 FirstName = model.FirstName,
                 LastName = model.LastName,
-                IsCaregiver = model.IsCaregiver
+                IsCaregiver = model.IsCaregiver,
+                HasAcceptedTerms = true,
+                TermsAcceptedAt = DateTime.UtcNow
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -60,17 +65,21 @@ public class AccountController : Controller
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 await _log.LogAsync(AppLogLevel.Info, "Account", $"Registered: {model.Email}", userId: user.Id);
 
-                // Fire-and-forget admin notification
-                var adminEmail = _config["Email:AdminEmail"] ?? "";
-                if (!string.IsNullOrEmpty(adminEmail))
-                    _ = Task.Run(async () =>
-                    {
-                        try { await _email.SendAsync(adminEmail, $"New user: {model.Email}",
-                            $"<p>A new user has registered: <strong>{model.Email}</strong></p>"); }
-                        catch { /* best-effort */ }
-                    });
+                // Send email verification link (fire-and-forget)
+                _ = Task.Run(async () =>
+                {
+                    try { await SendVerificationEmailAsync(user); }
+                    catch { /* best-effort */ }
+                });
 
-                return RedirectToAction("Index", "Home");
+                // Fire-and-forget admin notification
+                _ = Task.Run(async () =>
+                {
+                    try { await _notifications.NotifyNewRegistrationAsync(model.Email); }
+                    catch { /* best-effort */ }
+                });
+
+                return RedirectToAction(nameof(VerifyEmailSent));
             }
 
             foreach (var error in result.Errors)
@@ -114,6 +123,8 @@ public class AccountController : Controller
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
         }
 
+        model.Password = string.Empty;
+        ModelState.Remove(nameof(model.Password));
         return View(model);
     }
 
@@ -237,6 +248,97 @@ public class AccountController : Controller
         await _log.LogAsync(AppLogLevel.Info, "Account", $"Logout: {email}", userId: userId);
         return RedirectToAction("Index", "Home");
     }
+
+    // ── Email verification ────────────────────────────────────────────────────
+
+    [HttpGet]
+    public IActionResult VerifyEmailSent()
+    {
+        // Show the "check your inbox" page regardless of auth state
+        return View();
+    }
+
+    [HttpGet("account/confirm-email")]
+    public async Task<IActionResult> ConfirmEmail(string userId, string token)
+    {
+        if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(token))
+            return View("ConfirmEmailResult", false);
+
+        var user = await _userManager.FindByIdAsync(userId);
+        if (user is null)
+            return View("ConfirmEmailResult", false);
+
+        var decodedToken = System.Net.WebUtility.UrlDecode(token);
+        var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
+
+        if (result.Succeeded)
+            await _log.LogAsync(AppLogLevel.Info, "Account",
+                $"Email confirmed: {user.Email}", userId: user.Id);
+
+        return View("ConfirmEmailResult", result.Succeeded);
+    }
+
+    [HttpPost("account/resend-verification")]
+    [ValidateAntiForgeryToken]
+    [Microsoft.AspNetCore.Authorization.Authorize]
+    public async Task<IActionResult> ResendVerification()
+    {
+        var user = await _userManager.GetUserAsync(User);
+        if (user is null) return NotFound();
+
+        if (user.EmailConfirmed)
+        {
+            TempData["VerifyInfo"] = "already";
+            return RedirectToAction(nameof(VerifyEmailSent));
+        }
+
+        _ = Task.Run(async () =>
+        {
+            try { await SendVerificationEmailAsync(user); }
+            catch { /* best-effort */ }
+        });
+
+        TempData["VerifyInfo"] = "resent";
+        return RedirectToAction(nameof(VerifyEmailSent));
+    }
+
+    private async Task SendVerificationEmailAsync(ApplicationUser user)
+    {
+        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var encodedToken = System.Net.WebUtility.UrlEncode(token);
+
+        var confirmUrl = Url.Action(
+            nameof(ConfirmEmail), "Account",
+            new { userId = user.Id, token = encodedToken },
+            Request.Scheme);
+
+        var fromName = _config["Email:FromName"] ?? "frontida4all";
+        var html = $"""
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+              <h2 style="color:#4f46e5">Επιβεβαίωση email — {fromName}</h2>
+              <p>Γεια σου {user.FirstName},</p>
+              <p>Ευχαριστούμε για την εγγραφή σου! Πάτα το παρακάτω κουμπί για να επιβεβαιώσεις
+                 τη διεύθυνση email σου:</p>
+              <p style="margin:32px 0">
+                <a href="{confirmUrl}"
+                   style="background:#4f46e5;color:#fff;padding:12px 28px;border-radius:6px;
+                          text-decoration:none;font-weight:600;font-size:15px">
+                  Επιβεβαίωση Email
+                </a>
+              </p>
+              <p style="color:#6b7280;font-size:13px">
+                Αν δεν έκανες εγγραφή, αγνόησε αυτό το μήνυμα.<br/>
+                Ο σύνδεσμος λήγει μετά από 24 ώρες.
+              </p>
+              <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0"/>
+              <p style="color:#9ca3af;font-size:12px">{fromName} · Greece</p>
+            </div>
+            """;
+
+        await _email.SendAsync(user.Email!, "Επιβεβαίωση email", html);
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
 
     private IActionResult RedirectToLocal(string? returnUrl)
     {

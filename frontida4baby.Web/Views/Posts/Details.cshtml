@@ -136,6 +136,84 @@
             </div>
         </div>
 
+        @* OP Contact Info (shown to OP always, and to approved reactors) *@
+        @if (Model.ShowOPContactInfo && !Model.CanEdit)
+        {
+            <div class="card mb-4 border-success">
+                <div class="card-header bg-success bg-opacity-10 fw-semibold text-success">
+                    <i class="fas fa-address-card me-2"></i>Στοιχεία Επικοινωνίας Συντάκτη
+                </div>
+                <div class="card-body">
+                    @if (!string.IsNullOrEmpty(Model.AuthorPhone))
+                    {
+                        <p class="mb-1"><i class="fas fa-phone me-2 text-muted"></i>@Model.AuthorPhone</p>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.AuthorEmail))
+                    {
+                        <p class="mb-1"><i class="fas fa-envelope me-2 text-muted"></i>@Model.AuthorEmail</p>
+                    }
+                    @if (!string.IsNullOrEmpty(Model.AuthorAddress))
+                    {
+                        <p class="mb-1"><i class="fas fa-map-marker-alt me-2 text-muted"></i>@Model.AuthorAddress</p>
+                    }
+                </div>
+            </div>
+        }
+
+        @* Waiting for approval notice (non-approved caregivers who have reacted) *@
+        @if (Model.CurrentUserLiked && !Model.IsViewerApprovedReactor && !Model.CanEdit && Model.ViewerIsCaregiver)
+        {
+            <div class="alert alert-info mb-4">
+                <i class="fas fa-clock me-2"></i>
+                <strong>Αναμονή έγκρισης:</strong> Η αντίδρασή σας στάλθηκε στον συντάκτη.
+                Μόλις εγκριθεί, θα έχετε πρόσβαση στα στοιχεία επικοινωνίας.
+            </div>
+        }
+
+        @* Reactions panel — only shown to OP *@
+        @if (Model.CanEdit && Model.ReactingUsers.Any())
+        {
+            <div class="card mb-4">
+                <div class="card-header fw-semibold">
+                    <i class="fas fa-heart me-2 text-danger"></i>Αντιδράσεις (@Model.ReactingUsers.Count)
+                </div>
+                <div class="list-group list-group-flush">
+                    @foreach (var reactor in Model.ReactingUsers)
+                    {
+                        <div class="list-group-item d-flex align-items-center gap-3 py-2">
+                            <div class="flex-grow-1">
+                                <a href="/profile/@reactor.UserId" class="fw-semibold text-decoration-none">@reactor.UserName</a>
+                                @if (reactor.IsCaregiver)
+                                {
+                                    <span class="badge bg-primary ms-1">Φροντιστής</span>
+                                }
+                                @if (reactor.AverageRating > 0)
+                                {
+                                    @await Html.PartialAsync("_StarRating", reactor.AverageRating,
+                                        new ViewDataDictionary(ViewData) { ["StarCount"] = reactor.ReviewCount })
+                                }
+                                <small class="text-muted d-block">@reactor.ReactedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")</small>
+                            </div>
+                            @if (reactor.IsApproved)
+                            {
+                                <span class="badge bg-success"><i class="fas fa-check me-1"></i>Εγκεκριμένο</span>
+                            }
+                            else
+                            {
+                                <form asp-controller="Reactions" asp-action="ApproveReaction"
+                                      asp-route-reactionId="@reactor.ReactionId" method="post" class="d-inline">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-outline-success">
+                                        <i class="fas fa-check me-1"></i>Έγκριση
+                                    </button>
+                                </form>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+
         @* Replies *@
         <h5 class="mb-3">@Model.Replies.Count @(Model.Replies.Count == 1 ? L["PostReplySingular"].Value : L["PostReplyPlural"].Value)</h5>
 

@@ -1,0 +1,120 @@
+@{
+    ViewData["Title"] = "Πολιτική Αξιολόγησης AI";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="page-header mb-4">
+                <h1><i class="fas fa-robot me-2"></i>Πολιτική Αξιολόγησης AI</h1>
+                <p class="lead text-muted">Τελευταία ενημέρωση: Μάρτιος 2026</p>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4><i class="fas fa-info-circle me-2 text-primary"></i>1. Τι είναι η Αξιολόγηση AI;</h4>
+                    <p>
+                        Η frontida4all χρησιμοποιεί το <strong>Claude AI</strong> της Anthropic για
+                        αυτόματη εποπτεία του περιεχομένου που δημοσιεύεται στην πλατφόρμα.
+                        Το σύστημα αυτό λειτουργεί ως πρώτο στρώμα ασφαλείας για τη διατήρηση
+                        ενός ασφαλούς και φιλόξενου περιβάλλοντος.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4><i class="fas fa-search me-2 text-primary"></i>2. Τι Ελέγχει το AI;</h4>
+                    <p>Το σύστημα εποπτείας ελέγχει για:</p>
+                    <ul>
+                        <li><strong>Ακατάλληλο περιεχόμενο:</strong> ύβρεις, προσβολές, ρατσιστικό λόγο</li>
+                        <li><strong>Απειλητική γλώσσα:</strong> απειλές βίας ή εκφοβισμός</li>
+                        <li><strong>Παράνομο περιεχόμενο:</strong> παράνομες δραστηριότητες ή προσφορές</li>
+                        <li><strong>Spam & διαφήμιση:</strong> ανεπιθύμητο εμπορικό περιεχόμενο</li>
+                        <li><strong>Παραπλανητικές πληροφορίες:</strong> ψευδείς ή παραπλανητικοί ισχυρισμοί</li>
+                        <li><strong>Προστασία ανηλίκων:</strong> οποιοδήποτε περιεχόμενο κινδυνεύει ανηλίκους</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4><i class="fas fa-project-diagram me-2 text-primary"></i>3. Πώς Λειτουργεί;</h4>
+                    <p>Η διαδικασία εποπτείας είναι διπλή:</p>
+                    <ol>
+                        <li>
+                            <strong>Στάδιο 1 — Λίστα λέξεων (άμεσο):</strong>
+                            Ελέγχεται άμεσα έναντι λίστας απαγορευμένων λέξεων και φράσεων.
+                            Αν εντοπιστεί παραβίαση, το περιεχόμενο απορρίπτεται αυτόματα.
+                        </li>
+                        <li>
+                            <strong>Στάδιο 2 — Ανάλυση Claude AI (σημασιολογική):</strong>
+                            Αν το περιεχόμενο περάσει το πρώτο στάδιο, αναλύεται από το Claude AI
+                            για βαθύτερη κατανόηση του πλαισίου και του νοήματος.
+                        </li>
+                    </ol>
+                    <p class="mt-3"><strong>Πιθανά αποτελέσματα:</strong></p>
+                    <ul>
+                        <li><span class="badge bg-success">Εγκεκριμένο</span> — Δημοσιεύεται αμέσως</li>
+                        <li><span class="badge bg-warning text-dark">Σε αναμονή</span> — Αποστέλλεται για χειροκίνητη αξιολόγηση</li>
+                        <li><span class="badge bg-danger">Απορρίφθηκε</span> — Δεν δημοσιεύεται, ο χρήστης ενημερώνεται</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4><i class="fas fa-exclamation-triangle me-2 text-warning"></i>4. Περιορισμοί του AI</h4>
+                    <p>
+                        Το αυτόματο σύστημα εποπτείας δεν είναι τέλειο. Ενδέχεται να:
+                    </p>
+                    <ul>
+                        <li><strong>Ψευδώς αρνηθεί</strong> νόμιμο περιεχόμενο (false positive)</li>
+                        <li><strong>Εγκρίνει κατά λάθος</strong> παραβατικό περιεχόμενο (false negative)</li>
+                        <li>Δυσκολευτεί με ιδιωματισμούς ή τοπικές εκφράσεις</li>
+                    </ul>
+                    <p>
+                        Οι διαχειριστές παρακολουθούν το σύστημα και μπορούν να επαναξιολογήσουν
+                        αποφάσεις κατόπιν αιτήματος.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4><i class="fas fa-shield-alt me-2 text-primary"></i>5. Δεδομένα & Απόρρητο</h4>
+                    <p>
+                        Το περιεχόμενο που υποβάλλετε αναλύεται από το API της Anthropic (Claude).
+                        Η Anthropic επεξεργάζεται αυτά τα δεδομένα σύμφωνα με τη δική της
+                        <a href="https://www.anthropic.com/privacy" target="_blank">Πολιτική Απορρήτου</a>.
+                    </p>
+                    <p>
+                        Δεν χρησιμοποιούμε τα δεδομένα σας για εκπαίδευση AI μοντέλων.
+                    </p>
+                </div>
+            </div>
+
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4><i class="fas fa-comments me-2 text-primary"></i>6. Προσφυγή κατά Απόρριψης</h4>
+                    <p>
+                        Αν πιστεύετε ότι το περιεχόμενό σας απορρίφθηκε λανθασμένα:
+                    </p>
+                    <ol>
+                        <li>Επανεξετάστε το περιεχόμενο για τυχόν παρεξηγήσιμες φράσεις</li>
+                        <li>Δοκιμάστε να επαναδιατυπώσετε και να υποβάλλετε εκ νέου</li>
+                        <li>Επικοινωνήστε μαζί μας στο
+                            <a href="mailto:support@frontida4all.gr">support@frontida4all.gr</a>
+                            αναφέροντας το πρόβλημα</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>Επιστροφή στην Αρχική
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

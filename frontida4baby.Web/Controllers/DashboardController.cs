@@ -33,11 +33,13 @@ public class DashboardController : Controller
     {
         var userId = _userManager.GetUserId(User)!;
         var plan   = await _subscription.GetPlanAsync(userId);
+        var user   = await _userManager.FindByIdAsync(userId);
 
         var vm = new DashboardViewModel
         {
-            CurrentPlan = plan,
-            ActiveTab   = tab,
+            CurrentPlan     = plan,
+            ActiveTab       = tab,
+            IsEmailVerified = user?.EmailConfirmed ?? false,
         };
 
         if (tab == "posts" || tab == "")

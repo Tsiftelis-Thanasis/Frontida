@@ -66,6 +66,23 @@ public class AdminController : Controller
         return View(user);
     }
 
+    // POST /admin/users/{id}/unblacklist
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> UnblacklistUser(string id)
+    {
+        var user = await _db.Users.FindAsync(id);
+        if (user == null) return NotFound();
+
+        user.IsBlacklisted   = false;
+        user.BlacklistReason = null;
+        user.BlacklistedAt   = null;
+        await _db.SaveChangesAsync();
+
+        TempData["AdminMsg"] = "Ο αποκλεισμός χρήστη αρθεί επιτυχώς.";
+        return RedirectToAction(nameof(UserDetail), new { id });
+    }
+
     // POST /admin/users/{id}/set-plan
     [HttpPost]
     [ValidateAntiForgeryToken]

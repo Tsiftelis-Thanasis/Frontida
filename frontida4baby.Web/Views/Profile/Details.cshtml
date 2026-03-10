@@ -10,6 +10,13 @@
             @* Page header *@
             <div class="d-flex align-items-center gap-2 mb-4 flex-wrap">
                 <h3 class="mb-0">@Model.FullName</h3>
+                @if (Model.IsEmailVerified)
+                {
+                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25"
+                          title="Email επιβεβαιωμένο" style="font-size:.7rem">
+                        <i class="fas fa-circle-check me-1"></i>Επιβεβαιωμένος
+                    </span>
+                }
                 @if (!string.IsNullOrEmpty(Model.City))
                 {
                     <span class="badge bg-light text-dark border">📍 @Model.City</span>

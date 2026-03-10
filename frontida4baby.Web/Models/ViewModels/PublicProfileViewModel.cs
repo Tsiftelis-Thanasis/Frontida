@@ -9,6 +9,7 @@ public class PublicProfileViewModel
     public string? Bio                { get; set; }
     public string? Phone              { get; set; }
     public bool    PhoneVisible       { get; set; }
+    public bool    IsEmailVerified   { get; set; }
     public double  AverageRating      { get; set; }
     public int     ReviewCount        { get; set; }
     public bool    CanSeeRatingDetails { get; set; }

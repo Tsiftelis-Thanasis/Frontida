@@ -251,4 +251,21 @@
   <data name="ProfileRecentPosts"  xml:space="preserve"><value>Πρόσφατες Αναρτήσεις</value></data>
   <data name="ProfileNoPosts"      xml:space="preserve"><value>Δεν υπάρχουν δημοσιευμένες αναρτήσεις.</value></data>
   <data name="ProfileBackToPosts"  xml:space="preserve"><value>← Πίσω στις αναρτήσεις</value></data>
+
+  <!-- Δημόσιο προφίλ φροντιστή -->
+  <data name="CgProfileBack"              xml:space="preserve"><value>← Πίσω στους φροντιστές</value></data>
+  <data name="CgProfileYearsExp"          xml:space="preserve"><value>χρόνια εμπειρίας</value></data>
+  <data name="CgProfilePhoneLoginTitle"   xml:space="preserve"><value>Στοιχεία επικοινωνίας κλειδωμένα</value></data>
+  <data name="CgProfilePhoneLoginMsg"     xml:space="preserve"><value>Συνδεθείτε για να δείτε τον αριθμό τηλεφώνου.</value></data>
+  <data name="CgProfilePhoneUpgradeTitle" xml:space="preserve"><value>Στοιχεία επικοινωνίας κλειδωμένα</value></data>
+  <data name="CgProfilePhoneUpgradeMsg"   xml:space="preserve"><value>Αναβαθμίστε το πλάνο σας για να δείτε τα στοιχεία επικοινωνίας.</value></data>
+  <data name="CgProfileReviews"           xml:space="preserve"><value>Αξιολογήσεις</value></data>
+  <data name="CgProfileNoReviews"         xml:space="preserve"><value>Δεν υπάρχουν αξιολογήσεις ακόμα.</value></data>
+  <data name="CgProfileReviewsUpgradeMsg" xml:space="preserve"><value>Αναβαθμίστε το πλάνο σας για να διαβάσετε τις αξιολογήσεις.</value></data>
+
+  <!-- Συναίνεση cookies -->
+  <data name="CookieTitle"      xml:space="preserve"><value>Χρησιμοποιούμε cookies</value></data>
+  <data name="CookieMessage"    xml:space="preserve"><value>Χρησιμοποιούμε cookies για να βελτιώσουμε την εμπειρία σας στην πλατφόρμα μας.</value></data>
+  <data name="CookieLearnMore" xml:space="preserve"><value>Μάθετε περισσότερα</value></data>
+  <data name="CookieAccept"    xml:space="preserve"><value>Αποδοχή</value></data>
 </root>

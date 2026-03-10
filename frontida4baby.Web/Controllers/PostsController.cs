@@ -80,6 +80,9 @@ public class PostsController : Controller
             .Include(p => p.Replies)
                 .ThenInclude(r => r.AuthorUser)
                     .ThenInclude(u => u.ReceivedReviews)
+            .Include(p => p.Reactions)
+                .ThenInclude(r => r.User)
+                    .ThenInclude(u => u.ReceivedReviews)
             .FirstOrDefaultAsync(p => p.Id == id
                 && (p.Status == PostStatus.Active || p.Status == PostStatus.Closed));
 
@@ -90,6 +93,14 @@ public class PostsController : Controller
         int reactionCount = await _db.PostReactions.CountAsync(r => r.PostId == id);
         bool liked = currentUserId != null &&
             await _db.PostReactions.AnyAsync(r => r.PostId == id && r.UserId == currentUserId);
+
+        // Reaction approval: check if the current viewer has an approved reaction
+        bool isViewerApprovedReactor = currentUserId != null &&
+            post.Reactions.Any(r => r.UserId == currentUserId && r.IsApprovedByOP);
+
+        // OP can always see their own contact; approved reactors also see it
+        bool isOP = currentUserId == post.AuthorUserId;
+        bool showOPContact = isOP || isViewerApprovedReactor;
         bool saved = currentUserId != null &&
             await _db.SavedPosts.AnyAsync(s => s.PostId == id && s.UserId == currentUserId);
 
@@ -144,6 +155,24 @@ public class PostsController : Controller
             CanEdit              = currentUserId == post.AuthorUserId,
             ViewerIsCaregiver    = viewerIsCaregiver,
             CanViewAuthorProfile = canViewProfile,
+            IsViewerApprovedReactor = isViewerApprovedReactor,
+            ShowOPContactInfo    = showOPContact,
+            AuthorPhone          = showOPContact ? post.AuthorUser.PhoneNumber : null,
+            AuthorEmail          = showOPContact ? post.AuthorUser.Email : null,
+            AuthorAddress        = showOPContact ? $"{post.AuthorUser.Address}, {post.AuthorUser.City}".Trim(',', ' ') : null,
+            ReactingUsers        = isOP ? post.Reactions
+                .OrderBy(r => r.CreatedAt)
+                .Select(r => new ReactingUserViewModel
+                {
+                    ReactionId    = r.Id,
+                    UserId        = r.UserId,
+                    UserName      = $"{r.User.FirstName} {r.User.LastName}".Trim(),
+                    IsCaregiver   = r.User.IsCaregiver,
+                    AverageRating = r.User.ReceivedReviews.Any() ? r.User.ReceivedReviews.Average(rv => (double)rv.Rating) : 0,
+                    ReviewCount   = r.User.ReceivedReviews.Count,
+                    IsApproved    = r.IsApprovedByOP,
+                    ReactedAt     = r.CreatedAt,
+                }).ToList() : new(),
             Replies          = post.Replies
                 .Where(r => r.ModerationStatus == ModerationStatus.Approved)
                 .OrderBy(r => r.CreatedAt)
@@ -179,6 +208,15 @@ public class PostsController : Controller
         if (!ModelState.IsValid) return View(model);
 
         var userId = _userManager.GetUserId(User)!;
+
+        var currentUser = await _userManager.FindByIdAsync(userId);
+        if (currentUser?.IsBlacklisted == true)
+        {
+            ModelState.AddModelError(string.Empty,
+                "Ο λογαριασμός σας έχει αποκλειστεί από τη δημοσίευση περιεχομένου λόγω επαναλαμβανόμενων παραβιάσεων. Επικοινωνήστε με την υποστήριξη για βοήθεια.");
+            return View(model);
+        }
+
         if (!await _subscription.CanPostAsync(userId))
         {
             ModelState.AddModelError(string.Empty,

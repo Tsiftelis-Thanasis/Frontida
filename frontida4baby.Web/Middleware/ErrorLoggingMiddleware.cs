@@ -14,7 +14,9 @@ public class ErrorLoggingMiddleware
         _logger = logger;
     }
 
-    public async Task InvokeAsync(HttpContext context, IAppLogService logService, IEmailService emailService)
+    public async Task InvokeAsync(HttpContext context,
+        IAppLogService logService,
+        INotificationService notifications)
     {
         try
         {
@@ -33,27 +35,13 @@ public class ErrorLoggingMiddleware
                     details: ex.ToString(),
                     path: context.Request.Path);
             }
-            catch
-            {
-                // Don't let logging failure mask the original exception
-            }
+            catch { /* don't let logging failure mask the original exception */ }
 
             try
             {
-                var adminEmail = context.RequestServices
-                    .GetRequiredService<IConfiguration>()["Email:AdminEmail"];
-                if (!string.IsNullOrWhiteSpace(adminEmail))
-                {
-                    await emailService.SendAsync(
-                        adminEmail,
-                        $"[frontida4baby] Error: {ex.Message}",
-                        $"<h3>Unhandled Exception</h3><pre>{System.Net.WebUtility.HtmlEncode(ex.ToString())}</pre><p>Path: {context.Request.Path}</p>");
-                }
+                await notifications.NotifyServerErrorAsync(context.Request.Path, ex);
             }
-            catch
-            {
-                // Best-effort
-            }
+            catch { /* best-effort */ }
 
             throw;
         }

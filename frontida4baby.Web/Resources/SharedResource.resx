@@ -251,4 +251,21 @@
   <data name="ProfileRecentPosts"  xml:space="preserve"><value>Recent Posts</value></data>
   <data name="ProfileNoPosts"      xml:space="preserve"><value>No published posts.</value></data>
   <data name="ProfileBackToPosts"  xml:space="preserve"><value>← Back to posts</value></data>
+
+  <!-- Caregiver public profile -->
+  <data name="CgProfileBack"              xml:space="preserve"><value>← Back to caregivers</value></data>
+  <data name="CgProfileYearsExp"          xml:space="preserve"><value>yrs experience</value></data>
+  <data name="CgProfilePhoneLoginTitle"   xml:space="preserve"><value>Contact details locked</value></data>
+  <data name="CgProfilePhoneLoginMsg"     xml:space="preserve"><value>Log in to view this caregiver's phone number.</value></data>
+  <data name="CgProfilePhoneUpgradeTitle" xml:space="preserve"><value>Contact details locked</value></data>
+  <data name="CgProfilePhoneUpgradeMsg"   xml:space="preserve"><value>Upgrade your plan to view contact details.</value></data>
+  <data name="CgProfileReviews"           xml:space="preserve"><value>Reviews</value></data>
+  <data name="CgProfileNoReviews"         xml:space="preserve"><value>No reviews yet.</value></data>
+  <data name="CgProfileReviewsUpgradeMsg" xml:space="preserve"><value>Upgrade your plan to read full reviews.</value></data>
+
+  <!-- Cookie consent -->
+  <data name="CookieTitle"      xml:space="preserve"><value>We use cookies</value></data>
+  <data name="CookieMessage"    xml:space="preserve"><value>We use cookies to improve your experience on our platform.</value></data>
+  <data name="CookieLearnMore" xml:space="preserve"><value>Learn more</value></data>
+  <data name="CookieAccept"    xml:space="preserve"><value>Accept</value></data>
 </root>

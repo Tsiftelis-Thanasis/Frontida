@@ -13,6 +13,15 @@ public class ApplicationUser : IdentityUser
     public bool IsCaregiver { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
+
+    // Blacklist
+    public bool IsBlacklisted { get; set; } = false;
+    public string? BlacklistReason { get; set; }
+    public DateTime? BlacklistedAt { get; set; }
+
+    // Terms acceptance
+    public bool HasAcceptedTerms { get; set; } = false;
+    public DateTime? TermsAcceptedAt { get; set; }
     
     public Profile? Profile { get; set; }
     public Subscription? Subscription { get; set; }

@@ -1,5 +1,7 @@
 using frontida4baby.Web.Data;
 using frontida4baby.Web.Models.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 
 namespace frontida4baby.Web.Services;
 
@@ -14,15 +16,21 @@ public class ContentModerationService : IContentModerationService
     private readonly WordlistModerationService _wordlist;
     private readonly ClaudeModerationService   _claude;
     private readonly ApplicationDbContext      _db;
+    private readonly INotificationService      _notifications;
+    private readonly int                       _blacklistThreshold;
 
     public ContentModerationService(
         WordlistModerationService wordlist,
         ClaudeModerationService   claude,
-        ApplicationDbContext      db)
+        ApplicationDbContext      db,
+        INotificationService      notifications,
+        IOptions<ModerationOptions> options)
     {
-        _wordlist = wordlist;
-        _claude   = claude;
-        _db       = db;
+        _wordlist           = wordlist;
+        _claude             = claude;
+        _db                 = db;
+        _notifications      = notifications;
+        _blacklistThreshold = options.Value.BlacklistThreshold;
     }
 
     public async Task<ModerationResult> ModerateAsync(string? title, string body)
@@ -40,6 +48,7 @@ public class ContentModerationService : IContentModerationService
     /// <summary>
     /// Persists the moderation decision to the audit log.
     /// Call this after saving the Post/Reply so ContentId is available.
+    /// If rejected, checks if the author has hit the blacklist threshold.
     /// </summary>
     public async Task LogAsync(
         ContentType      contentType,
@@ -62,5 +71,54 @@ public class ContentModerationService : IContentModerationService
             ConfidenceScore   = result.Confidence,
         });
         await _db.SaveChangesAsync();
+
+        if (result.Status == ModerationStatus.Rejected)
+        {
+            await CheckAndBlacklistAsync(authorUserId, title, body, result.Reason);
+
+            // Notify admin of rejection (controlled by Notifications:PostRejected toggle)
+            var user = await _db.Users.FindAsync(authorUserId);
+            if (user is not null)
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        await _notifications.NotifyPostRejectedAsync(
+                            user.Email ?? authorUserId,
+                            authorUserId,
+                            $"{title}\n{body}",
+                            result.Reason ?? "");
+                    }
+                    catch { /* best-effort */ }
+                });
+        }
+    }
+
+    private async Task CheckAndBlacklistAsync(string userId, string? title, string body, string? reason)
+    {
+        var user = await _db.Users.FindAsync(userId);
+        if (user is null || user.IsBlacklisted) return;
+
+        var rejectedCount = await _db.ModerationLogs
+            .CountAsync(l => l.AuthorUserId == userId && l.Decision == ModerationStatus.Rejected);
+
+        if (rejectedCount >= _blacklistThreshold)
+        {
+            var blacklistReason = "Auto: exceeded rejection threshold";
+            user.IsBlacklisted   = true;
+            user.BlacklistReason = blacklistReason;
+            user.BlacklistedAt   = DateTime.UtcNow;
+            await _db.SaveChangesAsync();
+
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _notifications.NotifyUserBlacklistedAsync(
+                        user.Email ?? userId, userId, blacklistReason);
+                }
+                catch { /* best-effort */ }
+            });
+        }
     }
 }

@@ -30,4 +30,9 @@ public class RegisterViewModel
 
     [Display(Name = "Register as Caregiver")]
     public bool IsCaregiver { get; set; }
+
+    [Range(typeof(bool), "true", "true",
+        ErrorMessage = "Πρέπει να αποδεχτείτε τους Όρους Χρήσης για να συνεχίσετε.")]
+    [Display(Name = "Αποδοχή Όρων")]
+    public bool AcceptedTerms { get; set; }
 }
