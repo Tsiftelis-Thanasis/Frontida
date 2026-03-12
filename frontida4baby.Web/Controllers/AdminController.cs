@@ -1,9 +1,12 @@
 using frontida4baby.Web.Data;
 using frontida4baby.Web.Models.Entities;
+using frontida4baby.Web.Models.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
+using EntitySubscription = frontida4baby.Web.Models.Entities.Subscription;
 
 namespace frontida4baby.Web.Controllers;
 
@@ -12,11 +15,13 @@ public class AdminController : Controller
 {
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IConfiguration _config;
 
-    public AdminController(ApplicationDbContext db, UserManager<ApplicationUser> userManager)
+    public AdminController(ApplicationDbContext db, UserManager<ApplicationUser> userManager, IConfiguration config)
     {
         _db = db;
         _userManager = userManager;
+        _config = config;
     }
 
     // GET /admin
@@ -91,7 +96,7 @@ public class AdminController : Controller
         var sub = await _db.Subscriptions.FirstOrDefaultAsync(s => s.UserId == id);
         if (sub == null)
         {
-            sub = new Subscription { UserId = id, StartDate = DateTime.UtcNow };
+            sub = new EntitySubscription { UserId = id, StartDate = DateTime.UtcNow };
             _db.Subscriptions.Add(sub);
         }
         sub.Plan   = plan;
@@ -150,5 +155,80 @@ public class AdminController : Controller
         ViewBag.DateFrom  = dateFrom;
         ViewBag.DateTo    = dateTo;
         return View(logs);
+    }
+
+    // GET /admin/payments
+    public async Task<IActionResult> Payments()
+    {
+        if (!_config.GetValue<bool>("Stripe:Enabled"))
+        {
+            ViewBag.StripeDisabled = true;
+            return View(new List<PaymentViewModel>());
+        }
+
+        StripeConfiguration.ApiKey = _config["Stripe:SecretKey"];
+
+        // Map StripeCustomerId → user info from DB
+        var subscriptions = await _db.Subscriptions
+            .Include(s => s.User)
+            .Where(s => s.StripeCustomerId != null)
+            .ToListAsync();
+
+        var customerUserMap = subscriptions
+            .GroupBy(s => s.StripeCustomerId!)
+            .ToDictionary(g => g.Key, g => g.First().User);
+
+        var invoiceOptions = new InvoiceListOptions
+        {
+            Limit = 100,
+        };
+        var invoiceService = new InvoiceService();
+        var invoices = await invoiceService.ListAsync(invoiceOptions);
+
+        var payments = invoices.Data
+            .Where(i => i.Status == "paid")
+            .Select(i =>
+            {
+                customerUserMap.TryGetValue(i.CustomerId, out var user);
+                return new PaymentViewModel
+                {
+                    InvoiceId        = i.Id,
+                    StripeCustomerId = i.CustomerId,
+                    UserEmail        = user?.Email ?? i.CustomerEmail ?? "–",
+                    UserName         = user != null ? $"{user.FirstName} {user.LastName}".Trim() : "–",
+                    Amount           = i.AmountPaid / 100m,
+                    Currency         = i.Currency.ToUpperInvariant(),
+                    Status           = i.Status,
+                    PaidAt           = i.StatusTransitions?.PaidAt ?? i.Created,
+                    InvoicePdfUrl    = i.InvoicePdf,
+                    HostedInvoiceUrl = i.HostedInvoiceUrl,
+                    ReceiptUrl       = null, // Stripe.net 50.x: charge receipt not directly accessible on Invoice
+                };
+            })
+            .OrderByDescending(p => p.PaidAt)
+            .ToList();
+
+        return View(payments);
+    }
+
+    // GET /admin/payments/invoice/{id}  — redirects to Stripe-hosted invoice PDF
+    [HttpGet("/admin/payments/invoice/{id}")]
+    public async Task<IActionResult> DownloadInvoice(string id)
+    {
+        StripeConfiguration.ApiKey = _config["Stripe:SecretKey"];
+        var invoice = await new InvoiceService().GetAsync(id);
+        if (string.IsNullOrEmpty(invoice?.InvoicePdf)) return NotFound();
+        return Redirect(invoice.InvoicePdf);
+    }
+
+    // GET /admin/payments/receipt/{id}  — redirects to Stripe charge receipt
+    [HttpGet("/admin/payments/receipt/{id}")]
+    public async Task<IActionResult> DownloadReceipt(string id)
+    {
+        StripeConfiguration.ApiKey = _config["Stripe:SecretKey"];
+        var invoice = await new InvoiceService().GetAsync(id);
+        // Stripe.net 50.x: charge receipt URL is not directly accessible; redirect to hosted invoice
+        if (string.IsNullOrEmpty(invoice?.HostedInvoiceUrl)) return NotFound();
+        return Redirect(invoice.HostedInvoiceUrl);
     }
 }

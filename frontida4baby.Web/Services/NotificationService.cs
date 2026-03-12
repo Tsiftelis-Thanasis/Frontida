@@ -105,6 +105,33 @@ public class NotificationService : INotificationService
         await SendToAdminAsync("Content Rejected", authorEmail, Truncate(contentSnippet, 60), html);
     }
 
+    public async Task NotifySupportRequestAsync(string name, string email, string subject, string category, string message)
+    {
+        if (!_notifOpts.SupportRequest) return;
+
+        var html = $"""
+            <div style="font-family:sans-serif;max-width:600px">
+              <h2 style="color:#4f46e5">📬 Νέο Αίτημα Υποστήριξης — frontida4all</h2>
+              <table style="border-collapse:collapse;width:100%">
+                <tr><td style="padding:6px 12px;background:#ede9fe;font-weight:bold;width:120px">Όνομα</td>
+                    <td style="padding:6px 12px;background:#f5f3ff">{System.Net.WebUtility.HtmlEncode(name)}</td></tr>
+                <tr><td style="padding:6px 12px;background:#ede9fe;font-weight:bold">Email</td>
+                    <td style="padding:6px 12px;background:#f5f3ff">{System.Net.WebUtility.HtmlEncode(email)}</td></tr>
+                <tr><td style="padding:6px 12px;background:#ede9fe;font-weight:bold">Κατηγορία</td>
+                    <td style="padding:6px 12px;background:#f5f3ff">{System.Net.WebUtility.HtmlEncode(category)}</td></tr>
+                <tr><td style="padding:6px 12px;background:#ede9fe;font-weight:bold">Θέμα</td>
+                    <td style="padding:6px 12px;background:#f5f3ff">{System.Net.WebUtility.HtmlEncode(subject)}</td></tr>
+                <tr><td style="padding:6px 12px;background:#ede9fe;font-weight:bold">Μήνυμα</td>
+                    <td style="padding:6px 12px;background:#f5f3ff;white-space:pre-wrap">{System.Net.WebUtility.HtmlEncode(message)}</td></tr>
+                <tr><td style="padding:6px 12px;background:#ede9fe;font-weight:bold">Ώρα</td>
+                    <td style="padding:6px 12px;background:#f5f3ff">{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC</td></tr>
+              </table>
+            </div>
+            """;
+
+        await SendToAdminAsync("Support Request", name, Truncate(subject, 60), html);
+    }
+
     // ─────────────────────────────────────────────────────────────────────────
 
     // subject format:  "frontida4all | Category: detail"

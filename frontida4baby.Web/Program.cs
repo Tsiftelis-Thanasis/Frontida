@@ -86,6 +86,10 @@ builder.Services.AddScoped<IEmailService, SmtpEmailService>();
 builder.Services.Configure<NotificationOptions>(builder.Configuration.GetSection("Notifications"));
 builder.Services.AddScoped<INotificationService, NotificationService>();
 
+// ── User email service ────────────────────────────────────────────────────────
+builder.Services.Configure<UserEmailOptions>(builder.Configuration.GetSection("UserEmails"));
+builder.Services.AddScoped<IUserEmailService, UserEmailService>();
+
 // ── Application log service ───────────────────────────────────────────────────
 builder.Services.AddScoped<IAppLogService, AppLogService>();
 

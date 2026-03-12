@@ -14,15 +14,18 @@ public class ReactionsController : Controller
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ISubscriptionService _subscription;
+    private readonly IUserEmailService _userEmail;
 
     public ReactionsController(
         ApplicationDbContext db,
         UserManager<ApplicationUser> userManager,
-        ISubscriptionService subscription)
+        ISubscriptionService subscription,
+        IUserEmailService userEmail)
     {
         _db = db;
         _userManager = userManager;
         _subscription = subscription;
+        _userEmail = userEmail;
     }
 
     [HttpPost("/reactions/toggle/{postId:int}")]
@@ -80,6 +83,15 @@ public class ReactionsController : Controller
         reaction.IsApprovedByOP = true;
         reaction.ApprovedAt     = DateTime.UtcNow;
         await _db.SaveChangesAsync();
+
+        var caregiver = await _userManager.FindByIdAsync(reaction.UserId);
+        var op        = await _userManager.FindByIdAsync(reaction.Post.AuthorUserId);
+        if (caregiver is not null && op is not null)
+            _ = Task.Run(async () =>
+            {
+                try { await _userEmail.SendReactionApprovedAsync(caregiver, reaction.Post.Title, op); }
+                catch { /* best-effort */ }
+            });
 
         TempData["ReactionApproved"] = true;
         return RedirectToAction("Details", "Posts", new { id = reaction.PostId });

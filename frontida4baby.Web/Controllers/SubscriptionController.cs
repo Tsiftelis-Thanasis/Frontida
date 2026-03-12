@@ -15,17 +15,23 @@ public class SubscriptionController : Controller
     private readonly ISubscriptionService _subscription;
     private readonly ApplicationDbContext _db;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly IUserEmailService _userEmail;
+    private readonly IAppLogService _appLog;
     private readonly IConfiguration _config;
 
     public SubscriptionController(
         ISubscriptionService subscription,
         ApplicationDbContext db,
         UserManager<ApplicationUser> userManager,
+        IUserEmailService userEmail,
+        IAppLogService appLog,
         IConfiguration config)
     {
         _subscription = subscription;
         _db = db;
         _userManager = userManager;
+        _userEmail = userEmail;
+        _appLog = appLog;
         _config = config;
     }
 
@@ -81,8 +87,41 @@ public class SubscriptionController : Controller
 
     [HttpGet("/subscription/success")]
     [Authorize]
-    public IActionResult Success()
+    public async Task<IActionResult> Success(string? session_id)
     {
+        var userId = _userManager.GetUserId(User)!;
+
+        if (!string.IsNullOrEmpty(session_id) && _config.GetValue<bool>("Stripe:Enabled"))
+        {
+            try
+            {
+                StripeConfiguration.ApiKey = _config["Stripe:SecretKey"];
+                var session = await new SessionService().GetAsync(session_id);
+
+                if (session?.Status == "complete")
+                {
+                    await SetPlanAsync(userId, SubscriptionPlan.Paid,
+                        session.CustomerId, session.SubscriptionId);
+
+                    await _appLog.LogAsync(AppLogLevel.Info, "Subscription",
+                        $"Plan upgraded to Paid via success page. SessionId={session_id}",
+                        userId: userId);
+                }
+                else
+                {
+                    await _appLog.LogAsync(AppLogLevel.Warning, "Subscription",
+                        $"Success page: session status='{session?.Status}', payment_status='{session?.PaymentStatus}'. No update.",
+                        userId: userId);
+                }
+            }
+            catch (Exception ex)
+            {
+                await _appLog.LogAsync(AppLogLevel.Error, "Subscription",
+                    $"Success page Stripe error: {ex.Message}",
+                    details: ex.ToString(), userId: userId);
+            }
+        }
+
         return View();
     }
 
@@ -113,6 +152,14 @@ public class SubscriptionController : Controller
                 {
                     await SetPlanAsync(userId, SubscriptionPlan.Paid,
                         session.CustomerId, session.SubscriptionId);
+
+                    var paidUser = await _userManager.FindByIdAsync(userId);
+                    if (paidUser is not null)
+                        _ = Task.Run(async () =>
+                        {
+                            try { await _userEmail.SendPaymentSucceededAsync(paidUser); }
+                            catch { /* best-effort */ }
+                        });
                 }
             }
             else if (stripeEvent.Type == "customer.subscription.deleted")
@@ -128,6 +175,33 @@ public class SubscriptionController : Controller
                         sub.Status = SubscriptionStatus.Cancelled;
                         sub.EndDate = DateTime.UtcNow;
                         await _db.SaveChangesAsync();
+
+                        var cancelledUser = await _userManager.FindByIdAsync(sub.UserId);
+                        if (cancelledUser is not null)
+                            _ = Task.Run(async () =>
+                            {
+                                try { await _userEmail.SendSubscriptionCancelledAsync(cancelledUser); }
+                                catch { /* best-effort */ }
+                            });
+                    }
+                }
+            }
+            else if (stripeEvent.Type == "invoice.payment_failed")
+            {
+                var invoice = stripeEvent.Data.Object as Stripe.Invoice;
+                if (invoice?.CustomerId is not null)
+                {
+                    var failedSub = await _db.Subscriptions.FirstOrDefaultAsync(
+                        s => s.StripeCustomerId == invoice.CustomerId);
+                    if (failedSub is not null)
+                    {
+                        var failedUser = await _userManager.FindByIdAsync(failedSub.UserId);
+                        if (failedUser is not null)
+                            _ = Task.Run(async () =>
+                            {
+                                try { await _userEmail.SendPaymentFailedAsync(failedUser); }
+                                catch { /* best-effort */ }
+                            });
                     }
                 }
             }

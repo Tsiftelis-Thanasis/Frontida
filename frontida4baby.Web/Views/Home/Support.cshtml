@@ -1,0 +1,85 @@
+@model frontida4baby.Web.Models.ViewModels.SupportViewModel
+@{
+    ViewData["Title"] = "Επικοινωνία";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7">
+
+            <div class="page-header mb-4">
+                <h1><i class="fas fa-envelope me-2"></i>Επικοινωνία</h1>
+                <p class="lead text-muted">Έχεις ερώτηση ή χρειάζεσαι βοήθεια; Γράψε μας.</p>
+            </div>
+
+            @if (TempData["SupportSent"] is true)
+            {
+                <div class="alert alert-success d-flex align-items-center gap-2 mb-4">
+                    <i class="fas fa-check-circle"></i>
+                    <span>Το μήνυμά σου στάλθηκε επιτυχώς! Θα επικοινωνήσουμε μαζί σου σύντομα.</span>
+                </div>
+            }
+
+            <div class="card">
+                <div class="card-body p-4">
+                    <form asp-action="Support" asp-controller="Home" method="post">
+                        @Html.AntiForgeryToken()
+
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label asp-for="Name" class="form-label">Όνομα</label>
+                                <input asp-for="Name" class="form-control" placeholder="Το όνομά σου" />
+                                <span asp-validation-for="Name" class="text-danger small"></span>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label">Email</label>
+                                <input asp-for="Email" type="email" class="form-control" placeholder="email@example.com" />
+                                <span asp-validation-for="Email" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="Category" class="form-label">Κατηγορία</label>
+                                <select asp-for="Category" class="form-select"
+                                        asp-items="Html.GetEnumSelectList<frontida4baby.Web.Models.ViewModels.SupportCategory>()">
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label asp-for="Subject" class="form-label">Θέμα</label>
+                                <input asp-for="Subject" class="form-control" placeholder="Σύντομη περιγραφή" />
+                                <span asp-validation-for="Subject" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-12">
+                                <label asp-for="Message" class="form-label">Μήνυμα</label>
+                                <textarea asp-for="Message" class="form-control" rows="6"
+                                          placeholder="Περιέγραψε το ζήτημά σου με λεπτομέρεια..."></textarea>
+                                <span asp-validation-for="Message" class="text-danger small"></span>
+                                <div class="form-text text-end" id="charCount"></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="fas fa-paper-plane me-2"></i>Αποστολή
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        const ta = document.querySelector('textarea[name="Message"]');
+        const cc = document.getElementById('charCount');
+        if (ta && cc) {
+            const update = () => cc.textContent = ta.value.length + ' / 2000';
+            ta.addEventListener('input', update);
+            update();
+        }
+    </script>
+}

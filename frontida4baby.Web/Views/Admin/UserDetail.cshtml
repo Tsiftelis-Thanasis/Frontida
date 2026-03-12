@@ -155,8 +155,8 @@
                     <form asp-action="SetPlan" asp-route-id="@Model.Id" method="post" class="d-flex gap-2 mt-3">
                         @Html.AntiForgeryToken()
                         <select name="plan" class="form-select form-select-sm">
-                            <option value="@SubscriptionPlan.Free">Free</option>
-                            <option value="@SubscriptionPlan.Paid">Paid</option>
+                            <option value="@SubscriptionPlan.Free" selected="@(Model.Subscription?.Plan == SubscriptionPlan.Free || Model.Subscription == null)">Free</option>
+                            <option value="@SubscriptionPlan.Paid" selected="@(Model.Subscription?.Plan == SubscriptionPlan.Paid)">Paid</option>
                         </select>
                         <button type="submit" class="btn btn-sm btn-primary">Αλλαγή</button>
                     </form>

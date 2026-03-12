@@ -13,4 +13,7 @@ public class NotificationOptions
 
     /// <summary>Send email when a post/reply is rejected by moderation.</summary>
     public bool PostRejected    { get; set; } = false;
+
+    /// <summary>Send email to admin when a support request is submitted.</summary>
+    public bool SupportRequest  { get; set; } = true;
 }

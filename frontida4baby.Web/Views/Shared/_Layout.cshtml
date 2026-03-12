@@ -178,6 +178,7 @@
                     <a asp-controller="Home" asp-action="TermsOfService">Όροι Χρήσης</a>
                     <a asp-controller="Home" asp-action="Disclaimer">Αποποίηση Ευθύνης</a>
                     <a asp-controller="Home" asp-action="AiReviewPolicy">Πολιτική AI</a>
+                    <a asp-controller="Home" asp-action="Support">Επικοινωνία</a>
                     @if (!(User.Identity?.IsAuthenticated ?? false))
                     {
                         <a asp-controller="Account" asp-action="Register">@L["NavRegister"]</a>

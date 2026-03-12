@@ -17,6 +17,7 @@ public class ContentModerationService : IContentModerationService
     private readonly ClaudeModerationService   _claude;
     private readonly ApplicationDbContext      _db;
     private readonly INotificationService      _notifications;
+    private readonly IUserEmailService         _userEmail;
     private readonly int                       _blacklistThreshold;
 
     public ContentModerationService(
@@ -24,12 +25,14 @@ public class ContentModerationService : IContentModerationService
         ClaudeModerationService   claude,
         ApplicationDbContext      db,
         INotificationService      notifications,
+        IUserEmailService         userEmail,
         IOptions<ModerationOptions> options)
     {
         _wordlist           = wordlist;
         _claude             = claude;
         _db                 = db;
         _notifications      = notifications;
+        _userEmail          = userEmail;
         _blacklistThreshold = options.Value.BlacklistThreshold;
     }
 
@@ -79,6 +82,7 @@ public class ContentModerationService : IContentModerationService
             // Notify admin of rejection (controlled by Notifications:PostRejected toggle)
             var user = await _db.Users.FindAsync(authorUserId);
             if (user is not null)
+            {
                 _ = Task.Run(async () =>
                 {
                     try
@@ -91,6 +95,19 @@ public class ContentModerationService : IContentModerationService
                     }
                     catch { /* best-effort */ }
                 });
+
+                _ = Task.Run(async () =>
+                {
+                    try
+                    {
+                        await _userEmail.SendContentRejectedAsync(
+                            user,
+                            $"{title}\n{body}",
+                            result.Reason ?? "");
+                    }
+                    catch { /* best-effort */ }
+                });
+            }
         }
     }
 

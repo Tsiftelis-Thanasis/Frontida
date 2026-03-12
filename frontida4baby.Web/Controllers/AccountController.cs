@@ -15,6 +15,7 @@ public class AccountController : Controller
     private readonly IEmailService       _email;
     private readonly IAppLogService      _log;
     private readonly INotificationService _notifications;
+    private readonly IUserEmailService   _userEmail;
     private readonly IConfiguration      _config;
 
     public AccountController(
@@ -23,6 +24,7 @@ public class AccountController : Controller
         IEmailService       email,
         IAppLogService      log,
         INotificationService notifications,
+        IUserEmailService   userEmail,
         IConfiguration      config)
     {
         _userManager   = userManager;
@@ -30,6 +32,7 @@ public class AccountController : Controller
         _email         = email;
         _log           = log;
         _notifications = notifications;
+        _userEmail     = userEmail;
         _config        = config;
     }
 
@@ -65,10 +68,16 @@ public class AccountController : Controller
                 await _signInManager.SignInAsync(user, isPersistent: false);
                 await _log.LogAsync(AppLogLevel.Info, "Account", $"Registered: {model.Email}", userId: user.Id);
 
+                // Build confirm URL on the request thread (Url.Action needs HttpContext)
+                var verifyToken    = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                var encodedToken   = System.Net.WebUtility.UrlEncode(verifyToken);
+                var confirmUrl     = Url.Action(nameof(ConfirmEmail), "Account",
+                    new { userId = user.Id, token = encodedToken }, Request.Scheme) ?? "";
+
                 // Send email verification link (fire-and-forget)
                 _ = Task.Run(async () =>
                 {
-                    try { await SendVerificationEmailAsync(user); }
+                    try { await SendVerificationEmailAsync(user, confirmUrl); }
                     catch { /* best-effort */ }
                 });
 
@@ -272,10 +281,24 @@ public class AccountController : Controller
         var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
 
         if (result.Succeeded)
+        {
             await _log.LogAsync(AppLogLevel.Info, "Account",
                 $"Email confirmed: {user.Email}", userId: user.Id);
 
-        return View("ConfirmEmailResult", result.Succeeded);
+            _ = Task.Run(async () =>
+            {
+                try { await _userEmail.SendWelcomeAsync(user); }
+                catch { /* best-effort */ }
+            });
+
+            return View("ConfirmEmailResult", true);
+        }
+
+        // Token already consumed but email was confirmed on a previous click — show success
+        if (user.EmailConfirmed)
+            return View("ConfirmEmailResult", true);
+
+        return View("ConfirmEmailResult", false);
     }
 
     [HttpPost("account/resend-verification")]
@@ -292,9 +315,14 @@ public class AccountController : Controller
             return RedirectToAction(nameof(VerifyEmailSent));
         }
 
+        var verifyToken  = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+        var encodedToken = System.Net.WebUtility.UrlEncode(verifyToken);
+        var confirmUrl   = Url.Action(nameof(ConfirmEmail), "Account",
+            new { userId = user.Id, token = encodedToken }, Request.Scheme) ?? "";
+
         _ = Task.Run(async () =>
         {
-            try { await SendVerificationEmailAsync(user); }
+            try { await SendVerificationEmailAsync(user, confirmUrl); }
             catch { /* best-effort */ }
         });
 
@@ -302,15 +330,8 @@ public class AccountController : Controller
         return RedirectToAction(nameof(VerifyEmailSent));
     }
 
-    private async Task SendVerificationEmailAsync(ApplicationUser user)
+    private async Task SendVerificationEmailAsync(ApplicationUser user, string confirmUrl)
     {
-        var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        var encodedToken = System.Net.WebUtility.UrlEncode(token);
-
-        var confirmUrl = Url.Action(
-            nameof(ConfirmEmail), "Account",
-            new { userId = user.Id, token = encodedToken },
-            Request.Scheme);
 
         var fromName = _config["Email:FromName"] ?? "frontida4all";
         var html = $"""
