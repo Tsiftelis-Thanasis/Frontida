@@ -139,6 +139,10 @@
   <data name="PostNewRequest"        xml:space="preserve"><value>+ Δημοσίευση Αιτήματος</value></data>
   <data name="PostLoginToPost"       xml:space="preserve"><value>Συνδεθείτε για να δημοσιεύσετε αίτημα</value></data>
   <data name="PostPendingNotice"     xml:space="preserve"><value>Η ανάρτησή σας βρίσκεται υπό εξέταση και θα εμφανιστεί μετά την έγκριση από συντονιστή.</value></data>
+  <data name="PostPendingReview"     xml:space="preserve"><value>Σε Αναμονή Ελέγχου</value></data>
+  <data name="PostPendingBannerMsg"  xml:space="preserve"><value>Αυτή η ανάρτηση βρίσκεται υπό έλεγχο συντονισμού. Θα είναι ορατή στους άλλους μετά την έγκριση.</value></data>
+  <data name="PostRejected"          xml:space="preserve"><value>Απορρίφθηκε</value></data>
+  <data name="PostRejectedBannerMsg" xml:space="preserve"><value>Αυτή η ανάρτηση απορρίφθηκε από τον συντονισμό και δεν είναι ορατή στους άλλους.</value></data>
   <data name="PostAllServiceTypes"   xml:space="preserve"><value>Όλοι οι τύποι υπηρεσιών</value></data>
   <data name="PostNoResults"         xml:space="preserve"><value>Δεν βρέθηκαν αιτήματα.</value></data>
   <data name="PostBeFirst"           xml:space="preserve"><value>Γίνετε ο πρώτος που θα δημοσιεύσει</value></data>
@@ -172,6 +176,7 @@
   <data name="PostReplyPlaceholder" xml:space="preserve"><value>Γράψτε την απάντησή σας…</value></data>
   <data name="PostSubmitReply"      xml:space="preserve"><value>Δημοσίευση Απάντησης</value></data>
   <data name="PostToReply"          xml:space="preserve"><value>για να απαντήσετε.</value></data>
+  <data name="PostClosed"           xml:space="preserve"><value>Κλειστό</value></data>
   <data name="PostClosedMsg"        xml:space="preserve"><value>Αυτό το αίτημα έχει κλείσει.</value></data>
   <data name="PostBackToAll"        xml:space="preserve"><value>← Πίσω σε όλα τα αιτήματα</value></data>
   <data name="PostReplyApproved"    xml:space="preserve"><value>Η απάντησή σας δημοσιεύθηκε.</value></data>

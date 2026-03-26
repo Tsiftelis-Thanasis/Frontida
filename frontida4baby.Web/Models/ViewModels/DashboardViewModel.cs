@@ -11,6 +11,8 @@ public class DashboardViewModel
     public SubscriptionPlan            CurrentPlan      { get; set; }
     public string                      ActiveTab        { get; set; } = "posts";
     public bool                        IsEmailVerified  { get; set; }
+    public bool                        IsCaregiver      { get; set; }
+    public bool                        HasServices      { get; set; }
 }
 
 public class ReplyDashboardItem

@@ -1,0 +1,87 @@
+@{
+    ViewData["Title"] = "Template 4 – Clean Green";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .t4-hero {
+        background-image: url('https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=1200');
+        background-size: cover;
+        background-position: center;
+        min-height: 440px;
+    }
+    .t4-hero-overlay {
+        background: rgba(5, 150, 105, 0.68);
+        padding: 90px 0 70px;
+        min-height: 440px;
+        display: flex;
+        align-items: center;
+    }
+    .t4-hero h1 { font-size: 2.7rem; font-weight: 800; color: #fff; line-height: 1.2; }
+    .t4-hero p  { color: rgba(255,255,255,0.9); font-size: 1.05rem; margin: 1.2rem 0 2rem; }
+    .t4-btn-white   { background: #fff; color: #059669; border: none; padding: 12px 28px; border-radius: 8px; font-weight: 600; text-decoration: none; }
+    .t4-btn-white:hover { background: #f0fdf4; color: #059669; }
+    .t4-btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.7); padding: 10px 24px; border-radius: 8px; font-weight: 600; text-decoration: none; margin-left: 12px; }
+    .t4-btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.1); color: #fff; }
+    .t4-subtitle { color: #6b7280; font-size: 1rem; }
+    .t4-features { padding-bottom: 70px; }
+    .t4-feature-card { background: #fff; border-radius: 12px; padding: 30px 24px; height: 100%; box-shadow: 0 2px 20px rgba(0,0,0,0.07); border: 1px solid #f3f4f6; text-align: center; }
+    .t4-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 16px; display: block; border: 3px solid #d1fae5; }
+    .t4-feature-card h5 { font-weight: 700; margin-bottom: 8px; color: #111827; }
+    .t4-feature-card p  { color: #6b7280; font-size: 0.92rem; margin-bottom: 16px; }
+    .t4-find-btn { background: #059669; color: #fff; border: none; padding: 8px 20px; border-radius: 6px; font-size: 0.88rem; font-weight: 600; text-decoration: none; }
+    .t4-find-btn:hover { background: #047857; color: #fff; }
+    .t4-section-label { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; color: #059669; text-transform: uppercase; margin-bottom: 6px; }
+</style>
+
+<section class="t4-hero">
+    <div class="t4-hero-overlay">
+        <div class="container">
+            <div class="col-lg-6">
+                <div class="t4-section-label">Φροντίδα για όλους</div>
+                <h1>Care You Can<br>Trust, Every Day</h1>
+                <p>From newborns to grandparents, find the right caregiver in your city — vetted, rated and ready to help.</p>
+                <a href="#" class="t4-btn-white">Find a Caregiver</a>
+                <a href="#" class="t4-btn-outline">Join as Caregiver</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="container text-center py-4 pb-2">
+    <p class="t4-subtitle">Frontida helps connect families with trusted caregiving services across Greece.</p>
+</div>
+
+<section class="t4-features">
+    <div class="container">
+        <div class="row g-4 justify-content-center">
+            <div class="col-md-4">
+                <div class="t4-feature-card">
+                    <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=200"
+                         alt="Child" class="t4-avatar">
+                    <h5>Family Profiles</h5>
+                    <p>Set up your family profile and let caregivers understand your needs before applying.</p>
+                    <a href="#" class="t4-find-btn">Find Families</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="t4-feature-card">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200"
+                         alt="Elderly care" class="t4-avatar">
+                    <h5>Elderly Care</h5>
+                    <p>Compassionate professionals providing companionship, health support and daily assistance.</p>
+                    <a href="#" class="t4-find-btn">Find Carers</a>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="t4-feature-card">
+                    <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=200"
+                         alt="Caregiver" class="t4-avatar">
+                    <h5>Reviews &amp; Ratings</h5>
+                    <p>Real reviews from verified families help you choose with confidence every time.</p>
+                    <a href="#" class="t4-find-btn">Read Reviews</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

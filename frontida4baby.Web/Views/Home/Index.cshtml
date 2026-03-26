@@ -2,199 +2,101 @@
     ViewData["Title"] = L["HeroTitle"].Value;
 }
 
-@* ─── Hero ──────────────────────────────────────────────────────────────── *@
-<section class="hero">
-    <div class="container position-relative" style="z-index:1">
-        <div class="row">
-            <div class="col-lg-8 col-xl-7">
-                <h1>@L["HeroTitle"]</h1>
-                <p class="lead">@L["HeroSubtitle"]</p>
+<style>
+    .t4-hero {
+        background-image: url('https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=1200');
+        background-size: cover;
+        background-position: center;
+        min-height: 440px;
+    }
+    .t4-hero-overlay {
+        background: rgba(0, 96, 103, 0.78);
+        padding: 90px 0 70px;
+        min-height: 440px;
+        display: flex;
+        align-items: center;
+    }
+    .t4-hero h1 { font-size: 2.7rem; font-weight: 800; color: #fff; line-height: 1.2; }
+    .t4-hero p  { color: rgba(255,255,255,0.9); font-size: 1.05rem; margin: 1.2rem 0 2rem; }
+    .t4-btn-white   { background: #fff; color: var(--st-primary); border: none; padding: 12px 28px; border-radius: 8px; font-weight: 600; text-decoration: none; display: inline-block; }
+    .t4-btn-white:hover { background: var(--st-surface-container-low); color: var(--st-primary); }
+    .t4-btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.7); padding: 10px 24px; border-radius: 8px; font-weight: 600; text-decoration: none; margin-left: 12px; display: inline-block; }
+    .t4-btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.1); color: #fff; }
+    .t4-subtitle { color: var(--st-on-surface-variant); font-size: 1rem; }
+    .t4-features { padding-bottom: 70px; }
+    .t4-feature-card { background: var(--st-surface-container-lowest); border-radius: 12px; padding: 30px 24px; height: 100%; box-shadow: 0 2px 20px rgba(0,0,0,0.07); border: 1px solid var(--st-outline-variant); text-align: center; }
+    .t4-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 16px; display: block; border: 3px solid var(--st-primary-fixed); }
+    .t4-feature-card h5 { font-weight: 700; margin-bottom: 8px; color: var(--st-on-surface); }
+    .t4-feature-card p  { color: var(--st-on-surface-variant); font-size: 0.92rem; margin-bottom: 16px; }
+    .t4-find-btn { background: var(--st-primary); color: var(--st-on-primary); border: none; padding: 8px 20px; border-radius: 6px; font-size: 0.88rem; font-weight: 600; text-decoration: none; display: inline-block; }
+    .t4-find-btn:hover { background: var(--st-primary-container); color: var(--st-on-primary); }
+    .t4-section-label { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; color: var(--st-primary-fixed); text-transform: uppercase; margin-bottom: 6px; }
+</style>
 
-                <form asp-controller="Caregivers" asp-action="Index" method="get" class="search-box">
-                    <select name="ServiceType" class="form-select">
-                        <option value="">@L["HeroSelectService"]</option>
-                        <option value="Childcare">@L["SvcChildcareTitle"]</option>
-                        <option value="ElderlyCare">@L["SvcElderlyTitle"]</option>
-                        <option value="Tutoring">@L["SvcTutoringTitle"]</option>
-                        <option value="Housekeeping">@L["SvcHousekeepingTitle"]</option>
-                        <option value="PetCare">@L["SvcPetTitle"]</option>
-                    </select>
-                    <input name="City" class="form-control" placeholder="@L["HeroSelectCity"]" />
-                    <button type="submit" class="btn btn-accent px-4">
-                        <i class="fa-solid fa-magnifying-glass me-1"></i>@L["HeroBtnSearch"]
-                    </button>
-                </form>
-
-                <div class="d-flex gap-3 flex-wrap">
-                    <a asp-controller="Caregivers" asp-action="Index" class="btn btn-outline-light">
-                        <i class="fa-solid fa-users me-1"></i>@L["NavBrowse"]
-                    </a>
-                    <a asp-controller="Posts" asp-action="Create" class="btn btn-accent">
-                        <i class="fa-solid fa-pen-to-square me-1"></i>@L["CtaFamilyBtn"]
-                    </a>
-                </div>
+<section class="t4-hero">
+    <div class="t4-hero-overlay">
+        <div class="container">
+            <div class="col-lg-6">
+                <div class="t4-section-label">Φροντίδα για όλους</div>
+                <h1>@L["HeroTitle"]<br><span style="font-weight:400">@L["HeroSubtitle"]</span></h1>
+                <p>@L["SvcSubtitle"]</p>
+                <a asp-controller="Caregivers" asp-action="Index" class="t4-btn-white">@L["NavBrowse"]</a>
+                <a asp-controller="Account" asp-action="Register" class="t4-btn-outline">@L["NavRegister"]</a>
             </div>
         </div>
     </div>
 </section>
 
-@* ─── Services ───────────────────────────────────────────────────────────── *@
-<section class="section-padding">
-    <div class="container">
-        <h2 class="section-title">@L["SvcTitle"]</h2>
-        <p class="section-sub">@L["SvcSubtitle"]</p>
+<div class="container text-center py-4 pb-2">
+    <p class="t4-subtitle">@L["HowSubtitle"]</p>
+</div>
 
-        <div class="row g-4 row-cols-2 row-cols-sm-3 row-cols-lg-5">
-            <div class="col">
-                <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="Childcare"
-                   class="service-card">
-                    <div class="svc-icon icon-childcare"><i class="fa-solid fa-baby"></i></div>
+<section class="t4-features pb-5">
+    <div class="container">
+        <div class="row g-4 justify-content-center">
+            <div class="col-lg-4 col-md-6">
+                <div class="t4-feature-card">
+                    <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=200"
+                         alt="@L["SvcChildcareTitle"]" class="t4-avatar">
                     <h5>@L["SvcChildcareTitle"]</h5>
                     <p>@L["SvcChildcareDesc"]</p>
-                </a>
+                    <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="Childcare" class="t4-find-btn">@L["NavBrowse"]</a>
+                </div>
             </div>
-            <div class="col">
-                <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="ElderlyCare"
-                   class="service-card">
-                    <div class="svc-icon icon-elderly"><i class="fa-solid fa-heart-pulse"></i></div>
+            <div class="col-lg-4 col-md-6">
+                <div class="t4-feature-card">
+                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200"
+                         alt="@L["SvcElderlyTitle"]" class="t4-avatar">
                     <h5>@L["SvcElderlyTitle"]</h5>
                     <p>@L["SvcElderlyDesc"]</p>
-                </a>
+                    <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="ElderlyCare" class="t4-find-btn">@L["NavBrowse"]</a>
+                </div>
             </div>
-            <div class="col">
-                <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="Tutoring"
-                   class="service-card">
-                    <div class="svc-icon icon-tutoring"><i class="fa-solid fa-graduation-cap"></i></div>
+            <div class="col-lg-4 col-md-6">
+                <div class="t4-feature-card">
+                    <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=200"
+                         alt="@L["SvcTutoringTitle"]" class="t4-avatar">
                     <h5>@L["SvcTutoringTitle"]</h5>
                     <p>@L["SvcTutoringDesc"]</p>
-                </a>
+                    <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="Tutoring" class="t4-find-btn">@L["NavBrowse"]</a>
+                </div>
             </div>
-            <div class="col">
-                <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="Housekeeping"
-                   class="service-card">
-                    <div class="svc-icon icon-housekeeping"><i class="fa-solid fa-broom"></i></div>
+            <div class="col-lg-4 col-md-6">
+                <div class="t4-feature-card">
+                    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=200"
+                         alt="@L["SvcHousekeepingTitle"]" class="t4-avatar">
                     <h5>@L["SvcHousekeepingTitle"]</h5>
                     <p>@L["SvcHousekeepingDesc"]</p>
-                </a>
+                    <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="Housekeeping" class="t4-find-btn">@L["NavBrowse"]</a>
+                </div>
             </div>
-            <div class="col">
-                <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="PetCare"
-                   class="service-card">
-                    <div class="svc-icon icon-pet"><i class="fa-solid fa-paw"></i></div>
+            <div class="col-lg-4 col-md-6">
+                <div class="t4-feature-card">
+                    <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=200"
+                         alt="@L["SvcPetTitle"]" class="t4-avatar">
                     <h5>@L["SvcPetTitle"]</h5>
                     <p>@L["SvcPetDesc"]</p>
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
-@* ─── How It Works ───────────────────────────────────────────────────────── *@
-<section class="how-it-works">
-    <div class="container">
-        <h2 class="section-title">@L["HowTitle"]</h2>
-        <p class="section-sub">@L["HowSubtitle"]</p>
-
-        <div class="row justify-content-center align-items-start g-0">
-            <div class="col-md">
-                <div class="step-card">
-                    <div class="step-number">1</div>
-                    <h5>@L["HowStep1Title"]</h5>
-                    <p>@L["HowStep1Desc"]</p>
-                </div>
-            </div>
-            <div class="col-md-1 d-none d-md-flex step-arrow">
-                <i class="fa-solid fa-chevron-right"></i>
-            </div>
-            <div class="col-md">
-                <div class="step-card">
-                    <div class="step-number">2</div>
-                    <h5>@L["HowStep2Title"]</h5>
-                    <p>@L["HowStep2Desc"]</p>
-                </div>
-            </div>
-            <div class="col-md-1 d-none d-md-flex step-arrow">
-                <i class="fa-solid fa-chevron-right"></i>
-            </div>
-            <div class="col-md">
-                <div class="step-card">
-                    <div class="step-number">3</div>
-                    <h5>@L["HowStep3Title"]</h5>
-                    <p>@L["HowStep3Desc"]</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-@* ─── Stats (shown only when 50+ caregivers are registered) ─────────────── *@
-@if ((int)(ViewBag.CaregiverCount ?? 0) > 50)
-{
-<section class="stats-bar">
-    <div class="container">
-        <div class="row g-4 text-center">
-            <div class="col-4">
-                <div class="stat-label">@L["Stat1Label"]</div>
-            </div>
-            <div class="col-4">
-                <div class="stat-label">@L["Stat2Label"]</div>
-            </div>
-            <div class="col-4">
-                <div class="stat-label">@L["Stat3Label"]</div>
-            </div>
-        </div>
-    </div>
-</section>
-}
-
-@* ─── Trust ──────────────────────────────────────────────────────────────── *@
-<section class="trust-section">
-    <div class="container">
-        <h2 class="section-title">@L["TrustTitle"]</h2>
-        <div class="row g-4 mt-2">
-            <div class="col-md-4">
-                <div class="trust-item">
-                    <div class="trust-icon"><i class="fa-solid fa-circle-check"></i></div>
-                    <h6>@L["TrustVerifiedTitle"]</h6>
-                    <p>@L["TrustVerifiedDesc"]</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="trust-item">
-                    <div class="trust-icon"><i class="fa-solid fa-robot"></i></div>
-                    <h6>@L["TrustSafeTitle"]</h6>
-                    <p>@L["TrustSafeDesc"]</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="trust-item">
-                    <div class="trust-icon"><i class="fa-solid fa-headset"></i></div>
-                    <h6>@L["Trust24Title"]</h6>
-                    <p>@L["Trust24Desc"]</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-@* ─── Dual CTA ───────────────────────────────────────────────────────────── *@
-<section class="cta-section">
-    <div class="container">
-        <div class="row g-4">
-            <div class="col-md-6">
-                <div class="cta-card cta-family">
-                    <i class="fa-solid fa-house-chimney-heart fa-2x mb-3 d-block"></i>
-                    <h3>@L["CtaFamilyTitle"]</h3>
-                    <p>@L["CtaFamilyDesc"]</p>
-                    <a asp-controller="Posts" asp-action="Create" class="btn-cta">@L["CtaFamilyBtn"]</a>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="cta-card cta-caregiver">
-                    <i class="fa-solid fa-user-nurse fa-2x mb-3 d-block"></i>
-                    <h3>@L["CtaCaregiverTitle"]</h3>
-                    <p>@L["CtaCaregiverDesc"]</p>
-                    <a asp-controller="Account" asp-action="Register" class="btn-cta">@L["CtaCaregiverBtn"]</a>
+                    <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="PetCare" class="t4-find-btn">@L["NavBrowse"]</a>
                 </div>
             </div>
         </div>

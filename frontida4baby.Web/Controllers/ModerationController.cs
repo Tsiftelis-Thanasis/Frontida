@@ -59,7 +59,7 @@ public class ModerationController : Controller
     // ── POST /moderation/approve ──────────────────────────────────────────────
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Approve(ContentType contentType, int id)
+    public async Task<IActionResult> Approve(ContentType contentType, int id, string? returnUrl = null)
     {
         if (contentType == ContentType.Post)
         {
@@ -74,13 +74,15 @@ public class ModerationController : Controller
 
         await _db.SaveChangesAsync();
         TempData["AdminMessage"] = "Item approved.";
+        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            return Redirect(returnUrl);
         return RedirectToAction(nameof(Queue));
     }
 
     // ── POST /moderation/reject ───────────────────────────────────────────────
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Reject(ContentType contentType, int id, string reason)
+    public async Task<IActionResult> Reject(ContentType contentType, int id, string reason, string? returnUrl = null)
     {
         if (contentType == ContentType.Post)
         {
@@ -104,6 +106,8 @@ public class ModerationController : Controller
 
         await _db.SaveChangesAsync();
         TempData["AdminMessage"] = "Item rejected.";
+        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            return Redirect(returnUrl);
         return RedirectToAction(nameof(Queue));
     }
 

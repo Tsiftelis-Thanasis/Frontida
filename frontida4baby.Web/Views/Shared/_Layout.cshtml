@@ -8,18 +8,21 @@
     <title>@ViewData["Title"] – frontida4all</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
           integrity="sha512-Avb2QiuDEEvB4bZJYdft2mNjVShBftLdPG8FJ0V7irTLQ8Uo0qcPxh4Plq7G5tGm0rU+1SPhVotteLpBERwTkA=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/stitch-tokens.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/stitch-components.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
 
     @* ─── Navbar ──────────────────────────────────────────────────────────── *@
     <header>
-        <nav class="navbar navbar-expand-lg">
+        <nav class="navbar navbar-expand-lg st-nav">
             <div class="container">
 
                 <a class="navbar-brand" asp-controller="Home" asp-action="Index">
@@ -74,47 +77,47 @@
                             {
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Dashboard" asp-action="Index">
-                                        <i class="fa-solid fa-gauge-high me-1"></i>@L["NavDashboard"]
+                                        <span class="material-symbols-outlined me-1" style="font-size:1.1rem">dashboard</span>@L["NavDashboard"]
                                     </a>
                                 </li>
                                 <li class="nav-item">
                                     <a class="nav-link" asp-controller="Subscription" asp-action="Index">
-                                        <i class="fa-solid fa-star me-1"></i>@L["NavSubscription"]
+                                        <span class="material-symbols-outlined me-1" style="font-size:1.1rem">star</span>@L["NavSubscription"]
                                     </a>
                                 </li>
                             }
                             @if (User.IsInRole("Admin"))
                             {
                                 <li class="nav-item dropdown">
-                                    <a class="nav-link fw-bold dropdown-toggle" style="color:#dc3545!important"
+                                    <a class="nav-link fw-bold dropdown-toggle" style="color:var(--st-error)!important"
                                        href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                        <i class="fa-solid fa-shield-halved me-1"></i>Admin
+                                        <span class="material-symbols-outlined me-1" style="font-size:1.1rem">shield</span>Admin
                                     </a>
                                     <ul class="dropdown-menu dropdown-menu-end">
                                         <li>
                                             <a class="dropdown-item" asp-controller="Admin" asp-action="Index">
-                                                <i class="fas fa-tachometer-alt me-2 text-danger"></i>Dashboard
+                                                <span class="material-symbols-outlined me-2 text-danger" style="font-size:1.1rem">speed</span>Dashboard
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" asp-controller="Admin" asp-action="Users">
-                                                <i class="fas fa-users me-2 text-primary"></i>Χρήστες
+                                                <span class="material-symbols-outlined me-2" style="font-size:1.1rem;color:var(--st-primary)">group</span>Χρήστες
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" asp-controller="Admin" asp-action="Posts">
-                                                <i class="fas fa-file-alt me-2 text-primary"></i>Αγγελίες
+                                                <span class="material-symbols-outlined me-2" style="font-size:1.1rem;color:var(--st-primary)">article</span>Αγγελίες
                                             </a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" asp-controller="Admin" asp-action="Logs">
-                                                <i class="fas fa-list-alt me-2 text-primary"></i>Logs
+                                                <span class="material-symbols-outlined me-2" style="font-size:1.1rem;color:var(--st-primary)">list_alt</span>Logs
                                             </a>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li>
                                             <a class="dropdown-item" asp-controller="Moderation" asp-action="Queue">
-                                                <i class="fas fa-gavel me-2 text-warning"></i>@L["NavModeration"]
+                                                <span class="material-symbols-outlined me-2" style="font-size:1.1rem;color:var(--st-tertiary)">gavel</span>@L["NavModeration"]
                                             </a>
                                         </li>
                                     </ul>
@@ -148,7 +151,7 @@
     </main>
 
     @* ─── Footer ───────────────────────────────────────────────────────────── *@
-    <footer class="site-footer">
+    <footer class="st-footer">
         <div class="container">
             <div class="row g-5">
                 <div class="col-lg-4">

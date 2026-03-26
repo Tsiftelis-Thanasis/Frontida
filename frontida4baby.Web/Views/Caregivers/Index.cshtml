@@ -72,7 +72,8 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="btn btn-primary w-100 btn-sm">@L["FilterBtn"]</button>
+                    <button type="submit" class="btn btn-primary w-100 btn-sm"
+                            onclick="this.form.querySelectorAll('input,select').forEach(e=>{if(!e.value)e.disabled=true})">@L["FilterBtn"]</button>
                     <a asp-action="Index" class="btn btn-outline-secondary w-100 btn-sm mt-2">@L["FilterClear"]</a>
                 </form>
             </div>

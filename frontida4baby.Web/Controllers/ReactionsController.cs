@@ -34,6 +34,10 @@ public class ReactionsController : Controller
     {
         var userId = _userManager.GetUserId(User)!;
 
+        var post = await _db.Posts.FindAsync(postId);
+        if (post is null || post.ModerationStatus != ModerationStatus.Approved)
+            return Json(new { error = "Cannot react to this post." });
+
         var reactingUser = await _userManager.FindByIdAsync(userId);
         if (reactingUser?.IsBlacklisted == true)
             return Json(new { error = "Ο λογαριασμός σας έχει αποκλειστεί. Δεν μπορείτε να αντιδράτε σε αγγελίες." });

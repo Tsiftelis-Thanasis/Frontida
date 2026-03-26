@@ -37,10 +37,15 @@ public class PostsController : Controller
     // ── GET /posts ────────────────────────────────────────────────────────────
     public async Task<IActionResult> Index(PostListViewModel filter)
     {
+        var currentUserId = _userManager.GetUserId(User);
+
         var query = _db.Posts
             .Include(p => p.AuthorUser).ThenInclude(u => u.ReceivedReviews)
             .Include(p => p.Replies)
-            .Where(p => p.Status == PostStatus.Active);
+            .Where(p => (p.Status == PostStatus.Active || p.AuthorUserId == currentUserId)
+                     && p.Status != PostStatus.Deleted)
+            .Where(p => p.ModerationStatus == ModerationStatus.Approved
+                     || p.AuthorUserId == currentUserId);
 
         if (filter.ServiceType.HasValue)
             query = query.Where(p => p.ServiceType == filter.ServiceType.Value);
@@ -63,6 +68,9 @@ public class PostsController : Controller
                 City                = p.City,
                 ReplyCount          = p.Replies.Count(r => r.ModerationStatus == ModerationStatus.Approved),
                 CreatedAt           = p.CreatedAt,
+                Status              = p.Status,
+                ModerationStatus    = p.ModerationStatus,
+                IsOwner             = p.AuthorUserId == currentUserId,
             })
             .ToListAsync();
 
@@ -147,6 +155,7 @@ public class PostsController : Controller
             ServiceType          = post.ServiceType,
             City                 = post.City,
             Status               = post.Status,
+            ModerationStatus     = post.ModerationStatus,
             CreatedAt            = post.CreatedAt,
             EditedAt             = post.EditedAt,
             ReactionCount        = reactionCount,

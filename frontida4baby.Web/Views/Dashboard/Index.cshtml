@@ -29,6 +29,16 @@
         </div>
     }
 
+    @if (Model.IsCaregiver && !Model.HasServices)
+    {
+        <div class="alert alert-warning mb-4">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            <strong>Ολοκληρώστε το προφίλ σας!</strong>
+            Δεν έχετε επιλέξει υπηρεσίες — δεν θα εμφανίζεστε στις αναζητήσεις.
+            <a asp-action="Settings" class="alert-link">Ρυθμίσεις προφίλ</a>
+        </div>
+    }
+
     @if (Model.CurrentPlan == SubscriptionPlan.Free)
     {
         <div class="alert alert-info mb-4">

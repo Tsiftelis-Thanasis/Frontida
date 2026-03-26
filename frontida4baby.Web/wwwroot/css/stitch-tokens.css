@@ -1,0 +1,99 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Stitch Design Tokens — "The Resilient Sanctuary"
+   CSS Custom Properties for colors, typography, spacing, radii, shadows
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ─── Primary ─────────────────────────────────────────────────────────── */
+  --st-primary:                 #006067;
+  --st-primary-container:       #007b83;
+  --st-on-primary:              #ffffff;
+  --st-on-primary-container:    #d0fbff;
+  --st-primary-fixed:           #96f1fa;
+  --st-primary-fixed-dim:       #7ad5dd;
+  --st-on-primary-fixed:        #002022;
+  --st-on-primary-fixed-variant:#004f54;
+
+  /* ─── Secondary ───────────────────────────────────────────────────────── */
+  --st-secondary:               #4c616c;
+  --st-secondary-container:     #cfe6f2;
+  --st-on-secondary:            #ffffff;
+  --st-on-secondary-container:  #526772;
+  --st-secondary-fixed:         #cfe6f2;
+  --st-secondary-fixed-dim:     #b4cad6;
+
+  /* ─── Tertiary (warm ochre) ───────────────────────────────────────────── */
+  --st-tertiary:                #84470b;
+  --st-tertiary-container:      #a25e23;
+  --st-on-tertiary:             #ffffff;
+  --st-on-tertiary-container:   #fff0e8;
+  --st-tertiary-fixed:          #ffdcc4;
+  --st-tertiary-fixed-dim:      #ffb780;
+
+  /* ─── Error ───────────────────────────────────────────────────────────── */
+  --st-error:                   #ba1a1a;
+  --st-error-container:         #ffdad6;
+  --st-on-error:                #ffffff;
+  --st-on-error-container:      #93000a;
+
+  /* ─── Surface Hierarchy ───────────────────────────────────────────────── */
+  --st-surface:                 #f8fafb;
+  --st-surface-dim:             #d8dadb;
+  --st-surface-bright:          #f8fafb;
+  --st-surface-container-lowest:#ffffff;
+  --st-surface-container-low:   #f2f4f5;
+  --st-surface-container:       #eceeef;
+  --st-surface-container-high:  #e6e8e9;
+  --st-surface-container-highest:#e1e3e4;
+  --st-surface-variant:         #e1e3e4;
+  --st-surface-tint:            #006970;
+
+  /* ─── On Surface ──────────────────────────────────────────────────────── */
+  --st-on-surface:              #191c1d;
+  --st-on-surface-variant:      #3e494a;
+  --st-on-background:           #191c1d;
+
+  /* ─── Outline ─────────────────────────────────────────────────────────── */
+  --st-outline:                 #6e797a;
+  --st-outline-variant:         #bdc9ca;
+
+  /* ─── Inverse ─────────────────────────────────────────────────────────── */
+  --st-inverse-surface:         #2e3132;
+  --st-inverse-on-surface:      #eff1f2;
+  --st-inverse-primary:         #7ad5dd;
+
+  /* ─── Typography ──────────────────────────────────────────────────────── */
+  --st-font-headline:           'Manrope', sans-serif;
+  --st-font-body:               'Inter', sans-serif;
+
+  /* ─── Spacing ─────────────────────────────────────────────────────────── */
+  --st-space-1:   0.25rem;  /* 4px */
+  --st-space-2:   0.5rem;   /* 8px */
+  --st-space-3:   0.75rem;  /* 12px */
+  --st-space-4:   1rem;     /* 16px */
+  --st-space-5:   1.25rem;  /* 20px */
+  --st-space-6:   1.5rem;   /* 24px */
+  --st-space-8:   2rem;     /* 32px */
+  --st-space-10:  2.5rem;   /* 40px */
+  --st-space-12:  3rem;     /* 48px */
+  --st-space-16:  5.5rem;   /* 88px */
+  --st-space-20:  7rem;     /* 112px */
+  --st-space-24:  8.5rem;   /* 136px */
+
+  /* ─── Border Radius ───────────────────────────────────────────────────── */
+  --st-radius-sm:   0.25rem;
+  --st-radius-md:   0.5rem;
+  --st-radius-lg:   0.75rem;
+  --st-radius-xl:   1.5rem;
+  --st-radius-2xl:  2rem;
+  --st-radius-3xl:  1.875rem; /* 30px */
+  --st-radius-full: 9999px;
+
+  /* ─── Shadows ─────────────────────────────────────────────────────────── */
+  --st-shadow-editorial: 0px 20px 40px rgba(25, 28, 29, 0.06);
+  --st-shadow-nav:       0 2px 12px rgba(0, 0, 0, 0.06);
+
+  /* ─── Transitions ─────────────────────────────────────────────────────── */
+  --st-transition:  0.22s ease;
+  --st-transition-fast: 0.15s ease;
+}

@@ -30,7 +30,7 @@ public class WordlistModerationService
         "shit", "shitting",
         "cunt", "cunts",
         "bitch", "bitches",
-        "asshole", "assholes",
+        "asshole", "assholes", "ashole", "asholes",
         "bastard", "bastards",
         "cock", "dick", "pussy",
         "whore", "slut",
@@ -44,6 +44,17 @@ public class WordlistModerationService
         "i will hurt you", "i'll hurt you",
         "i will find you", "you will regret",
         "bomb threat", "i will rape",
+    ];
+
+    // Sexual solicitation phrases (substring match)
+    private static readonly string[] EnglishSexual =
+    [
+        "have sex", "looking for sex", "sex nanny", "sex babysitter",
+        "sex caregiver", "sexual services", "sexual favors", "sexual favours",
+        "escort service", "happy ending", "friends with benefits",
+        "hookup", "hook up with", "one night stand",
+        "nude", "nudes", "naked pics", "naked photos",
+        "sex worker", "porn", "pornography",
     ];
 
     // Illegal-offer keywords (whole-word)
@@ -85,6 +96,12 @@ public class WordlistModerationService
         "θα σε κανω", "θα σε χτυπησω",
     ];
 
+    private static readonly string[] GreekSexual =
+    [
+        "σεξ νταντα", "σεξ μπεημπισιτερ", "σεξουαλικες υπηρεσιες",
+        "σεξουαλικη χαρη", "ψαχνω για σεξ", "κανω σεξ",
+    ];
+
     private static readonly string[] GreekIllegal =
     [
         "ναρκωτικα προς πωληση", "πουλαω ναρκωτικα",
@@ -112,7 +129,14 @@ public class WordlistModerationService
                 return Rejected("Threatening or violent language detected.", "Threat");
         }
 
-        // 3. Illegal offer phrases (substring)
+        // 3. Sexual solicitation phrases (substring)
+        foreach (var phrase in EnglishSexual.Concat(GreekSexual))
+        {
+            if (combined.Contains(phrase, StringComparison.Ordinal))
+                return Rejected("Sexual or inappropriate content is not allowed.", "SexualContent");
+        }
+
+        // 4. Illegal offer phrases (substring)
         foreach (var phrase in EnglishIllegal.Concat(GreekIllegal))
         {
             if (combined.Contains(phrase, StringComparison.Ordinal))

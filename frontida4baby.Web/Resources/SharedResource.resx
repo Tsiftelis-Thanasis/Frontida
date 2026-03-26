@@ -139,6 +139,10 @@
   <data name="PostNewRequest"        xml:space="preserve"><value>+ Post a Request</value></data>
   <data name="PostLoginToPost"       xml:space="preserve"><value>Log in to post a request</value></data>
   <data name="PostPendingNotice"     xml:space="preserve"><value>Your post is under review and will appear once approved by a moderator.</value></data>
+  <data name="PostPendingReview"     xml:space="preserve"><value>Pending Review</value></data>
+  <data name="PostPendingBannerMsg"  xml:space="preserve"><value>This post is pending moderation review. It will be visible to others once approved.</value></data>
+  <data name="PostRejected"          xml:space="preserve"><value>Rejected</value></data>
+  <data name="PostRejectedBannerMsg" xml:space="preserve"><value>This post was rejected by moderation and is not visible to others.</value></data>
   <data name="PostAllServiceTypes"   xml:space="preserve"><value>All service types</value></data>
   <data name="PostNoResults"         xml:space="preserve"><value>No requests found.</value></data>
   <data name="PostBeFirst"           xml:space="preserve"><value>Be the first to post</value></data>
@@ -172,6 +176,7 @@
   <data name="PostReplyPlaceholder" xml:space="preserve"><value>Write your reply…</value></data>
   <data name="PostSubmitReply"      xml:space="preserve"><value>Submit Reply</value></data>
   <data name="PostToReply"          xml:space="preserve"><value>to reply.</value></data>
+  <data name="PostClosed"           xml:space="preserve"><value>Closed</value></data>
   <data name="PostClosedMsg"        xml:space="preserve"><value>This request is closed.</value></data>
   <data name="PostBackToAll"        xml:space="preserve"><value>← Back to all requests</value></data>
   <data name="PostReplyApproved"    xml:space="preserve"><value>Your reply has been published.</value></data>

@@ -1,0 +1,92 @@
+@{
+    ViewData["Title"] = "Template 3 – Dark Professional";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .t3-page { background: #0f172a; color: #f8fafc; }
+    .t3-hero { background: #1e293b; padding: 80px 0 40px; }
+    .t3-hero h1 { font-size: 2.9rem; font-weight: 800; color: #fff; line-height: 1.15; }
+    .t3-hero p  { color: #94a3b8; font-size: 1.05rem; margin: 1.2rem 0 2rem; max-width: 500px; }
+    .t3-btn-orange { background: #f97316; color: #fff; border: none; padding: 12px 28px; border-radius: 8px; font-weight: 600; text-decoration: none; }
+    .t3-btn-orange:hover { background: #ea6c0a; color: #fff; }
+    .t3-btn-outline { background: transparent; color: #94a3b8; border: 1px solid #475569; padding: 10px 24px; border-radius: 8px; font-weight: 500; text-decoration: none; margin-left: 10px; }
+    .t3-btn-outline:hover { border-color: #94a3b8; color: #f8fafc; }
+    .t3-hero-img { border-radius: 16px; width: 100%; max-height: 380px; object-fit: cover; box-shadow: 0 20px 60px rgba(0,0,0,0.4); }
+    .t3-stats { border-top: 1px solid #334155; padding-top: 32px; margin-top: 40px; }
+    .t3-stat-val { font-size: 1.7rem; font-weight: 800; color: #f97316; }
+    .t3-stat-lbl { color: #94a3b8; font-size: 0.88rem; }
+    .t3-features { padding: 60px 0 80px; background: #0f172a; }
+    .t3-features h2 { font-size: 1.7rem; font-weight: 700; color: #f8fafc; margin-bottom: 0.4rem; }
+    .t3-features .t3-sub { color: #64748b; margin-bottom: 2.5rem; }
+    .t3-feature-card { background: #1e293b; border-radius: 12px; padding: 28px; height: 100%; border: 1px solid #334155; }
+    .t3-feature-card .t3-icon { width: 48px; height: 48px; border-radius: 10px; background: rgba(249,115,22,0.15); display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .t3-feature-card .t3-icon i { color: #f97316; font-size: 1.2rem; }
+    .t3-feature-card h5 { font-weight: 700; color: #f8fafc; margin-bottom: 8px; }
+    .t3-feature-card p  { color: #94a3b8; font-size: 0.9rem; margin: 0; }
+    .t3-tag { display: inline-block; background: rgba(249,115,22,0.12); color: #f97316; font-size: 0.75rem; padding: 3px 10px; border-radius: 20px; margin-bottom: 14px; font-weight: 600; }
+</style>
+
+<div class="t3-page">
+    <section class="t3-hero">
+        <div class="container">
+            <div class="row align-items-center g-5">
+                <div class="col-lg-7">
+                    <span class="t3-tag"><i class="fas fa-bolt me-1"></i> Greece's #1 Care Platform</span>
+                    <h1>Professional Care<br>On Your Schedule</h1>
+                    <p>Hire verified caregivers for childcare, eldercare, tutoring and more. Smart matching, transparent pricing, zero hassle.</p>
+                    <a href="#" class="t3-btn-orange">Browse Services</a>
+                    <a href="#" class="t3-btn-outline">How it works</a>
+                </div>
+                <div class="col-lg-5">
+                    <img src="https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=500"
+                         alt="Caregiver" class="t3-hero-img">
+                </div>
+            </div>
+            <div class="row t3-stats">
+                <div class="col-4 text-center">
+                    <div class="t3-stat-val">446k+</div>
+                    <div class="t3-stat-lbl">Verified Profiles</div>
+                </div>
+                <div class="col-4 text-center">
+                    <div class="t3-stat-val">8</div>
+                    <div class="t3-stat-lbl">Service Categories</div>
+                </div>
+                <div class="col-4 text-center">
+                    <div class="t3-stat-val">4,117+</div>
+                    <div class="t3-stat-lbl">Secure Messages</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="t3-features">
+        <div class="container">
+            <h2>Everything you need</h2>
+            <p class="t3-sub">Powerful tools for families and caregivers alike.</p>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="t3-feature-card">
+                        <div class="t3-icon"><i class="fas fa-house-chimney-user"></i></div>
+                        <h5>Family Booking</h5>
+                        <p>Post your care needs, receive applications and confirm a caregiver — all through the platform.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="t3-feature-card">
+                        <div class="t3-icon"><i class="fas fa-badge-check"></i></div>
+                        <h5>Premium Features</h5>
+                        <p>Access verified caregivers with background checks, certifications and detailed experience records.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="t3-feature-card">
+                        <div class="t3-icon"><i class="fas fa-clock"></i></div>
+                        <h5>Time &amp; Flexibility</h5>
+                        <p>Smart scheduling tools let you manage recurring bookings, last-minute requests and date changes easily.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

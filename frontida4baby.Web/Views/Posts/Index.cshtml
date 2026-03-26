@@ -83,7 +83,21 @@ else
                class="list-group-item list-group-item-action py-3">
                 <div class="d-flex justify-content-between align-items-start">
                     <div>
-                        <h6 class="mb-1 fw-semibold">@post.Title</h6>
+                        <h6 class="mb-1 fw-semibold">
+                            @post.Title
+                            @if (post.IsOwner && post.ModerationStatus == ModerationStatus.PendingReview)
+                            {
+                                <span class="badge bg-warning text-dark ms-2">@L["PostPendingReview"]</span>
+                            }
+                            @if (post.IsOwner && post.ModerationStatus == ModerationStatus.Rejected)
+                            {
+                                <span class="badge bg-danger ms-2">@L["PostRejected"]</span>
+                            }
+                            @if (post.Status == PostStatus.Closed)
+                            {
+                                <span class="badge bg-dark ms-2">@L["PostClosed"]</span>
+                            }
+                        </h6>
                         <small class="text-muted">
                             @post.AuthorName
                             @if (post.AuthorIsCaregiver && post.AuthorAverageRating > 0)

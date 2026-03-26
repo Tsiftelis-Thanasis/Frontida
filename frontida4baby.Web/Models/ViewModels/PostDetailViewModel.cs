@@ -12,8 +12,9 @@ public class PostDetailViewModel
     public string       AuthorId          { get; set; } = string.Empty;
     public ServiceType? ServiceType       { get; set; }
     public string?      City              { get; set; }
-    public PostStatus   Status            { get; set; }
-    public DateTime     CreatedAt         { get; set; }
+    public PostStatus        Status            { get; set; }
+    public ModerationStatus  ModerationStatus  { get; set; }
+    public DateTime          CreatedAt         { get; set; }
     public DateTime?    EditedAt          { get; set; }
     public int          ReactionCount     { get; set; }
     public bool         CurrentUserLiked  { get; set; }

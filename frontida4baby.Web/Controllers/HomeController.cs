@@ -40,6 +40,18 @@ public class HomeController : Controller
         return View();
     }
 
+    [Route("template1")]
+    public IActionResult Template1() => View();
+
+    [Route("template2")]
+    public IActionResult Template2() => View();
+
+    [Route("template3")]
+    public IActionResult Template3() => View();
+
+    [Route("template4")]
+    public IActionResult Template4() => View();
+
     [Route("disclaimer")]
     public IActionResult Disclaimer()
     {

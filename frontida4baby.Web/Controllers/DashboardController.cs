@@ -35,11 +35,19 @@ public class DashboardController : Controller
         var plan   = await _subscription.GetPlanAsync(userId);
         var user   = await _userManager.FindByIdAsync(userId);
 
+        var isCaregiver = user?.IsCaregiver ?? false;
+        var hasServices = isCaregiver && await _db.Profiles
+            .Where(p => p.UserId == userId)
+            .SelectMany(p => p.Services)
+            .AnyAsync(s => s.IsActive);
+
         var vm = new DashboardViewModel
         {
             CurrentPlan     = plan,
             ActiveTab       = tab,
             IsEmailVerified = user?.EmailConfirmed ?? false,
+            IsCaregiver     = isCaregiver,
+            HasServices     = hasServices,
         };
 
         if (tab == "posts" || tab == "")
@@ -119,7 +127,9 @@ public class DashboardController : Controller
         var user = await _userManager.GetUserAsync(User);
         if (user == null) return NotFound();
 
-        var profile = await _db.Profiles.FirstOrDefaultAsync(p => p.UserId == user.Id);
+        var profile = await _db.Profiles
+            .Include(p => p.Services)
+            .FirstOrDefaultAsync(p => p.UserId == user.Id);
 
         var vm = new UserSettingsViewModel
         {
@@ -133,6 +143,10 @@ public class DashboardController : Controller
             HourlyRate        = profile?.HourlyRate,
             YearsOfExperience = profile?.YearsOfExperience,
             Languages         = profile?.Languages,
+            SelectedServiceTypes = profile?.Services
+                .Where(s => s.IsActive)
+                .Select(s => s.ServiceType)
+                .ToList() ?? new(),
         };
         return View(vm);
     }
@@ -141,14 +155,19 @@ public class DashboardController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Settings(UserSettingsViewModel model)
     {
-        if (!ModelState.IsValid)
-        {
-            model.IsCaregiver = (await _userManager.GetUserAsync(User))?.IsCaregiver ?? false;
-            return View(model);
-        }
-
         var user = await _userManager.GetUserAsync(User);
         if (user == null) return NotFound();
+
+        model.IsCaregiver = user.IsCaregiver;
+
+        if (user.IsCaregiver && (model.SelectedServiceTypes == null || model.SelectedServiceTypes.Count == 0))
+        {
+            ModelState.AddModelError(nameof(model.SelectedServiceTypes),
+                "Επιλέξτε τουλάχιστον μία υπηρεσία.");
+        }
+
+        if (!ModelState.IsValid)
+            return View(model);
 
         user.FirstName   = model.FirstName;
         user.LastName    = model.LastName;
@@ -157,7 +176,9 @@ public class DashboardController : Controller
         await _userManager.UpdateAsync(user);
 
         // Upsert profile
-        var profile = await _db.Profiles.FirstOrDefaultAsync(p => p.UserId == user.Id);
+        var profile = await _db.Profiles
+            .Include(p => p.Services)
+            .FirstOrDefaultAsync(p => p.UserId == user.Id);
         if (profile == null)
         {
             profile = new Profile { UserId = user.Id };
@@ -171,6 +192,18 @@ public class DashboardController : Controller
             profile.HourlyRate        = model.HourlyRate;
             profile.YearsOfExperience = model.YearsOfExperience;
             profile.Languages         = model.Languages;
+
+            // Sync service types
+            var existing = profile.Services.ToList();
+            var selected = model.SelectedServiceTypes ?? new();
+
+            // Remove deselected
+            foreach (var svc in existing.Where(s => !selected.Contains(s.ServiceType)))
+                _db.Remove(svc);
+
+            // Add newly selected
+            foreach (var st in selected.Where(t => !existing.Any(s => s.ServiceType == t)))
+                profile.Services.Add(new Service { ServiceType = st, IsActive = true });
         }
 
         // Handle photo upload

@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
+using frontida4baby.Web.Models.Entities;
 
 namespace frontida4baby.Web.Models.ViewModels;
 
@@ -41,4 +42,8 @@ public class UserSettingsViewModel
     [Display(Name = "Γλώσσες")]
     [StringLength(200)]
     public string? Languages { get; set; }
+
+    // Service types the caregiver offers
+    [Display(Name = "Υπηρεσίες")]
+    public List<ServiceType> SelectedServiceTypes { get; set; } = new();
 }
