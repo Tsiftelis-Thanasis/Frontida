@@ -1,50 +1,64 @@
 # frontida4baby (Φροντίδα)
 
-A simplified caregiving platform connecting families with trusted caregivers in Greece.
+A caregiving platform connecting families with trusted caregivers in Greece.
 
 ## Overview
 
-frontida4baby is a streamlined web application that helps families find and connect with verified babysitters, tutors, elderly caregivers, and other household help. Built with modern .NET technologies, it provides a simple and efficient way to manage caregiving services.
+frontida4baby (Φροντίδα = "care" in Greek) is a web application that helps families find verified babysitters, tutors, elderly caregivers, and other household help. It features community-driven posts, a moderation pipeline powered by Claude AI, Stripe-based subscriptions, and full Greek/English localization.
 
 ## Features
 
-- **Family Profiles**: Easy registration and profile management for families seeking care
-- **Caregiver Listings**: Browse and search verified caregivers by service type and location
-- **Service Categories**: Childcare, elderly care, tutoring, housekeeping, and pet care
-- **Booking System**: Simple scheduling and appointment management
-- **Reviews & Ratings**: Build trust through community feedback
-- **Secure Messaging**: Direct communication between families and caregivers
+- **Community Posts**: Families post care requests; caregivers react and connect
+- **Reaction Approval Flow**: Post owners approve caregivers who can then see contact details
+- **Caregiver Listings**: Browse and search by service type and city
+- **User Profiles**: Extended profiles with verification badges
+- **Subscription Tiers**: Gated posting/replying/reacting via Stripe
+- **AI Content Moderation**: 2-stage pipeline — wordlist pre-filter → Claude AI review
+- **Admin Dashboard**: User management, moderation queue, payment oversight
+- **Email Notifications**: Verification emails, admin alerts, user event notifications
+- **Blacklist System**: Auto-blacklist after 3 content rejections; admin can unblacklist
+- **Legal & Safety**: Terms of Service, Privacy Policy, Disclaimer, AI Review Policy pages
+- **Cookie Consent**: GDPR-compliant cookie banner
+- **Localization**: Greek (el) and English (en) via resource files
 
 ## Tech Stack
 
-- **Backend**: .NET 10
-- **Database**: SQL Server
-- **Frontend**: ASP.NET Core MVC / Razor Pages
-- **Authentication**: ASP.NET Core Identity
-- **ORM**: Entity Framework Core
+| Layer | Technology |
+|---|---|
+| Backend | .NET 10, ASP.NET Core MVC |
+| Database | SQL Server + Entity Framework Core |
+| Auth | ASP.NET Core Identity + OAuth |
+| Frontend | Bootstrap 5, Font Awesome 6, jQuery |
+| Payments | Stripe |
+| AI Moderation | Claude AI (Anthropic) |
+| Email | SMTP (Gmail) |
+| Hosting | Azure App Service |
 
 ## Prerequisites
 
 - .NET 10 SDK
-- SQL Server 2019 or later (or SQL Server Express)
-- Visual Studio 2022 or VS Code with C# extension
+- SQL Server 2019+ (or SQL Server Express)
+- Visual Studio 2022 / VS Code with C# extension
 
 ## Getting Started
 
-### Installation
+### 1. Clone
 
-1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/frontida4baby.git
-cd frontida4baby
+git clone https://github.com/Tsiftelis-Thanasis/Frontida.git
+cd Frontida
 ```
 
-2. Restore dependencies:
+### 2. Restore
+
 ```bash
 dotnet restore
 ```
 
-3. Update the connection string in `appsettings.json`:
+### 3. Configure
+
+Update `frontida4baby.Web/appsettings.json` with your connection string:
+
 ```json
 {
   "ConnectionStrings": {
@@ -53,71 +67,119 @@ dotnet restore
 }
 ```
 
-4. Apply database migrations:
+Set secrets for sensitive values (never commit these):
+
 ```bash
+cd frontida4baby.Web
+dotnet user-secrets set "Email:SmtpPass" "your-gmail-app-password"
+dotnet user-secrets set "Stripe:SecretKey" "sk_test_..."
+dotnet user-secrets set "Moderation:ClaudeApiKey" "sk-ant-..."
+```
+
+### 4. Migrate
+
+```bash
+cd frontida4baby.Web
 dotnet ef database update
 ```
 
-5. Run the application:
+### 5. Run
+
 ```bash
 dotnet run
+# or for auto-reload:
+dotnet watch run
 ```
 
-6. Navigate to `https://localhost:5001` in your browser
+Navigate to `https://localhost:5001`.
 
 ## Project Structure
 
 ```
 frontida4baby/
-├── Controllers/          # MVC controllers
-├── Models/              # Data models and view models
-├── Views/               # Razor views
-├── Data/                # DbContext and migrations
-├── Services/            # Business logic services
-├── wwwroot/             # Static files (CSS, JS, images)
-└── appsettings.json     # Configuration
+├── Controllers/          # MVC controllers (thin, delegate to services)
+├── Models/
+│   ├── Entities/         # Domain models (ApplicationUser, Post, etc.)
+│   ├── ViewModels/       # View-specific models
+│   └── DTOs/             # Data transfer objects
+├── Data/
+│   ├── ApplicationDbContext.cs
+│   └── Migrations/
+├── Services/             # Business logic
+│   ├── ContentModerationService.cs
+│   ├── NotificationService.cs
+│   ├── UserEmailService.cs
+│   ├── SubscriptionService.cs
+│   └── PendingModerationJob.cs (hosted service)
+├── Middleware/
+│   └── ErrorLoggingMiddleware.cs
+├── Resources/            # Localization (.resx) for el/en
+├── Views/
+│   ├── Account/
+│   ├── Admin/
+│   ├── Caregivers/
+│   ├── Dashboard/
+│   ├── Home/
+│   ├── Moderation/
+│   ├── Posts/
+│   ├── Profile/
+│   ├── Subscription/
+│   └── Shared/
+└── wwwroot/
+    ├── css/
+    └── js/
 ```
 
-## Database Schema
+## Key Configuration (appsettings.json)
 
-Core entities:
-- **Users**: Family and caregiver accounts
-- **Profiles**: Detailed user profiles with verification status
-- **Services**: Available caregiving services
-- **Bookings**: Appointment and scheduling information
-- **Reviews**: Ratings and feedback
+```json
+{
+  "Moderation": {
+    "BlacklistThreshold": 3,
+    "ClaudeApiKey": "...",
+    "UseClaudeModeration": true
+  },
+  "Notifications": {
+    "OnNewRegistration": true,
+    "OnServerError": true,
+    "OnUserBlacklisted": true,
+    "OnPostRejected": true
+  },
+  "Email": {
+    "SmtpHost": "smtp.gmail.com",
+    "SmtpPort": 587,
+    "AdminEmail": "frontida4all@gmail.com"
+  }
+}
+```
 
-## Development Roadmap
+## Roadmap
 
-- [ ] Basic user authentication and authorization
-- [ ] Caregiver profile creation and verification
-- [ ] Family profile and search functionality
-- [ ] Booking and scheduling system
-- [ ] Messaging between users
-- [ ] Review and rating system
-- [ ] Payment integration
-- [ ] Mobile responsiveness
-- [ ] Greek and English localization
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+- [x] User authentication and authorization (Identity + OAuth)
+- [x] Family and caregiver profiles
+- [x] Community posts with service categories and city filter
+- [x] Reaction & approval system
+- [x] AI-powered content moderation (2-stage)
+- [x] Admin dashboard (users, moderation queue, payments)
+- [x] Stripe subscription tiers
+- [x] Email verification flow
+- [x] Admin notifications (registration, errors, blacklists, rejections)
+- [x] Blacklist system with auto-trigger
+- [x] Legal pages (Terms, Privacy, Disclaimer, AI Policy)
+- [x] Greek/English localization
+- [x] Cookie consent (GDPR)
+- [x] Azure App Service deployment
+- [ ] Real-time messaging (SignalR)
+- [ ] Calendar integration for bookings
+- [ ] Mobile apps (iOS/Android)
+- [ ] Background check integration
+- [ ] Advanced caregiver matching algorithm
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+MIT License — see [LICENSE](LICENSE) for details.
 
 ## Contact
 
-Project Link: [https://github.com/yourusername/frontida4baby](https://github.com/yourusername/frontida4baby)
-
-## Acknowledgments
-
-- Inspired by the need for simple, trustworthy caregiving connections in Greece
-- Built with modern .NET technologies for reliability and performance
+Support: frontida4all@gmail.com
+Project: [https://github.com/Tsiftelis-Thanasis/Frontida](https://github.com/Tsiftelis-Thanasis/Frontida)
