@@ -1,81 +1,209 @@
 @{
-    ViewData["Title"] = "Αποποίηση Ευθύνης";
+    ViewData["Title"] = "Αποποίηση Ευθύνης / Disclaimer";
+    var isEn = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en";
 }
 
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="page-header mb-4">
-                <h1><i class="fas fa-shield-alt me-2"></i>Αποποίηση Ευθύνης</h1>
-                <p class="lead text-muted">Τελευταία ενημέρωση: Μάρτιος 2026</p>
+                <h1><i class="fas fa-shield-alt me-2"></i>@(isEn ? "Disclaimer" : "Αποποίηση Ευθύνης")</h1>
+                <p class="lead text-muted">@(isEn ? "Last updated: April 2026" : "Τελευταία ενημέρωση: Απρίλιος 2026")</p>
             </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-users me-2 text-primary"></i>Αλληλεπιδράσεις Χρηστών</h4>
-                    <p>
-                        Η πλατφόρμα frontida4all λειτουργεί ως χώρος σύνδεσης οικογενειών και φροντιστών.
-                        Δεν φέρουμε ευθύνη για οποιαδήποτε αλληλεπίδραση, συναλλαγή ή συμφωνία
-                        μεταξύ χρηστών της πλατφόρμας.
-                    </p>
-                    <p>
-                        Κάθε χρήστης είναι αποκλειστικά υπεύθυνος για τις ενέργειές του και τις
-                        συμφωνίες που συνάπτει με άλλους χρήστες.
-                    </p>
+            @if (isEn)
+            {
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-store me-2 text-primary"></i>Role of the Platform</h4>
+                        <p>
+                            The <strong>frontida4all</strong> platform operates exclusively as an online connection
+                            marketplace between families and individuals offering care or related services. The platform
+                            does not itself provide care services, nor does it act as an employer, principal,
+                            representative or guarantor of any user.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-robot me-2 text-primary"></i>Εποπτεία Περιεχομένου με Claude AI</h4>
-                    <p>
-                        Το περιεχόμενο που δημοσιεύεται στην πλατφόρμα εποπτεύεται αυτόματα από
-                        το <strong>Claude AI</strong> της Anthropic. Το σύστημα ελέγχει για:
-                    </p>
-                    <ul>
-                        <li>Ακατάλληλο ή προσβλητικό περιεχόμενο</li>
-                        <li>Απειλητική γλώσσα</li>
-                        <li>Παράνομες προτάσεις</li>
-                        <li>Ανεπιθύμητο εμπορικό περιεχόμενο</li>
-                    </ul>
-                    <p class="text-muted">
-                        <small>
-                            Η αυτόματη εποπτεία δεν είναι τέλεια. Περιεχόμενο που περνά την αυτόματη
-                            εποπτεία μπορεί να επανεξεταστεί από τους διαχειριστές.
-                        </small>
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-users me-2 text-primary"></i>User Interactions and Agreements</h4>
+                        <p>
+                            Any interaction, communication, negotiation or agreement entered into between users of
+                            the platform takes place entirely at their own risk. frontida4all bears no responsibility for:
+                        </p>
+                        <ul>
+                            <li>The content of agreements concluded between users</li>
+                            <li>The quality, suitability or legality of services provided</li>
+                            <li>The behaviour, acts or omissions of any user</li>
+                            <li>Any damages, losses or disputes arising from their relationship</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Περιορισμός Ευθύνης</h4>
-                    <p>
-                        Η frontida4all παρέχεται "ως έχει" χωρίς εγγυήσεις οποιουδήποτε είδους.
-                        Δεν φέρουμε ευθύνη για:
-                    </p>
-                    <ul>
-                        <li>Ζημίες που προκύπτουν από τη χρήση της πλατφόρμας</li>
-                        <li>Την ακρίβεια των πληροφοριών που παρέχουν οι χρήστες</li>
-                        <li>Τη συμπεριφορά τρίτων μέσω της πλατφόρμας</li>
-                    </ul>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-robot me-2 text-primary"></i>Content and Moderation</h4>
+                        <p>
+                            Content posted on the platform is monitored automatically by artificial intelligence
+                            systems to detect manifestly inappropriate or illegal content, such as:
+                        </p>
+                        <ul>
+                            <li>Offensive or threatening language</li>
+                            <li>Illegal proposals or activities</li>
+                            <li>Unsolicited commercial content</li>
+                        </ul>
+                        <p class="text-muted small">
+                            Automated moderation does not guarantee completeness or accuracy and does not replace
+                            human review. The platform retains the right, but not the obligation, to remove or
+                            modify content.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-envelope me-2 text-primary"></i>Επικοινωνία</h4>
-                    <p>
-                        Για οποιαδήποτε ανησυχία σχετικά με το περιεχόμενο της πλατφόρμας,
-                        επικοινωνήστε μαζί μας στη διεύθυνση:
-                        <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Limitation of Liability</h4>
+                        <p>
+                            The platform is provided "as is" without any express or implied warranties.
+                            frontida4all is not liable for:
+                        </p>
+                        <ul>
+                            <li>The accuracy, completeness or reliability of information provided by users</li>
+                            <li>Direct or indirect damages that may arise from use of the platform</li>
+                            <li>Technical issues, service interruptions or data loss</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-user-check me-2 text-primary"></i>User Responsibility</h4>
+                        <p>Each user bears sole responsibility for:</p>
+                        <ul>
+                            <li>The legality of their actions</li>
+                            <li>The accuracy of the information they provide</li>
+                            <li>Compliance with applicable law, particularly regarding employment, taxation,
+                                insurance and the protection of minors or vulnerable persons</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-envelope me-2 text-primary"></i>Contact</h4>
+                        <p>
+                            For any matter relating to platform content or a possible violation of the terms of use,
+                            please contact us at:
+                            <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>
+                        </p>
+                        <p class="text-muted small">
+                            This text constitutes a Disclaimer and complements the Terms of Use and Privacy Policy
+                            of the platform.
+                        </p>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-store me-2 text-primary"></i>Ρόλος της Πλατφόρμας</h4>
+                        <p>
+                            Η πλατφόρμα <strong>frontida4all</strong> λειτουργεί αποκλειστικά ως ηλεκτρονικός
+                            χώρος διασύνδεσης (marketplace) μεταξύ οικογενειών και προσώπων που προσφέρουν
+                            υπηρεσίες φροντίδας ή συναφείς υπηρεσίες. Η πλατφόρμα δεν παρέχει η ίδια
+                            υπηρεσίες φροντίδας, ούτε ενεργεί ως εργοδότης, εντολέας, αντιπρόσωπος
+                            ή εγγυητής οποιουδήποτε χρήστη.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-users me-2 text-primary"></i>Αλληλεπιδράσεις και Συμφωνίες Χρηστών</h4>
+                        <p>
+                            Κάθε αλληλεπίδραση, επικοινωνία, διαπραγμάτευση ή συμφωνία που συνάπτεται
+                            μεταξύ χρηστών της πλατφόρμας πραγματοποιείται αποκλειστικά με δική τους ευθύνη.
+                            Η frontida4all δεν φέρει καμία ευθύνη για:
+                        </p>
+                        <ul>
+                            <li>Το περιεχόμενο των συμφωνιών που συνάπτονται μεταξύ χρηστών</li>
+                            <li>Την ποιότητα, καταλληλότητα ή νομιμότητα των παρεχόμενων υπηρεσιών</li>
+                            <li>Τη συμπεριφορά, τις πράξεις ή παραλείψεις οποιουδήποτε χρήστη</li>
+                            <li>Τυχόν ζημίες, απώλειες ή διαφορές που προκύπτουν από τη μεταξύ τους σχέση</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-robot me-2 text-primary"></i>Περιεχόμενο και Εποπτεία</h4>
+                        <p>
+                            Το περιεχόμενο που αναρτάται στην πλατφόρμα εποπτεύεται αυτοματοποιημένα μέσω
+                            συστημάτων τεχνητής νοημοσύνης, με σκοπό τον εντοπισμό προδήλως ακατάλληλου
+                            ή παράνομου περιεχομένου, όπως:
+                        </p>
+                        <ul>
+                            <li>Προσβλητική ή απειλητική γλώσσα</li>
+                            <li>Παράνομες προτάσεις ή δραστηριότητες</li>
+                            <li>Ανεπιθύμητο εμπορικό περιεχόμενο</li>
+                        </ul>
+                        <p class="text-muted small">
+                            Η αυτοματοποιημένη εποπτεία δεν εγγυάται την πληρότητα ή ακρίβεια του ελέγχου
+                            και δεν υποκαθιστά τον ανθρώπινο έλεγχο. Η πλατφόρμα διατηρεί το δικαίωμα,
+                            αλλά όχι την υποχρέωση, να αφαιρεί ή να τροποποιεί περιεχόμενο.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-exclamation-triangle me-2 text-warning"></i>Περιορισμός Ευθύνης</h4>
+                        <p>
+                            Η πλατφόρμα παρέχεται «ως έχει» και χωρίς οποιαδήποτε ρητή ή σιωπηρή εγγύηση.
+                            Η frontida4all δεν ευθύνεται για:
+                        </p>
+                        <ul>
+                            <li>Την ακρίβεια, πληρότητα ή αξιοπιστία των πληροφοριών που παρέχονται από χρήστες</li>
+                            <li>Άμεσες ή έμμεσες ζημίες που ενδέχεται να προκύψουν από τη χρήση της πλατφόρμας</li>
+                            <li>Τεχνικά προβλήματα, διακοπές λειτουργίας ή απώλεια δεδομένων</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-user-check me-2 text-primary"></i>Ευθύνη Χρηστών</h4>
+                        <p>Κάθε χρήστης φέρει την αποκλειστική ευθύνη για:</p>
+                        <ul>
+                            <li>Τη νομιμότητα των ενεργειών του</li>
+                            <li>Την ακρίβεια των στοιχείων που δηλώνει</li>
+                            <li>Τη συμμόρφωσή του με την ισχύουσα νομοθεσία, ιδίως σε θέματα εργασίας,
+                                φορολογίας, ασφάλισης και προστασίας ανηλίκων ή ευάλωτων προσώπων</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-envelope me-2 text-primary"></i>Επικοινωνία</h4>
+                        <p>
+                            Για οποιοδήποτε ζήτημα αφορά το περιεχόμενο της πλατφόρμας ή πιθανή παραβίαση
+                            των όρων χρήσης, οι ενδιαφερόμενοι μπορούν να επικοινωνούν στη διεύθυνση:
+                            <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>
+                        </p>
+                        <p class="text-muted small">
+                            Το παρόν κείμενο αποτελεί Αποποίηση Ευθύνης και λειτουργεί συμπληρωματικά
+                            προς τους Όρους Χρήσης και την Πολιτική Απορρήτου της πλατφόρμας.
+                        </p>
+                    </div>
+                </div>
+            }
 
             <div class="text-center mt-4">
                 <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
-                    <i class="fas fa-arrow-left me-2"></i>Επιστροφή στην Αρχική
+                    <i class="fas fa-arrow-left me-2"></i>@(isEn ? "Back to Home" : "Επιστροφή στην Αρχική")
                 </a>
             </div>
         </div>

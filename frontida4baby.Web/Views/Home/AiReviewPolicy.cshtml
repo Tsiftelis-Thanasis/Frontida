@@ -1,118 +1,294 @@
 @{
-    ViewData["Title"] = "Πολιτική Αξιολόγησης AI";
+    ViewData["Title"] = "Πολιτική Αξιολόγησης AI / AI Review Policy";
+    var isEn = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en";
 }
 
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="page-header mb-4">
-                <h1><i class="fas fa-robot me-2"></i>Πολιτική Αξιολόγησης AI</h1>
-                <p class="lead text-muted">Τελευταία ενημέρωση: Μάρτιος 2026</p>
+                <h1><i class="fas fa-robot me-2"></i>@(isEn ? "AI Content Review Policy" : "Πολιτική Αξιολόγησης Περιεχομένου με Τεχνητή Νοημοσύνη (AI)")</h1>
+                <p class="lead text-muted">@(isEn ? "Last updated: April 2026" : "Τελευταία ενημέρωση: Απρίλιος 2026")</p>
             </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-info-circle me-2 text-primary"></i>1. Τι είναι η Αξιολόγηση AI;</h4>
-                    <p>
-                        Η frontida4all χρησιμοποιεί το <strong>Claude AI</strong> της Anthropic για
-                        αυτόματη εποπτεία του περιεχομένου που δημοσιεύεται στην πλατφόρμα.
-                        Το σύστημα αυτό λειτουργεί ως πρώτο στρώμα ασφαλείας για τη διατήρηση
-                        ενός ασφαλούς και φιλόξενου περιβάλλοντος.
-                    </p>
+            @if (isEn)
+            {
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-info-circle me-2 text-primary"></i>1. Purpose of this Policy</h4>
+                        <p>
+                            This Policy describes how the <strong>frontida4all</strong> platform uses automated
+                            artificial intelligence systems for the proactive moderation and evaluation of content
+                            posted by users, with the exclusive purpose of maintaining a safe, lawful and friendly
+                            digital environment.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-search me-2 text-primary"></i>2. Τι Ελέγχει το AI;</h4>
-                    <p>Το σύστημα εποπτείας ελέγχει για:</p>
-                    <ul>
-                        <li><strong>Ακατάλληλο περιεχόμενο:</strong> ύβρεις, προσβολές, ρατσιστικό λόγο</li>
-                        <li><strong>Απειλητική γλώσσα:</strong> απειλές βίας ή εκφοβισμός</li>
-                        <li><strong>Παράνομο περιεχόμενο:</strong> παράνομες δραστηριότητες ή προσφορές</li>
-                        <li><strong>Spam & διαφήμιση:</strong> ανεπιθύμητο εμπορικό περιεχόμενο</li>
-                        <li><strong>Παραπλανητικές πληροφορίες:</strong> ψευδείς ή παραπλανητικοί ισχυρισμοί</li>
-                        <li><strong>Προστασία ανηλίκων:</strong> οποιοδήποτε περιεχόμενο κινδυνεύει ανηλίκους</li>
-                    </ul>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-microchip me-2 text-primary"></i>2. Use of AI Systems</h4>
+                        <p>
+                            frontida4all uses automated artificial intelligence tools as a first level of content
+                            review. These systems serve a supporting role and do not replace human review, nor do
+                            they make binding final decisions affecting users.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-project-diagram me-2 text-primary"></i>3. Πώς Λειτουργεί;</h4>
-                    <p>Η διαδικασία εποπτείας είναι διπλή:</p>
-                    <ol>
-                        <li>
-                            <strong>Στάδιο 1 — Λίστα λέξεων (άμεσο):</strong>
-                            Ελέγχεται άμεσα έναντι λίστας απαγορευμένων λέξεων και φράσεων.
-                            Αν εντοπιστεί παραβίαση, το περιεχόμενο απορρίπτεται αυτόματα.
-                        </li>
-                        <li>
-                            <strong>Στάδιο 2 — Ανάλυση Claude AI (σημασιολογική):</strong>
-                            Αν το περιεχόμενο περάσει το πρώτο στάδιο, αναλύεται από το Claude AI
-                            για βαθύτερη κατανόηση του πλαισίου και του νοήματος.
-                        </li>
-                    </ol>
-                    <p class="mt-3"><strong>Πιθανά αποτελέσματα:</strong></p>
-                    <ul>
-                        <li><span class="badge bg-success">Εγκεκριμένο</span> — Δημοσιεύεται αμέσως</li>
-                        <li><span class="badge bg-warning text-dark">Σε αναμονή</span> — Αποστέλλεται για χειροκίνητη αξιολόγηση</li>
-                        <li><span class="badge bg-danger">Απορρίφθηκε</span> — Δεν δημοσιεύεται, ο χρήστης ενημερώνεται</li>
-                    </ul>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-search me-2 text-primary"></i>3. Categories of Content Evaluated</h4>
+                        <p>Automated evaluation may detect content that includes, but is not limited to:</p>
+                        <ul>
+                            <li>Offensive, abusive or racist language</li>
+                            <li>Threats, intimidation or incitement to violence</li>
+                            <li>Illegal activities or offers</li>
+                            <li>Misleading or false statements</li>
+                            <li>Unsolicited commercial content or spam</li>
+                            <li>Content that may endanger minors or vulnerable persons</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-exclamation-triangle me-2 text-warning"></i>4. Περιορισμοί του AI</h4>
-                    <p>
-                        Το αυτόματο σύστημα εποπτείας δεν είναι τέλειο. Ενδέχεται να:
-                    </p>
-                    <ul>
-                        <li><strong>Ψευδώς αρνηθεί</strong> νόμιμο περιεχόμενο (false positive)</li>
-                        <li><strong>Εγκρίνει κατά λάθος</strong> παραβατικό περιεχόμενο (false negative)</li>
-                        <li>Δυσκολευτεί με ιδιωματισμούς ή τοπικές εκφράσεις</li>
-                    </ul>
-                    <p>
-                        Οι διαχειριστές παρακολουθούν το σύστημα και μπορούν να επαναξιολογήσουν
-                        αποφάσεις κατόπιν αιτήματος.
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-project-diagram me-2 text-primary"></i>4. Review Process</h4>
+                        <p>The moderation process is carried out in two stages:</p>
+                        <ol>
+                            <li class="mb-2">
+                                <strong>Stage 1 — Automated word and phrase check:</strong><br />
+                                Content is immediately checked against predefined criteria. If a serious violation
+                                is detected, the content may be temporarily rejected.
+                            </li>
+                            <li>
+                                <strong>Stage 2 — Semantic analysis via AI:</strong><br />
+                                If no immediate violation is found, the content is further analysed to assess
+                                its meaning and context.
+                            </li>
+                        </ol>
+                        <p class="mt-3"><strong>Possible outcomes:</strong></p>
+                        <ul>
+                            <li><span class="badge bg-success">Approved</span> — content is published</li>
+                            <li><span class="badge bg-warning text-dark">Pending</span> — content is referred for manual review</li>
+                            <li><span class="badge bg-danger">Rejected</span> — content is not published</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-shield-alt me-2 text-primary"></i>5. Δεδομένα & Απόρρητο</h4>
-                    <p>
-                        Το περιεχόμενο που υποβάλλετε αναλύεται από το API της Anthropic (Claude).
-                        Η Anthropic επεξεργάζεται αυτά τα δεδομένα σύμφωνα με τη δική της
-                        <a href="https://www.anthropic.com/privacy" target="_blank">Πολιτική Απορρήτου</a>.
-                    </p>
-                    <p>
-                        Δεν χρησιμοποιούμε τα δεδομένα σας για εκπαίδευση AI μοντέλων.
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-exclamation-triangle me-2 text-warning"></i>5. Limitations of Automated Review</h4>
+                        <p>AI systems operate on probabilistic models and may:</p>
+                        <ul>
+                            <li>Reject legitimate content (false positive)</li>
+                            <li>Approve content that violates the rules (false negative)</li>
+                            <li>Have difficulty understanding idioms, humour or context</li>
+                        </ul>
+                        <p>For this reason, frontida4all maintains a human review mechanism.</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-comments me-2 text-primary"></i>6. Προσφυγή κατά Απόρριψης</h4>
-                    <p>
-                        Αν πιστεύετε ότι το περιεχόμενό σας απορρίφθηκε λανθασμένα:
-                    </p>
-                    <ol>
-                        <li>Επανεξετάστε το περιεχόμενο για τυχόν παρεξηγήσιμες φράσεις</li>
-                        <li>Δοκιμάστε να επαναδιατυπώσετε και να υποβάλλετε εκ νέου</li>
-                        <li>Επικοινωνήστε μαζί μας στο
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-comments me-2 text-primary"></i>6. Right to Appeal</h4>
+                        <p>
+                            Users have the right to request review by a human administrator if they believe their
+                            content was wrongly rejected or restricted. The platform retains final discretion over
+                            whether content is published.
+                        </p>
+                        <p>
+                            To submit an appeal, contact us at
+                            <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-shield-alt me-2 text-primary"></i>7. Data and Privacy</h4>
+                        <p>
+                            Content submitted for review may be processed by third-party AI system providers,
+                            exclusively for moderation purposes. Processing is carried out in accordance with
+                            applicable data protection legislation and the platform's
+                            <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>.
+                        </p>
+                        <p>
+                            frontida4all <strong>does not use</strong> user content to train artificial intelligence models.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-handshake me-2 text-primary"></i>8. No Liability for User Interactions</h4>
+                        <p>
+                            Automated content moderation does not imply any platform liability for the interactions
+                            or agreements concluded between users, which remain entirely their own responsibility.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-envelope me-2 text-primary"></i>9. Contact</h4>
+                        <p>
+                            For appeals or queries about this Policy, users may contact us at:
                             <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>
-                            αναφέροντας το πρόβλημα</li>
-                    </ol>
+                        </p>
+                        <p class="text-muted small">
+                            This text complements the Terms of Use and the Disclaimer of the platform.
+                        </p>
+                    </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-info-circle me-2 text-primary"></i>1. Σκοπός της Πολιτικής</h4>
+                        <p>
+                            Η παρούσα Πολιτική περιγράφει τον τρόπο με τον οποίο η πλατφόρμα <strong>frontida4all</strong>
+                            χρησιμοποιεί αυτοματοποιημένα συστήματα τεχνητής νοημοσύνης για την προληπτική εποπτεία
+                            και αξιολόγηση περιεχομένου που αναρτούν οι χρήστες, με αποκλειστικό σκοπό τη διατήρηση
+                            ενός ασφαλούς, νόμιμου και φιλικού ψηφιακού περιβάλλοντος.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-microchip me-2 text-primary"></i>2. Χρήση Συστημάτων Τεχνητής Νοημοσύνης</h4>
+                        <p>
+                            Η frontida4all χρησιμοποιεί αυτοματοποιημένα εργαλεία τεχνητής νοημοσύνης ως πρώτο
+                            επίπεδο ελέγχου του περιεχομένου. Τα συστήματα αυτά λειτουργούν υποστηρικτικά και
+                            δεν αντικαθιστούν τον ανθρώπινο έλεγχο, ούτε λαμβάνουν οριστικές αποφάσεις με
+                            δεσμευτικό χαρακτήρα για τους χρήστες.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-search me-2 text-primary"></i>3. Κατηγορίες Περιεχομένου που Αξιολογούνται</h4>
+                        <p>Η αυτοματοποιημένη αξιολόγηση ενδέχεται να εντοπίζει περιεχόμενο που περιλαμβάνει ενδεικτικά:</p>
+                        <ul>
+                            <li>Προσβλητικό, υβριστικό ή ρατσιστικό λόγο</li>
+                            <li>Απειλές, εκφοβισμό ή προτροπή σε βία</li>
+                            <li>Παράνομες δραστηριότητες ή προσφορές</li>
+                            <li>Παραπλανητικές ή ψευδείς δηλώσεις</li>
+                            <li>Ανεπιθύμητο εμπορικό περιεχόμενο ή spam</li>
+                            <li>Περιεχόμενο που ενδέχεται να θέτει σε κίνδυνο ανηλίκους ή ευάλωτα πρόσωπα</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-project-diagram me-2 text-primary"></i>4. Διαδικασία Αξιολόγησης</h4>
+                        <p>Η διαδικασία εποπτείας πραγματοποιείται σε δύο στάδια:</p>
+                        <ol>
+                            <li class="mb-2">
+                                <strong>Στάδιο 1 — Αυτοματοποιημένος έλεγχος λέξεων και φράσεων:</strong><br />
+                                Το περιεχόμενο ελέγχεται άμεσα βάσει προκαθορισμένων κριτηρίων.
+                                Σε περίπτωση εντοπισμού σοβαρής παραβίασης, το περιεχόμενο μπορεί
+                                να απορριφθεί προσωρινά.
+                            </li>
+                            <li>
+                                <strong>Στάδιο 2 — Σημασιολογική ανάλυση μέσω AI:</strong><br />
+                                Αν δεν διαπιστωθεί άμεση παραβίαση, το περιεχόμενο αναλύεται περαιτέρω
+                                για την εκτίμηση του νοήματος και του πλαισίου.
+                            </li>
+                        </ol>
+                        <p class="mt-3"><strong>Πιθανά αποτελέσματα της αξιολόγησης:</strong></p>
+                        <ul>
+                            <li><span class="badge bg-success">Εγκεκριμένο</span> — το περιεχόμενο δημοσιεύεται</li>
+                            <li><span class="badge bg-warning text-dark">Σε αναμονή</span> — το περιεχόμενο παραπέμπεται σε χειροκίνητο έλεγχο</li>
+                            <li><span class="badge bg-danger">Απορριφθέν</span> — το περιεχόμενο δεν δημοσιεύεται</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-exclamation-triangle me-2 text-warning"></i>5. Περιορισμοί της Αυτοματοποιημένης Αξιολόγησης</h4>
+                        <p>
+                            Τα συστήματα τεχνητής νοημοσύνης λειτουργούν με βάση πιθανολογικά μοντέλα και ενδέχεται:
+                        </p>
+                        <ul>
+                            <li>Να απορρίψουν νόμιμο περιεχόμενο (ψευδώς θετικό αποτέλεσμα)</li>
+                            <li>Να εγκρίνουν περιεχόμενο που παραβιάζει τους κανόνες (ψευδώς αρνητικό αποτέλεσμα)</li>
+                            <li>Να δυσκολευτούν στην κατανόηση ιδιωματισμών, χιούμορ ή συμφραζομένων</li>
+                        </ul>
+                        <p>
+                            Για τον λόγο αυτό, η frontida4all διατηρεί μηχανισμό ανθρώπινης επανεξέτασης.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-comments me-2 text-primary"></i>6. Δικαίωμα Επανεξέτασης</h4>
+                        <p>
+                            Οι χρήστες έχουν το δικαίωμα να ζητήσουν επανεξέταση από ανθρώπινο διαχειριστή
+                            σε περίπτωση που θεωρούν ότι το περιεχόμενό τους απορρίφθηκε ή περιορίστηκε εσφαλμένα.
+                            Η πλατφόρμα διατηρεί την τελική διακριτική ευχέρεια ως προς τη δημοσίευση ή μη
+                            του περιεχομένου.
+                        </p>
+                        <p>
+                            Για αιτήματα επανεξέτασης επικοινωνήστε στο
+                            <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-shield-alt me-2 text-primary"></i>7. Δεδομένα και Απόρρητο</h4>
+                        <p>
+                            Το περιεχόμενο που υποβάλλεται για αξιολόγηση ενδέχεται να υποβληθεί σε επεξεργασία
+                            από τρίτους παρόχους συστημάτων τεχνητής νοημοσύνης, αποκλειστικά για τον σκοπό
+                            της εποπτείας. Η επεξεργασία πραγματοποιείται σύμφωνα με την ισχύουσα νομοθεσία
+                            περί προστασίας δεδομένων και την
+                            <a asp-controller="Home" asp-action="Privacy">Πολιτική Απορρήτου</a> της πλατφόρμας.
+                        </p>
+                        <p>
+                            Η frontida4all <strong>δεν χρησιμοποιεί</strong> το περιεχόμενο των χρηστών
+                            για την εκπαίδευση μοντέλων τεχνητής νοημοσύνης.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-handshake me-2 text-primary"></i>8. Μη Ευθύνη για Αλληλεπιδράσεις Χρηστών</h4>
+                        <p>
+                            Η αυτοματοποιημένη εποπτεία περιεχομένου δεν συνεπάγεται ευθύνη της πλατφόρμας
+                            για τις αλληλεπιδράσεις ή τις συμφωνίες που συνάπτονται μεταξύ χρηστών,
+                            οι οποίες παραμένουν αποκλειστικά δική τους ευθύνη.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-envelope me-2 text-primary"></i>9. Επικοινωνία</h4>
+                        <p>
+                            Για αιτήματα επανεξέτασης ή απορίες σχετικά με την παρούσα Πολιτική,
+                            οι χρήστες μπορούν να επικοινωνούν στη διεύθυνση:
+                            <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>
+                        </p>
+                        <p class="text-muted small">
+                            Το παρόν κείμενο λειτουργεί συμπληρωματικά προς τους Όρους Χρήσης
+                            και την Αποποίηση Ευθύνης της πλατφόρμας.
+                        </p>
+                    </div>
+                </div>
+            }
 
             <div class="text-center mt-4">
                 <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
-                    <i class="fas fa-arrow-left me-2"></i>Επιστροφή στην Αρχική
+                    <i class="fas fa-arrow-left me-2"></i>@(isEn ? "Back to Home" : "Επιστροφή στην Αρχική")
                 </a>
             </div>
         </div>

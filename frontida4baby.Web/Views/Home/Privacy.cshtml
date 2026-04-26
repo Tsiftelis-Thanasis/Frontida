@@ -1,172 +1,368 @@
 @{
-    ViewData["Title"] = "Πολιτική Απορρήτου";
+    ViewData["Title"] = "Πολιτική Απορρήτου / Privacy Policy";
+    var isEn = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en";
 }
 
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="page-header mb-4">
-                <h1><i class="fas fa-user-shield me-2"></i>Πολιτική Απορρήτου</h1>
-                <p class="lead text-muted">Τελευταία ενημέρωση: Μάρτιος 2026</p>
+                <h1><i class="fas fa-user-shield me-2"></i>@(isEn ? "Privacy Policy" : "Πολιτική Απορρήτου")</h1>
+                <p class="lead text-muted">@(isEn ? "Last updated: April 2026" : "Τελευταία ενημέρωση: Απρίλιος 2026")</p>
             </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-info-circle me-2 text-primary"></i>1. Εισαγωγή</h4>
-                    <p>
-                        Η πλατφόρμα <strong>frontida4all</strong> ("εμείς", "μας") σέβεται την ιδιωτικότητά σας
-                        και δεσμεύεται να προστατεύει τα προσωπικά σας δεδομένα σύμφωνα με τον
-                        Γενικό Κανονισμό Προστασίας Δεδομένων (GDPR — Κανονισμός ΕΕ 2016/679)
-                        και την ελληνική νομοθεσία για την προστασία προσωπικών δεδομένων.
-                    </p>
-                    <p>
-                        Αυτή η πολιτική εξηγεί ποια δεδομένα συλλέγουμε, πώς τα χρησιμοποιούμε,
-                        πόσο καιρό τα διατηρούμε και ποια δικαιώματα έχετε.
-                    </p>
+            @if (isEn)
+            {
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-info-circle me-2 text-primary"></i>1. Introduction</h4>
+                        <p>
+                            The platform <strong>frontida4all</strong> (hereinafter "the Platform", "we") respects
+                            the privacy of its users and is committed to protecting personal data in accordance with
+                            the General Data Protection Regulation (EU) 2016/679 (GDPR) and applicable Greek law.
+                        </p>
+                        <p>
+                            This Privacy Policy describes what data we collect, the purposes for which we process it,
+                            the retention period and users' rights.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-database me-2 text-primary"></i>2. Δεδομένα που Συλλέγουμε</h4>
-                    <p><strong>Κατά την εγγραφή:</strong></p>
-                    <ul>
-                        <li>Όνομα και επώνυμο</li>
-                        <li>Διεύθυνση ηλεκτρονικού ταχυδρομείου</li>
-                        <li>Κωδικός πρόσβασης (αποθηκεύεται σε κρυπτογραφημένη μορφή)</li>
-                        <li>Τύπος λογαριασμού (οικογένεια ή φροντιστής)</li>
-                    </ul>
-                    <p><strong>Κατά τη χρήση:</strong></p>
-                    <ul>
-                        <li>Δεδομένα προφίλ (τηλέφωνο, διεύθυνση, πόλη, βιογραφικό)</li>
-                        <li>Αγγελίες και απαντήσεις που δημοσιεύετε</li>
-                        <li>Αξιολογήσεις και σχόλια</li>
-                        <li>Ιστορικό συναλλαγών (κρατήσεις)</li>
-                        <li>Μηνύματα μεταξύ χρηστών</li>
-                    </ul>
-                    <p><strong>Τεχνικά δεδομένα:</strong></p>
-                    <ul>
-                        <li>Διεύθυνση IP</li>
-                        <li>Τύπος και έκδοση browser</li>
-                        <li>Δεδομένα σύνδεσης (ημερομηνία/ώρα, διάρκεια)</li>
-                    </ul>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-building me-2 text-primary"></i>2. Data Controller</h4>
+                        <p>
+                            The Data Controller is the <strong>frontida4all</strong> platform.<br />
+                            Contact email: <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a><br />
+                            Registered in: Greece
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-cogs me-2 text-primary"></i>3. Χρήση Δεδομένων</h4>
-                    <p>Χρησιμοποιούμε τα δεδομένα σας για:</p>
-                    <ul>
-                        <li>Παροχή και βελτίωση των υπηρεσιών της πλατφόρμας</li>
-                        <li>Σύνδεση οικογενειών με κατάλληλους φροντιστές</li>
-                        <li>Επαλήθευση ταυτότητας και ασφάλεια λογαριασμού</li>
-                        <li>Επικοινωνία σχετικά με την υπηρεσία (ειδοποιήσεις, ενημερώσεις)</li>
-                        <li>Εποπτεία περιεχομένου για τη διατήρηση ασφαλούς περιβάλλοντος</li>
-                        <li>Συμμόρφωση με νομικές υποχρεώσεις</li>
-                    </ul>
-                    <p><strong>Νομική βάση επεξεργασίας (GDPR Art. 6):</strong></p>
-                    <ul>
-                        <li>Εκτέλεση σύμβασης — παροχή της υπηρεσίας</li>
-                        <li>Συγκατάθεση — για μάρκετινγκ και ειδοποιήσεις</li>
-                        <li>Έννομο συμφέρον — ασφάλεια και αποτροπή απάτης</li>
-                        <li>Νομική υποχρέωση — τήρηση ελληνικής νομοθεσίας</li>
-                    </ul>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-database me-2 text-primary"></i>3. Data We Collect</h4>
+                        <p><strong>3.1 Upon registration:</strong></p>
+                        <ul>
+                            <li>Full name</li>
+                            <li>Email address</li>
+                            <li>Password (stored exclusively in encrypted form)</li>
+                            <li>Account type (family or caregiver)</li>
+                        </ul>
+                        <p><strong>3.2 During use of the Platform:</strong></p>
+                        <ul>
+                            <li>Profile details (phone, address, city, bio)</li>
+                            <li>Posts, requests and replies</li>
+                            <li>Ratings and comments</li>
+                            <li>Booking or transaction history</li>
+                            <li>Messages between users within the Platform</li>
+                        </ul>
+                        <p><strong>3.3 Technical data:</strong></p>
+                        <ul>
+                            <li>IP address</li>
+                            <li>Browser type and version</li>
+                            <li>Login date and time, session duration</li>
+                            <li>Log files</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-robot me-2 text-primary"></i>4. Αυτοματοποιημένη Επεξεργασία (AI)</h4>
-                    <p>
-                        Χρησιμοποιούμε το <strong>Claude AI</strong> (Anthropic) για αυτόματη εποπτεία
-                        του περιεχομένου που δημοσιεύετε. Το σύστημα αναλύει κείμενο για ακατάλληλο
-                        ή επιβλαβές περιεχόμενο.
-                    </p>
-                    <p>
-                        Δείτε την <a asp-controller="Home" asp-action="AiReviewPolicy">Πολιτική Αξιολόγησης AI</a>
-                        για λεπτομέρειες.
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-cogs me-2 text-primary"></i>4. Purposes and Legal Basis for Processing</h4>
+                        <p>Personal data is processed for the following purposes:</p>
+                        <ul>
+                            <li>Providing and operating the Platform's services</li>
+                            <li>Connecting families with caregivers</li>
+                            <li>User account management and security</li>
+                            <li>Communication regarding service use</li>
+                            <li>Content moderation and prevention of abusive behaviour</li>
+                            <li>Compliance with legal obligations</li>
+                        </ul>
+                        <p>Processing is based on Article 6 GDPR, specifically:</p>
+                        <ul>
+                            <li>Performance of a contract</li>
+                            <li>User consent, where required</li>
+                            <li>Legitimate interest of the Platform for security and fraud prevention</li>
+                            <li>Legal obligation</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-share-alt me-2 text-primary"></i>5. Κοινοποίηση Δεδομένων</h4>
-                    <p>
-                        <strong>Δεν πωλούμε</strong> τα προσωπικά σας δεδομένα σε τρίτους.
-                        Κοινοποιούμε δεδομένα μόνο σε:
-                    </p>
-                    <ul>
-                        <li><strong>Άλλους χρήστες:</strong> τα στοιχεία προφίλ σας είναι ορατά σε
-                            εγγεγραμμένους χρήστες της πλατφόρμας σύμφωνα με τις ρυθμίσεις σας</li>
-                        <li><strong>Παρόχους υπηρεσιών:</strong> Anthropic (AI εποπτεία), Stripe (πληρωμές),
-                            παρόχους email — που δεσμεύονται από συμβάσεις επεξεργασίας δεδομένων</li>
-                        <li><strong>Αρχές επιβολής νόμου:</strong> μόνο κατόπιν νόμιμης εντολής</li>
-                    </ul>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-robot me-2 text-primary"></i>5. Automated Processing and Artificial Intelligence</h4>
+                        <p>
+                            The Platform uses the <strong>Claude AI</strong> system by Anthropic for automated
+                            moderation of published content. This processing is exclusively aimed at detecting
+                            inappropriate or harmful content and does not produce automated decisions with legal
+                            effects on users.
+                        </p>
+                        <p>
+                            Further details are provided in the
+                            <a asp-controller="Home" asp-action="AiReviewPolicy">AI Review Policy</a>.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-clock me-2 text-primary"></i>6. Χρόνος Διατήρησης</h4>
-                    <ul>
-                        <li>Δεδομένα λογαριασμού: όσο ο λογαριασμός είναι ενεργός + 2 χρόνια</li>
-                        <li>Αγγελίες και απαντήσεις: 3 χρόνια από δημοσίευση</li>
-                        <li>Αρχεία καταγραφής (logs): 1 χρόνο</li>
-                        <li>Δεδομένα συναλλαγών: 7 χρόνια (νομική υποχρέωση)</li>
-                    </ul>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-share-alt me-2 text-primary"></i>6. Sharing of Data</h4>
+                        <p>The Platform <strong>does not sell</strong> personal data. Data may be shared only with:</p>
+                        <ul>
+                            <li>Other registered users, in accordance with profile settings</li>
+                            <li>Service providers (e.g. Anthropic for AI moderation, Stripe for payments,
+                                email providers), who are bound by data processing agreements</li>
+                            <li>Public authorities, exclusively upon a lawful obligation</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-user-check me-2 text-primary"></i>7. Δικαιώματά σας (GDPR)</h4>
-                    <p>Έχετε δικαίωμα:</p>
-                    <ul>
-                        <li><strong>Πρόσβασης:</strong> να λάβετε αντίγραφο των δεδομένων σας</li>
-                        <li><strong>Διόρθωσης:</strong> να διορθώσετε ανακριβή δεδομένα</li>
-                        <li><strong>Διαγραφής ("δικαίωμα λήθης"):</strong> να ζητήσετε διαγραφή υπό προϋποθέσεις</li>
-                        <li><strong>Περιορισμού επεξεργασίας</strong></li>
-                        <li><strong>Φορητότητας:</strong> να λάβετε τα δεδομένα σε μηχαναγνώσιμη μορφή</li>
-                        <li><strong>Εναντίωσης</strong> στη επεξεργασία για λόγους έννομου συμφέροντος</li>
-                    </ul>
-                    <p>
-                        Για άσκηση δικαιωμάτων GDPR επικοινωνήστε:
-                        <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>
-                    </p>
-                    <p class="text-muted small">
-                        Έχετε επίσης δικαίωμα καταγγελίας στην Αρχή Προστασίας Δεδομένων Προσωπικού Χαρακτήρα (ΑΠΔΠΧ):
-                        <a href="https://www.dpa.gr" target="_blank">www.dpa.gr</a>
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-clock me-2 text-primary"></i>7. Retention Periods</h4>
+                        <p>Data is retained for as long as required for the processing purpose:</p>
+                        <ul>
+                            <li>Account data: for as long as the account is active and up to 2 years after</li>
+                            <li>Posts and replies: up to 3 years from publication</li>
+                            <li>Log files: up to 1 year</li>
+                            <li>Transaction data: up to 7 years, in accordance with tax legislation</li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-lock me-2 text-primary"></i>8. Ασφάλεια</h4>
-                    <p>
-                        Λαμβάνουμε κατάλληλα τεχνικά και οργανωτικά μέτρα για την προστασία των
-                        δεδομένων σας, συμπεριλαμβανομένης της κρυπτογράφησης κωδικών πρόσβασης,
-                        HTTPS κρυπτογράφησης και ελέγχων πρόσβασης.
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-user-check me-2 text-primary"></i>8. Rights of Data Subjects</h4>
+                        <p>Users have the rights set out in Articles 12–22 GDPR, in particular:</p>
+                        <ul>
+                            <li>Right of access</li>
+                            <li>Right to rectification</li>
+                            <li>Right to erasure, subject to conditions</li>
+                            <li>Right to restriction of processing</li>
+                            <li>Right to data portability</li>
+                            <li>Right to object to processing based on legitimate interest</li>
+                        </ul>
+                        <p>
+                            Requests may be submitted by email to
+                            <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>.
+                        </p>
+                        <p class="text-muted small">
+                            Users also have the right to lodge a complaint with the Hellenic Data Protection Authority:
+                            <a href="https://www.dpa.gr" target="_blank">www.dpa.gr</a>.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-envelope me-2 text-primary"></i>9. Επικοινωνία</h4>
-                    <p>
-                        Υπεύθυνος Επεξεργασίας: frontida4all<br />
-                        Email: <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a><br />
-                        Διεύθυνση: Ελλάδα
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-lock me-2 text-primary"></i>9. Data Security</h4>
+                        <p>
+                            The Platform implements appropriate technical and organisational security measures,
+                            including password encryption, HTTPS, and access controls.
+                        </p>
+                    </div>
                 </div>
-            </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-cookie-bite me-2 text-primary"></i>10. Cookies</h4>
+                        <p>
+                            The Platform uses cookies to improve user experience. Detailed information is provided
+                            in this Policy and in the relevant settings of the user's browser.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-edit me-2 text-primary"></i>11. Policy Updates</h4>
+                        <p>
+                            This Policy may be updated from time to time. Users will be notified of material
+                            changes via the Platform.
+                        </p>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-info-circle me-2 text-primary"></i>1. Εισαγωγή</h4>
+                        <p>
+                            Η πλατφόρμα <strong>frontida4all</strong> (εφεξής «η Πλατφόρμα», «εμείς») σέβεται την ιδιωτικότητα των χρηστών της
+                            και δεσμεύεται να προστατεύει τα προσωπικά δεδομένα σύμφωνα με τον
+                            Γενικό Κανονισμό Προστασίας Δεδομένων (ΕΕ) 2016/679 (GDPR)
+                            και την ισχύουσα ελληνική νομοθεσία.
+                        </p>
+                        <p>
+                            Η παρούσα Πολιτική Απορρήτου περιγράφει ποια δεδομένα συλλέγουμε, για ποιους σκοπούς τα επεξεργαζόμαστε,
+                            τη διάρκεια διατήρησής τους και τα δικαιώματα των χρηστών.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-building me-2 text-primary"></i>2. Υπεύθυνος Επεξεργασίας</h4>
+                        <p>
+                            Υπεύθυνος Επεξεργασίας είναι η πλατφόρμα <strong>frontida4all</strong>.<br />
+                            Email επικοινωνίας: <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a><br />
+                            Έδρα: Ελλάδα
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-database me-2 text-primary"></i>3. Δεδομένα που Συλλέγουμε</h4>
+                        <p><strong>3.1 Κατά την εγγραφή:</strong></p>
+                        <ul>
+                            <li>Ονοματεπώνυμο</li>
+                            <li>Διεύθυνση ηλεκτρονικού ταχυδρομείου</li>
+                            <li>Κωδικός πρόσβασης (αποθηκεύεται αποκλειστικά σε κρυπτογραφημένη μορφή)</li>
+                            <li>Τύπος λογαριασμού (οικογένεια ή φροντιστής)</li>
+                        </ul>
+                        <p><strong>3.2 Κατά τη χρήση της Πλατφόρμας:</strong></p>
+                        <ul>
+                            <li>Στοιχεία προφίλ (τηλέφωνο, διεύθυνση, πόλη, περιγραφή/βιογραφικό)</li>
+                            <li>Αγγελίες, αιτήματα και απαντήσεις</li>
+                            <li>Αξιολογήσεις και σχόλια</li>
+                            <li>Ιστορικό κρατήσεων ή συναλλαγών</li>
+                            <li>Μηνύματα μεταξύ χρηστών εντός της Πλατφόρμας</li>
+                        </ul>
+                        <p><strong>3.3 Τεχνικά δεδομένα:</strong></p>
+                        <ul>
+                            <li>Διεύθυνση IP</li>
+                            <li>Τύπος και έκδοση προγράμματος περιήγησης</li>
+                            <li>Ημερομηνία και ώρα σύνδεσης, διάρκεια συνεδρίας</li>
+                            <li>Αρχεία καταγραφής (logs)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-cogs me-2 text-primary"></i>4. Σκοποί και Νομική Βάση Επεξεργασίας</h4>
+                        <p>Τα προσωπικά δεδομένα επεξεργάζονται για τους εξής σκοπούς:</p>
+                        <ul>
+                            <li>Παροχή και εύρυθμη λειτουργία των υπηρεσιών της Πλατφόρμας</li>
+                            <li>Διασύνδεση οικογενειών με φροντιστές</li>
+                            <li>Διαχείριση λογαριασμών χρηστών και ασφάλεια</li>
+                            <li>Επικοινωνία σχετικά με τη χρήση της υπηρεσίας</li>
+                            <li>Εποπτεία περιεχομένου και πρόληψη καταχρηστικής συμπεριφοράς</li>
+                            <li>Συμμόρφωση με νομικές υποχρεώσεις</li>
+                        </ul>
+                        <p>Η επεξεργασία βασίζεται στο άρθρο 6 GDPR και συγκεκριμένα:</p>
+                        <ul>
+                            <li>Στην εκτέλεση σύμβασης</li>
+                            <li>Στη συγκατάθεση του χρήστη, όπου απαιτείται</li>
+                            <li>Στο έννομο συμφέρον της Πλατφόρμας για ασφάλεια και πρόληψη απάτης</li>
+                            <li>Σε νομική υποχρέωση</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-robot me-2 text-primary"></i>5. Αυτοματοποιημένη Επεξεργασία και Τεχνητή Νοημοσύνη</h4>
+                        <p>
+                            Η Πλατφόρμα χρησιμοποιεί το σύστημα <strong>Claude AI</strong> της εταιρείας Anthropic για αυτοματοποιημένη εποπτεία
+                            του περιεχομένου που δημοσιεύεται. Η επεξεργασία αυτή αφορά αποκλειστικά τον εντοπισμό
+                            ακατάλληλου ή επιβλαβούς περιεχομένου και δεν παράγει αυτοματοποιημένες αποφάσεις
+                            που έχουν έννομα αποτελέσματα για τους χρήστες.
+                        </p>
+                        <p>
+                            Περισσότερες πληροφορίες παρέχονται στην
+                            <a asp-controller="Home" asp-action="AiReviewPolicy">Πολιτική Αξιολόγησης AI</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-share-alt me-2 text-primary"></i>6. Κοινοποίηση Δεδομένων</h4>
+                        <p>Η Πλατφόρμα <strong>δεν πωλεί</strong> προσωπικά δεδομένα. Δεδομένα ενδέχεται να κοινοποιηθούν μόνο σε:</p>
+                        <ul>
+                            <li>Άλλους εγγεγραμμένους χρήστες, σύμφωνα με τις ρυθμίσεις προφίλ</li>
+                            <li>Παρόχους υπηρεσιών (π.χ. Anthropic για AI εποπτεία, Stripe για πληρωμές, παρόχοι email),
+                                οι οποίοι δεσμεύονται με συμβάσεις επεξεργασίας δεδομένων</li>
+                            <li>Δημόσιες αρχές, αποκλειστικά κατόπιν νόμιμης υποχρέωσης</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-clock me-2 text-primary"></i>7. Χρόνος Διατήρησης</h4>
+                        <p>Τα δεδομένα διατηρούνται για όσο χρονικό διάστημα απαιτείται για τον σκοπό επεξεργασίας:</p>
+                        <ul>
+                            <li>Δεδομένα λογαριασμού: όσο ο λογαριασμός είναι ενεργός και έως 2 έτη μετά</li>
+                            <li>Αγγελίες και απαντήσεις: έως 3 έτη από τη δημοσίευση</li>
+                            <li>Αρχεία καταγραφής (logs): έως 1 έτος</li>
+                            <li>Δεδομένα συναλλαγών: έως 7 έτη, σύμφωνα με τη φορολογική νομοθεσία</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-user-check me-2 text-primary"></i>8. Δικαιώματα Υποκειμένων Δεδομένων</h4>
+                        <p>Οι χρήστες έχουν τα δικαιώματα των άρθρων 12–22 GDPR, και ιδίως:</p>
+                        <ul>
+                            <li>Δικαίωμα πρόσβασης</li>
+                            <li>Δικαίωμα διόρθωσης</li>
+                            <li>Δικαίωμα διαγραφής, υπό προϋποθέσεις</li>
+                            <li>Δικαίωμα περιορισμού επεξεργασίας</li>
+                            <li>Δικαίωμα φορητότητας</li>
+                            <li>Δικαίωμα εναντίωσης σε επεξεργασία βάσει έννομου συμφέροντος</li>
+                        </ul>
+                        <p>
+                            Τα αιτήματα ασκούνται μέσω email στο
+                            <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>.
+                        </p>
+                        <p class="text-muted small">
+                            Οι χρήστες έχουν επίσης δικαίωμα καταγγελίας στην Αρχή Προστασίας Δεδομένων Προσωπικού Χαρακτήρα:
+                            <a href="https://www.dpa.gr" target="_blank">www.dpa.gr</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-lock me-2 text-primary"></i>9. Ασφάλεια Δεδομένων</h4>
+                        <p>
+                            Η Πλατφόρμα εφαρμόζει κατάλληλα τεχνικά και οργανωτικά μέτρα ασφάλειας,
+                            όπως κρυπτογράφηση κωδικών πρόσβασης, χρήση HTTPS και περιορισμό πρόσβασης στα δεδομένα.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-cookie-bite me-2 text-primary"></i>10. Cookies</h4>
+                        <p>
+                            Η Πλατφόρμα χρησιμοποιεί cookies για τη βελτίωση της εμπειρίας χρήστη.
+                            Αναλυτικές πληροφορίες παρέχονται στην παρούσα Πολιτική και στις σχετικές
+                            ρυθμίσεις του προγράμματος περιήγησης.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-edit me-2 text-primary"></i>11. Τροποποιήσεις Πολιτικής</h4>
+                        <p>
+                            Η παρούσα Πολιτική ενδέχεται να τροποποιείται. Οι χρήστες ενημερώνονται
+                            για ουσιώδεις αλλαγές μέσω της Πλατφόρμας.
+                        </p>
+                    </div>
+                </div>
+            }
 
             <div class="text-center mt-4">
                 <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
-                    <i class="fas fa-arrow-left me-2"></i>Επιστροφή στην Αρχική
+                    <i class="fas fa-arrow-left me-2"></i>@(isEn ? "Back to Home" : "Επιστροφή στην Αρχική")
                 </a>
             </div>
         </div>

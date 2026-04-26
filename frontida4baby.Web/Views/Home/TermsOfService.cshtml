@@ -1,160 +1,315 @@
 @{
-    ViewData["Title"] = "Όροι Χρήσης";
+    ViewData["Title"] = "Όροι Χρήσης / Terms of Use";
+    var isEn = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en";
 }
 
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="page-header mb-4">
-                <h1><i class="fas fa-file-contract me-2"></i>Όροι Χρήσης</h1>
-                <p class="lead text-muted">Τελευταία ενημέρωση: Μάρτιος 2026</p>
+                <h1><i class="fas fa-file-contract me-2"></i>@(isEn ? "Terms of Use" : "Όροι Χρήσης")</h1>
+                <p class="lead text-muted">@(isEn ? "Last updated: April 2026" : "Τελευταία ενημέρωση: Απρίλιος 2026")</p>
             </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-info-circle me-2 text-primary"></i>1. Αποδοχή Όρων</h4>
-                    <p>
-                        Χρησιμοποιώντας την πλατφόρμα <strong>frontida4all</strong>, αποδέχεστε πλήρως
-                        αυτούς τους Όρους Χρήσης. Εάν δεν συμφωνείτε, παρακαλούμε μη χρησιμοποιείτε
-                        την υπηρεσία.
-                    </p>
-                    <p>
-                        Η frontida4all διατηρεί το δικαίωμα να τροποποιεί αυτούς τους όρους. Οι αλλαγές
-                        θα ανακοινώνονται στην πλατφόρμα. Η συνέχιση χρήσης μετά από αλλαγές συνιστά
-                        αποδοχή τους.
-                    </p>
+            @if (isEn)
+            {
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-info-circle me-2 text-primary"></i>1. Acceptance of Terms</h4>
+                        <p>
+                            By accessing and using the <strong>frontida4all</strong> platform, the user declares that
+                            they have read, understood and unconditionally accept these Terms of Use. If you do not
+                            accept these terms, you must refrain from using the platform.
+                        </p>
+                        <p>
+                            frontida4all reserves the right to modify these Terms of Use at any time. Changes are
+                            published on the platform and take effect from the date of publication. Continued use
+                            constitutes acceptance of the changes.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-users me-2 text-primary"></i>2. Εγγραφή & Λογαριασμός</h4>
-                    <ul>
-                        <li>Πρέπει να είστε τουλάχιστον 18 ετών για να εγγραφείτε</li>
-                        <li>Οφείλετε να παρέχετε ακριβή και αληθινά στοιχεία</li>
-                        <li>Είστε υπεύθυνοι για τη διαφύλαξη του κωδικού πρόσβασής σας</li>
-                        <li>Κάθε άτομο μπορεί να διατηρεί έναν μόνο λογαριασμό</li>
-                        <li>Δεν επιτρέπεται η εκχώρηση ή μεταβίβαση λογαριασμού σε τρίτους</li>
-                    </ul>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-users me-2 text-primary"></i>2. Registration and User Account</h4>
+                        <p>To create an account, the user must:</p>
+                        <ul>
+                            <li>Be at least 18 years of age</li>
+                            <li>Provide truthful, accurate and complete information</li>
+                            <li>Maintain only one personal account</li>
+                            <li>Not assign or transfer their account to third parties</li>
+                        </ul>
+                        <p>
+                            The user bears sole responsibility for safeguarding their login credentials and for any
+                            action carried out through their account.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-hand-paper me-2 text-primary"></i>3. Αποδεκτή Χρήση</h4>
-                    <p>Απαγορεύεται αυστηρά:</p>
-                    <ul>
-                        <li>Δημοσίευση ψευδών, παραπλανητικών ή απατηλών πληροφοριών</li>
-                        <li>Παρενόχληση, εκφοβισμός ή απειλές προς άλλους χρήστες</li>
-                        <li>Δημοσίευση ακατάλληλου, άσεμνου ή παράνομου περιεχομένου</li>
-                        <li>Διαφήμιση ή εμπορική χρήση χωρίς σχετική άδεια</li>
-                        <li>Επίθεση στα συστήματα της πλατφόρμας (hacking, DoS κ.λπ.)</li>
-                        <li>Δημιουργία ψευδών αξιολογήσεων ή χειραγώγηση της βαθμολογίας</li>
-                        <li>Αποστολή ανεπιθύμητης αλληλογραφίας (spam)</li>
-                    </ul>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-hand-paper me-2 text-primary"></i>3. Acceptable Use of the Platform</h4>
+                        <p>Users are strictly prohibited from:</p>
+                        <ul>
+                            <li>Posting false, misleading or inaccurate information</li>
+                            <li>Harassing, threatening or defaming other users</li>
+                            <li>Publishing illegal, obscene or offensive content</li>
+                            <li>Commercial exploitation of the platform without prior written consent</li>
+                            <li>Breaching the security or functionality of the platform's systems</li>
+                            <li>Creating fake reviews or manipulating ratings</li>
+                            <li>Sending unsolicited communications (spam)</li>
+                        </ul>
+                        <p>Violations may result in restriction, suspension or permanent deletion of the account.</p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-robot me-2 text-primary"></i>4. Εποπτεία Περιεχομένου</h4>
-                    <p>
-                        Το περιεχόμενο που δημοσιεύετε υπόκειται σε αυτόματη εποπτεία από AI
-                        (Claude, Anthropic) και ενδεχομένως σε χειροκίνητη αξιολόγηση από τους
-                        διαχειριστές.
-                    </p>
-                    <p>
-                        Η frontida4all διατηρεί το δικαίωμα να αφαιρεί περιεχόμενο που παραβιάζει
-                        αυτούς τους όρους χωρίς προειδοποίηση.
-                    </p>
-                    <p>
-                        Επαναλαμβανόμενες παραβιάσεις μπορεί να οδηγήσουν σε αναστολή ή μόνιμη
-                        διαγραφή του λογαριασμού.
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-robot me-2 text-primary"></i>4. Content Oversight and Management</h4>
+                        <p>
+                            Content published on the platform is subject to automated review via artificial intelligence
+                            technologies and possible manual review by administrators.
+                        </p>
+                        <p>
+                            frontida4all reserves the right to remove or modify content that violates these terms or
+                            applicable law, without prior notice.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-user-slash me-2 text-primary"></i>5. Αποκλεισμός Χρηστών (Blacklist)</h4>
-                    <p>
-                        Χρήστες των οποίων το περιεχόμενο απορρίπτεται επανειλημμένα λόγω παραβίασης
-                        των κανόνων της κοινότητας ενδέχεται να αποκλειστούν αυτόματα από τη δημοσίευση
-                        νέου περιεχομένου.
-                    </p>
-                    <p>
-                        Ο αποκλεισμός μπορεί να αρθεί από διαχειριστή κατόπιν αιτήματος στο
-                        <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>.
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-user-slash me-2 text-primary"></i>5. User Blacklisting</h4>
+                        <p>
+                            Users who repeatedly violate the Terms of Use may be temporarily or permanently excluded
+                            from posting or using the platform.
+                        </p>
+                        <p>
+                            A blacklist decision may be reviewed upon a reasoned request submitted to
+                            <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-handshake me-2 text-primary"></i>6. Σχέσεις μεταξύ Χρηστών</h4>
-                    <p>
-                        Η frontida4all λειτουργεί ως ενδιάμεσος χώρος σύνδεσης. Δεν είμαστε
-                        εργοδότης, πράκτορας ή εγγυητής οποιασδήποτε συμφωνίας μεταξύ χρηστών.
-                    </p>
-                    <p>
-                        Οι χρήστες ευθύνονται αποκλειστικά για τις συμφωνίες, πληρωμές και
-                        αλληλεπιδράσεις τους. Συνιστούμε επαλήθευση ταυτότητας πριν από κάθε
-                        συνεργασία.
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-handshake me-2 text-primary"></i>6. Relationships Between Users</h4>
+                        <p>
+                            frontida4all operates exclusively as a user-to-user connection platform. It is not an
+                            employer, agent, broker or guarantor of any agreement entered into between users.
+                        </p>
+                        <p>
+                            Users bear sole responsibility for agreements, payments and transactions between
+                            themselves. Due diligence and verification of details before any cooperation is
+                            strongly recommended.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-star me-2 text-primary"></i>7. Συνδρομή & Πληρωμές</h4>
-                    <p>
-                        Η βασική χρήση της πλατφόρμας είναι δωρεάν. Η Premium συνδρομή παρέχει
-                        επιπλέον δυνατότητες και χρεώνεται μηνιαία.
-                    </p>
-                    <p>
-                        Οι πληρωμές επεξεργάζονται ασφαλώς μέσω Stripe. Δεν αποθηκεύουμε
-                        στοιχεία καρτών. Οι χρεώσεις δεν επιστρέφονται εκτός αν ορίζεται διαφορετικά.
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-star me-2 text-primary"></i>7. Subscriptions and Payments</h4>
+                        <p>
+                            Basic use of the platform is free. The Premium subscription offers additional features
+                            and is billed on a monthly basis.
+                        </p>
+                        <p>
+                            Payments are processed through certified payment providers. frontida4all does not store
+                            card details. Charges paid are non-refundable unless explicitly stated otherwise or
+                            required by law.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-copyright me-2 text-primary"></i>8. Πνευματική Ιδιοκτησία</h4>
-                    <p>
-                        Το περιεχόμενο που δημοσιεύετε παραμένει δικό σας. Μας παρέχετε άδεια
-                        χρήσης για σκοπούς λειτουργίας της πλατφόρμας.
-                    </p>
-                    <p>
-                        Ο σχεδιασμός, το λογισμικό και τα εμπορικά σήματα της frontida4all
-                        προστατεύονται από νόμους πνευματικής ιδιοκτησίας.
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-copyright me-2 text-primary"></i>8. Intellectual Property</h4>
+                        <p>
+                            Content posted by the user remains their property. By posting, the user grants
+                            frontida4all a non-exclusive licence to use the content solely for the purposes of
+                            operating and promoting the platform.
+                        </p>
+                        <p>
+                            The software, design and trademarks of the platform are protected by applicable
+                            intellectual property law.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-gavel me-2 text-primary"></i>9. Εφαρμοστέο Δίκαιο</h4>
-                    <p>
-                        Οι παρόντες όροι διέπονται από το ελληνικό δίκαιο. Για οποιαδήποτε
-                        διαφορά αρμόδια είναι αποκλειστικά τα δικαστήρια της Αθήνας.
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-gavel me-2 text-primary"></i>9. Governing Law and Jurisdiction</h4>
+                        <p>
+                            These Terms of Use are governed by Greek law. The courts of Athens have exclusive
+                            jurisdiction over any dispute arising from them.
+                        </p>
+                    </div>
                 </div>
-            </div>
 
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4><i class="fas fa-envelope me-2 text-primary"></i>10. Επικοινωνία</h4>
-                    <p>
-                        Για ερωτήσεις σχετικά με τους Όρους Χρήσης:
-                        <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>
-                    </p>
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-envelope me-2 text-primary"></i>10. Contact</h4>
+                        <p>
+                            For any matter relating to these Terms of Use, users may contact us at:
+                            <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>
+                        </p>
+                    </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-info-circle me-2 text-primary"></i>1. Αποδοχή Όρων</h4>
+                        <p>
+                            Με την πρόσβαση και χρήση της διαδικτυακής πλατφόρμας <strong>frontida4all</strong>,
+                            ο χρήστης δηλώνει ότι έχει διαβάσει, κατανοήσει και αποδέχεται ανεπιφύλακτα
+                            τους παρόντες Όρους Χρήσης. Σε περίπτωση μη αποδοχής, ο χρήστης οφείλει
+                            να απέχει από οποιαδήποτε χρήση της πλατφόρμας.
+                        </p>
+                        <p>
+                            Η frontida4all διατηρεί το δικαίωμα τροποποίησης των Όρων Χρήσης οποτεδήποτε.
+                            Οι τροποποιήσεις αναρτώνται στην πλατφόρμα και ισχύουν από την ημερομηνία ανάρτησής τους.
+                            Η συνέχιση της χρήσης συνιστά τεκμήριο αποδοχής των τροποποιήσεων.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-users me-2 text-primary"></i>2. Εγγραφή και Λογαριασμός Χρήστη</h4>
+                        <p>Για τη δημιουργία λογαριασμού απαιτείται ο χρήστης:</p>
+                        <ul>
+                            <li>Να έχει συμπληρώσει το 18ο έτος της ηλικίας του</li>
+                            <li>Να παρέχει αληθή, ακριβή και πλήρη στοιχεία</li>
+                            <li>Να διατηρεί έναν μόνο προσωπικό λογαριασμό</li>
+                            <li>Να μην εκχωρεί ή μεταβιβάζει τον λογαριασμό του σε τρίτους</li>
+                        </ul>
+                        <p>
+                            Ο χρήστης φέρει την αποκλειστική ευθύνη για τη διαφύλαξη των στοιχείων σύνδεσης
+                            και για κάθε ενέργεια που πραγματοποιείται μέσω του λογαριασμού του.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-hand-paper me-2 text-primary"></i>3. Αποδεκτή Χρήση της Πλατφόρμας</h4>
+                        <p>Απαγορεύεται ρητά στους χρήστες:</p>
+                        <ul>
+                            <li>Η ανάρτηση ψευδών, παραπλανητικών ή ανακριβών πληροφοριών</li>
+                            <li>Η παρενόχληση, απειλή ή δυσφημιστική συμπεριφορά προς άλλους χρήστες</li>
+                            <li>Η ανάρτηση παράνομου, άσεμνου ή προσβλητικού περιεχομένου</li>
+                            <li>Η εμπορική εκμετάλλευση της πλατφόρμας χωρίς προηγούμενη έγγραφη άδεια</li>
+                            <li>Η παραβίαση της ασφάλειας ή της λειτουργικότητας των συστημάτων της πλατφόρμας</li>
+                            <li>Η δημιουργία ψευδών αξιολογήσεων ή η χειραγώγηση βαθμολογιών</li>
+                            <li>Η αποστολή ανεπιθύμητης επικοινωνίας (spam)</li>
+                        </ul>
+                        <p>Η παράβαση των ανωτέρω δύναται να επιφέρει περιορισμό, αναστολή ή οριστική διαγραφή του λογαριασμού.</p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-robot me-2 text-primary"></i>4. Εποπτεία και Διαχείριση Περιεχομένου</h4>
+                        <p>
+                            Το περιεχόμενο που δημοσιεύεται στην πλατφόρμα υπόκειται σε αυτοματοποιημένο έλεγχο
+                            μέσω τεχνολογιών τεχνητής νοημοσύνης καθώς και σε ενδεχόμενο χειροκίνητο έλεγχο
+                            από τους διαχειριστές.
+                        </p>
+                        <p>
+                            Η frontida4all διατηρεί το δικαίωμα αφαίρεσης ή τροποποίησης περιεχομένου που
+                            παραβιάζει τους παρόντες όρους ή την κείμενη νομοθεσία, χωρίς προηγούμενη ειδοποίηση.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-user-slash me-2 text-primary"></i>5. Αποκλεισμός Χρηστών (Blacklist)</h4>
+                        <p>
+                            Χρήστες που παραβιάζουν κατ' επανάληψη τους Όρους Χρήσης ενδέχεται να αποκλειστούν
+                            προσωρινά ή μόνιμα από τη δυνατότητα ανάρτησης ή χρήσης της πλατφόρμας.
+                        </p>
+                        <p>
+                            Ο αποκλεισμός δύναται να επανεξεταστεί κατόπιν αιτιολογημένου αιτήματος προς τη διαχείριση
+                            στο <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-handshake me-2 text-primary"></i>6. Σχέσεις Μεταξύ Χρηστών</h4>
+                        <p>
+                            Η frontida4all λειτουργεί αποκλειστικά ως πλατφόρμα διασύνδεσης χρηστών.
+                            Δεν αποτελεί εργοδότη, εντολοδόχο, μεσίτη ή εγγυητή οποιασδήποτε συμφωνίας
+                            που συνάπτεται μεταξύ χρηστών.
+                        </p>
+                        <p>
+                            Οι χρήστες φέρουν την αποκλειστική ευθύνη για τις μεταξύ τους συμφωνίες,
+                            πληρωμές και συναλλαγές. Συνιστάται η επιμέλεια και επαλήθευση στοιχείων
+                            πριν από κάθε συνεργασία.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-star me-2 text-primary"></i>7. Συνδρομές και Πληρωμές</h4>
+                        <p>
+                            Η βασική χρήση της πλατφόρμας παρέχεται δωρεάν. Η Premium συνδρομή προσφέρει
+                            πρόσθετες λειτουργίες και χρεώνεται σε μηνιαία βάση.
+                        </p>
+                        <p>
+                            Οι πληρωμές διεκπεραιώνονται μέσω πιστοποιημένων παρόχων πληρωμών.
+                            Η frontida4all δεν αποθηκεύει στοιχεία καρτών.
+                            Οι καταβληθείσες χρεώσεις δεν επιστρέφονται, εκτός αν ορίζεται ρητά διαφορετικά
+                            ή επιβάλλεται από τον νόμο.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-copyright me-2 text-primary"></i>8. Πνευματική Ιδιοκτησία</h4>
+                        <p>
+                            Το περιεχόμενο που αναρτά ο χρήστης παραμένει στην κυριότητά του. Με την ανάρτηση,
+                            ο χρήστης παραχωρεί στην frontida4all μη αποκλειστική άδεια χρήσης του περιεχομένου
+                            αποκλειστικά για σκοπούς λειτουργίας και προώθησης της πλατφόρμας.
+                        </p>
+                        <p>
+                            Το λογισμικό, ο σχεδιασμός και τα διακριτικά γνωρίσματα της πλατφόρμας
+                            προστατεύονται από την κείμενη νομοθεσία περί πνευματικής ιδιοκτησίας.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-gavel me-2 text-primary"></i>9. Εφαρμοστέο Δίκαιο και Δικαιοδοσία</h4>
+                        <p>
+                            Οι παρόντες Όροι Χρήσης διέπονται από το ελληνικό δίκαιο.
+                            Αρμόδια για την επίλυση κάθε διαφοράς είναι αποκλειστικά τα δικαστήρια Αθηνών.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-envelope me-2 text-primary"></i>10. Επικοινωνία</h4>
+                        <p>
+                            Για οποιοδήποτε ζήτημα αφορά τους παρόντες Όρους Χρήσης, οι χρήστες μπορούν
+                            να επικοινωνούν στη διεύθυνση:
+                            <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>
+                        </p>
+                    </div>
+                </div>
+            }
 
             <div class="text-center mt-4">
                 <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
-                    <i class="fas fa-arrow-left me-2"></i>Επιστροφή στην Αρχική
+                    <i class="fas fa-arrow-left me-2"></i>@(isEn ? "Back to Home" : "Επιστροφή στην Αρχική")
                 </a>
             </div>
         </div>
