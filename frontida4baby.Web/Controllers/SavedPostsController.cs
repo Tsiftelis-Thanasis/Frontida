@@ -27,6 +27,12 @@ public class SavedPostsController : Controller
     {
         var userId = _userManager.GetUserId(User)!;
 
+        // Validate post exists and is active + approved
+        var post = await _db.Posts.FindAsync(postId);
+        if (post is null || post.Status != PostStatus.Active
+            || post.ModerationStatus != ModerationStatus.Approved)
+            return Json(new { error = "Cannot save this post." });
+
         var existing = await _db.SavedPosts
             .FirstOrDefaultAsync(s => s.PostId == postId && s.UserId == userId);
 
@@ -46,7 +52,16 @@ public class SavedPostsController : Controller
             saved = true;
         }
 
-        await _db.SaveChangesAsync();
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            // Concurrent double-submit — check current state
+            saved = await _db.SavedPosts.AnyAsync(s => s.PostId == postId && s.UserId == userId);
+        }
+
         return Json(new { saved });
     }
 }

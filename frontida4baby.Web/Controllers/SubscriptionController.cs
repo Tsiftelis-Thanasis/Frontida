@@ -98,7 +98,9 @@ public class SubscriptionController : Controller
                 StripeConfiguration.ApiKey = _config["Stripe:SecretKey"];
                 var session = await new SessionService().GetAsync(session_id);
 
-                if (session?.Status == "complete")
+                if (session?.Status == "complete" && session.PaymentStatus == "paid"
+                    && session.Metadata?.TryGetValue("userId", out var sessionUserId) == true
+                    && sessionUserId == userId)
                 {
                     await SetPlanAsync(userId, SubscriptionPlan.Paid,
                         session.CustomerId, session.SubscriptionId);
@@ -133,17 +135,33 @@ public class SubscriptionController : Controller
 
     [HttpPost("/subscription/webhook")]
     [IgnoreAntiforgeryToken]
+    [Microsoft.AspNetCore.RateLimiting.EnableRateLimiting("webhook")]
     public async Task<IActionResult> Webhook()
     {
         var webhookSecret = _config["Stripe:WebhookSecret"] ?? "";
         var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
 
+        var signatureHeader = Request.Headers["Stripe-Signature"].ToString();
+        if (string.IsNullOrEmpty(signatureHeader))
+            return BadRequest();
+
         try
         {
             var stripeEvent = EventUtility.ConstructEvent(
                 json,
-                Request.Headers["Stripe-Signature"],
-                webhookSecret);
+                signatureHeader,
+                webhookSecret,
+                throwOnApiVersionMismatch: false);
+
+            // Idempotency: skip already-processed events
+            if (await _db.ProcessedStripeEvents.AnyAsync(e => e.EventId == stripeEvent.Id))
+                return Ok();
+
+            _db.ProcessedStripeEvents.Add(new Models.Entities.ProcessedStripeEvent
+            {
+                EventId = stripeEvent.Id,
+            });
+            await _db.SaveChangesAsync();
 
             if (stripeEvent.Type == "checkout.session.completed")
             {

@@ -70,6 +70,7 @@ public class SubscriptionService : ISubscriptionService
             .Select(r => r.Post.AuthorUserId)
             .Distinct()
             .CountAsync();
-        return distinctOwners <= 5;
+        // Free users can view profiles of up to 5 distinct post owners per month
+        return distinctOwners < 5;
     }
 }

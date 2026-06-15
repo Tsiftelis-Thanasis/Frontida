@@ -27,9 +27,11 @@ public class CaregiversController : Controller
     public async Task<IActionResult> Index(CaregiverSearchViewModel searchModel)
     {
         var query = _context.Users
+            .AsNoTracking()
             .Include(u => u.Profile)
                 .ThenInclude(p => p!.Services)
             .Include(u => u.ReceivedReviews)
+            .AsSplitQuery()
             .Where(u => u.IsCaregiver);
 
         if (searchModel.ServiceType.HasValue)
@@ -63,7 +65,7 @@ public class CaregiversController : Controller
                 HourlyRate = u.Profile != null ? u.Profile.HourlyRate : null,
                 YearsOfExperience = u.Profile != null ? u.Profile.YearsOfExperience : null,
                 IsVerified = u.Profile != null && u.Profile.IsVerified,
-                AverageRating = u.ReceivedReviews.Any() ? u.ReceivedReviews.Average(r => r.Rating) : 0,
+                AverageRating = u.ReceivedReviews.Any() ? u.ReceivedReviews.Average(r => (double)r.Rating) : 0,
                 ReviewCount = u.ReceivedReviews.Count,
                 Services = u.Profile != null
                     ? u.Profile.Services.Where(s => s.IsActive).Select(s => s.ServiceType).ToList()
@@ -83,6 +85,7 @@ public class CaregiversController : Controller
                 .ThenInclude(p => p!.Services)
             .Include(u => u.ReceivedReviews)
                 .ThenInclude(r => r.ReviewerUser)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(u => u.Id == id && u.IsCaregiver);
 
         if (caregiver is null) return NotFound();

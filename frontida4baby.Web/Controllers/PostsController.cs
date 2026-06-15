@@ -40,6 +40,7 @@ public class PostsController : Controller
         var currentUserId = _userManager.GetUserId(User);
 
         var query = _db.Posts
+            .AsNoTracking()
             .Include(p => p.AuthorUser).ThenInclude(u => u.ReceivedReviews)
             .Include(p => p.Replies)
             .Where(p => (p.Status == PostStatus.Active || p.AuthorUserId == currentUserId)
@@ -91,6 +92,7 @@ public class PostsController : Controller
             .Include(p => p.Reactions)
                 .ThenInclude(r => r.User)
                     .ThenInclude(u => u.ReceivedReviews)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(p => p.Id == id
                 && (p.Status == PostStatus.Active || p.Status == PostStatus.Closed));
 
@@ -219,6 +221,12 @@ public class PostsController : Controller
         var userId = _userManager.GetUserId(User)!;
 
         var currentUser = await _userManager.FindByIdAsync(userId);
+        if (currentUser is not null && !currentUser.EmailConfirmed)
+        {
+            ModelState.AddModelError(string.Empty,
+                "Please confirm your email address before posting. Check your inbox or resend from your dashboard.");
+            return View(model);
+        }
         if (currentUser?.IsBlacklisted == true)
         {
             ModelState.AddModelError(string.Empty,
@@ -237,6 +245,10 @@ public class PostsController : Controller
 
         if (result.Status == ModerationStatus.Rejected)
         {
+            // Log the rejection so it counts toward auto-blacklist threshold
+            await _moderationLog.LogAsync(ContentType.Post, 0, userId,
+                model.Title, model.Body, result);
+
             ModelState.AddModelError(string.Empty,
                 $"Your post could not be published: {result.Reason}");
             return View(model);
@@ -311,6 +323,14 @@ public class PostsController : Controller
                 CanEdit    = r.AuthorUserId == currentUserId,
             }).ToList();
 
+        var replyUser = await _userManager.FindByIdAsync(currentUserId);
+        if (replyUser is not null && !replyUser.EmailConfirmed)
+        {
+            ModelState.AddModelError(nameof(model.ReplyBody),
+                "Please confirm your email address before replying.");
+            return View(nameof(Details), model);
+        }
+
         if (!await _subscription.CanReplyAsync(currentUserId))
         {
             ModelState.AddModelError(string.Empty,
@@ -331,6 +351,10 @@ public class PostsController : Controller
 
         if (result.Status == ModerationStatus.Rejected)
         {
+            // Log the rejection so it counts toward auto-blacklist threshold
+            await _moderationLog.LogAsync(ContentType.Reply, 0, currentUserId,
+                null, model.ReplyBody, result);
+
             ModelState.AddModelError(nameof(model.ReplyBody),
                 $"Your reply could not be posted: {result.Reason}");
             return View(nameof(Details), model);

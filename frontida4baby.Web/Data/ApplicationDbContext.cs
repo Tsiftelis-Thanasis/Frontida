@@ -22,6 +22,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<SavedPost> SavedPosts { get; set; }
     public DbSet<Subscription> Subscriptions { get; set; }
     public DbSet<AppLog> AppLogs { get; set; }
+    public DbSet<ProcessedStripeEvent> ProcessedStripeEvents { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -100,6 +101,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasIndex(r => r.PostId);
         builder.Entity<Reply>()
             .HasIndex(r => r.ModerationStatus);
+        builder.Entity<Post>()
+            .HasIndex(p => new { p.Status, p.ModerationStatus, p.CreatedAt });
+
         builder.Entity<ModerationLog>()
             .HasIndex(m => new { m.ContentType, m.ContentId });
 
@@ -114,7 +118,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(r => r.User)
             .WithMany(u => u.Reactions)
             .HasForeignKey(r => r.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<PostReaction>()
             .HasIndex(r => new { r.PostId, r.UserId })
@@ -131,7 +135,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .HasOne(s => s.User)
             .WithMany(u => u.SavedPosts)
             .HasForeignKey(s => s.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.Entity<SavedPost>()
             .HasIndex(s => new { s.PostId, s.UserId })

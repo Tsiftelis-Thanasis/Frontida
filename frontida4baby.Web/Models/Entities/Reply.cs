@@ -20,6 +20,7 @@ public class Reply
 
     public ModerationStatus ModerationStatus { get; set; } = ModerationStatus.PendingReview;
     public string? ModerationReason { get; set; }
+    public int ModerationAttempts { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? EditedAt { get; set; }

@@ -1,6 +1,8 @@
 using System.Text;
+using System.Threading.RateLimiting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using frontida4baby.Web.Data;
 using frontida4baby.Web.Models.Entities;
 using frontida4baby.Web.Services;
@@ -23,7 +25,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
     options.Password.RequireNonAlphanumeric = false;
-    options.Password.RequiredLength = 6;
+    options.Password.RequiredLength = 8;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(15);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.Lockout.AllowedForNewUsers = true;
 })
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
@@ -69,7 +74,15 @@ builder.Services.Configure<ModerationOptions>(
     builder.Configuration.GetSection("Moderation"));
 
 builder.Services.AddSingleton<WordlistModerationService>();
-builder.Services.AddHttpClient<ClaudeModerationService>();
+builder.Services.AddHttpClient<ClaudeModerationService>()
+    .AddStandardResilienceHandler(options =>
+    {
+        options.Retry.MaxRetryAttempts = 2;
+        options.Retry.UseJitter = true;
+        options.CircuitBreaker.SamplingDuration = TimeSpan.FromSeconds(30);
+        options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(15);
+        options.TotalRequestTimeout.Timeout = TimeSpan.FromSeconds(45);
+    });
 builder.Services.AddScoped<IContentModerationService, ContentModerationService>();
 builder.Services.AddScoped<ContentModerationService>(); // needed for LogAsync
 
@@ -93,8 +106,30 @@ builder.Services.AddScoped<IUserEmailService, UserEmailService>();
 // ── Application log service ───────────────────────────────────────────────────
 builder.Services.AddScoped<IAppLogService, AppLogService>();
 
+// ── Health checks ────────────────────────────────────────────────────────────
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<ApplicationDbContext>("database");
+
 // ── Localisation ──────────────────────────────────────────────────────────────
 builder.Services.AddLocalization(o => o.ResourcesPath = "Resources");
+
+// ── Rate limiting ─────────────────────────────────────────────────────────────
+builder.Services.AddRateLimiter(options =>
+{
+    options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+    options.AddFixedWindowLimiter("auth", o =>
+    {
+        o.PermitLimit = 10;
+        o.Window = TimeSpan.FromMinutes(5);
+        o.QueueLimit = 0;
+    });
+    options.AddFixedWindowLimiter("webhook", o =>
+    {
+        o.PermitLimit = 100;
+        o.Window = TimeSpan.FromMinutes(1);
+        o.QueueLimit = 0;
+    });
+});
 
 // ── MVC ───────────────────────────────────────────────────────────────────────
 builder.Services.AddControllersWithViews()
@@ -117,21 +152,34 @@ using (var scope = app.Services.CreateScope())
         await roleManager.CreateAsync(new IdentityRole("Admin"));
 
     var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-    const string adminEmail    = "admin@frontida4baby.gr";
-    const string adminPassword = "Admin1234!";
-    if (await userManager.FindByEmailAsync(adminEmail) is null)
+    var adminEmail    = builder.Configuration["Admin:Email"];
+    var adminPassword = builder.Configuration["Admin:Password"];
+
+    if (app.Environment.IsProduction() && (string.IsNullOrWhiteSpace(adminEmail) || string.IsNullOrWhiteSpace(adminPassword)))
     {
-        var adminUser = new ApplicationUser
+        // In Production, admin credentials MUST be set via environment variables or User Secrets.
+        // Do not auto-seed with defaults.
+    }
+    else
+    {
+        // In Development, fall back to defaults if not configured
+        adminEmail    ??= "admin@frontida4baby.gr";
+        adminPassword ??= "Admin1234!";
+
+        if (await userManager.FindByEmailAsync(adminEmail) is null)
         {
-            UserName       = adminEmail,
-            Email          = adminEmail,
-            EmailConfirmed = true,
-            FirstName      = "Admin",
-            LastName       = "Admin",
-        };
-        var created = await userManager.CreateAsync(adminUser, adminPassword);
-        if (created.Succeeded)
-            await userManager.AddToRoleAsync(adminUser, "Admin");
+            var adminUser = new ApplicationUser
+            {
+                UserName       = adminEmail,
+                Email          = adminEmail,
+                EmailConfirmed = true,
+                FirstName      = "Admin",
+                LastName       = "Admin",
+            };
+            var created = await userManager.CreateAsync(adminUser, adminPassword);
+            if (created.Succeeded)
+                await userManager.AddToRoleAsync(adminUser, "Admin");
+        }
     }
 
     // ── Dev seed data (demo users, posts, replies) ────────────────────────
@@ -151,6 +199,19 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// ── Security headers ─────────────────────────────────────────────────────────
+app.Use(async (context, next) =>
+{
+    context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+    context.Response.Headers["X-Frame-Options"] = "DENY";
+    context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+    context.Response.Headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()";
+    await next();
+});
+
+// ── Rate limiting ────────────────────────────────────────────────────────────
+app.UseRateLimiter();
 
 // ── Error logging middleware ──────────────────────────────────────────────────
 app.UseMiddleware<ErrorLoggingMiddleware>();
@@ -173,5 +234,7 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")
     .WithStaticAssets();
+
+app.MapHealthChecks("/health");
 
 app.Run();

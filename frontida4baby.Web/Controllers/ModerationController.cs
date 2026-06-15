@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using frontida4baby.Web.Data;
 using frontida4baby.Web.Models.Entities;
 using frontida4baby.Web.Models.ViewModels;
+using frontida4baby.Web.Services;
 
 namespace frontida4baby.Web.Controllers;
 
@@ -11,8 +12,13 @@ namespace frontida4baby.Web.Controllers;
 public class ModerationController : Controller
 {
     private readonly ApplicationDbContext _db;
+    private readonly ContentModerationService _moderationLog;
 
-    public ModerationController(ApplicationDbContext db) => _db = db;
+    public ModerationController(ApplicationDbContext db, ContentModerationService moderationLog)
+    {
+        _db = db;
+        _moderationLog = moderationLog;
+    }
 
     // ── GET /moderation ───────────────────────────────────────────────────────
     public async Task<IActionResult> Queue()
@@ -61,18 +67,31 @@ public class ModerationController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Approve(ContentType contentType, int id, string? returnUrl = null)
     {
+        var result = new ModerationResult(ModerationStatus.Approved, "Manual approval by admin", null, ModerationStage.Manual, 1f);
+
         if (contentType == ContentType.Post)
         {
             var post = await _db.Posts.FindAsync(id);
-            if (post is not null) post.ModerationStatus = ModerationStatus.Approved;
+            if (post is not null)
+            {
+                post.ModerationStatus = ModerationStatus.Approved;
+                await _db.SaveChangesAsync();
+                await _moderationLog.LogAsync(ContentType.Post, id, post.AuthorUserId,
+                    post.Title, post.Body, result);
+            }
         }
         else
         {
             var reply = await _db.Replies.FindAsync(id);
-            if (reply is not null) reply.ModerationStatus = ModerationStatus.Approved;
+            if (reply is not null)
+            {
+                reply.ModerationStatus = ModerationStatus.Approved;
+                await _db.SaveChangesAsync();
+                await _moderationLog.LogAsync(ContentType.Reply, id, reply.AuthorUserId,
+                    null, reply.Body, result);
+            }
         }
 
-        await _db.SaveChangesAsync();
         TempData["AdminMessage"] = "Item approved.";
         if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
             return Redirect(returnUrl);
@@ -84,6 +103,8 @@ public class ModerationController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Reject(ContentType contentType, int id, string reason, string? returnUrl = null)
     {
+        var result = new ModerationResult(ModerationStatus.Rejected, reason, null, ModerationStage.Manual, 1f);
+
         if (contentType == ContentType.Post)
         {
             var post = await _db.Posts.FindAsync(id);
@@ -92,6 +113,9 @@ public class ModerationController : Controller
                 post.ModerationStatus = ModerationStatus.Rejected;
                 post.ModerationReason = reason;
                 post.Status           = PostStatus.Deleted;
+                await _db.SaveChangesAsync();
+                await _moderationLog.LogAsync(ContentType.Post, id, post.AuthorUserId,
+                    post.Title, post.Body, result);
             }
         }
         else
@@ -101,10 +125,12 @@ public class ModerationController : Controller
             {
                 reply.ModerationStatus = ModerationStatus.Rejected;
                 reply.ModerationReason = reason;
+                await _db.SaveChangesAsync();
+                await _moderationLog.LogAsync(ContentType.Reply, id, reply.AuthorUserId,
+                    null, reply.Body, result);
             }
         }
 
-        await _db.SaveChangesAsync();
         TempData["AdminMessage"] = "Item rejected.";
         if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
             return Redirect(returnUrl);

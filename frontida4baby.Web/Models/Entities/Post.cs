@@ -19,11 +19,14 @@ public class Post
     public string Body { get; set; } = string.Empty;
 
     public ServiceType? ServiceType { get; set; }
+
+    [StringLength(100)]
     public string? City { get; set; }
 
     public PostStatus Status { get; set; } = PostStatus.Active;
     public ModerationStatus ModerationStatus { get; set; } = ModerationStatus.PendingReview;
     public string? ModerationReason { get; set; }
+    public int ModerationAttempts { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? EditedAt { get; set; }

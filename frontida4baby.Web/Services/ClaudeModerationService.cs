@@ -15,6 +15,9 @@ public class ClaudeModerationService
 {
     private readonly HttpClient _http;
     private readonly ModerationOptions _opts;
+    private readonly ILogger<ClaudeModerationService> _logger;
+    private int _consecutiveFallbacks;
+    private const int FallbackAlertThreshold = 5;
 
     private const string SystemPrompt = """
         You are a content moderation system for frontida4baby, a Greek childcare and
@@ -49,14 +52,16 @@ public class ClaudeModerationService
         Valid category values: Profanity, Threat, HateSpeech, IllegalOffer, SexualContent, Spam, ContactInfo, null
         """;
 
-    public ClaudeModerationService(HttpClient http, IOptions<ModerationOptions> opts)
+    public ClaudeModerationService(HttpClient http, IOptions<ModerationOptions> opts, ILogger<ClaudeModerationService> logger)
     {
         _opts = opts.Value;
         _http = http;
-        _http.BaseAddress = new Uri("https://api.anthropic.com");
-        _http.DefaultRequestHeaders.Add("x-api-key", _opts.ClaudeApiKey);
-        _http.DefaultRequestHeaders.Add("anthropic-version", "2023-06-01");
-        _http.Timeout = TimeSpan.FromSeconds(_opts.TimeoutSeconds);
+        _logger = logger;
+        _http.BaseAddress ??= new Uri("https://api.anthropic.com");
+        if (!_http.DefaultRequestHeaders.Contains("x-api-key"))
+            _http.DefaultRequestHeaders.Add("x-api-key", _opts.ClaudeApiKey);
+        if (!_http.DefaultRequestHeaders.Contains("anthropic-version"))
+            _http.DefaultRequestHeaders.Add("anthropic-version", "2023-06-01");
     }
 
     public async Task<ModerationResult> CheckAsync(string? title, string body)
@@ -93,7 +98,19 @@ public class ClaudeModerationService
             if (string.IsNullOrWhiteSpace(text))
                 return Fallback("Empty response from Claude.");
 
-            var decision = JsonSerializer.Deserialize<ModerationDecision>(text, _jsonOpts);
+            // Strip markdown fences if Claude wraps the JSON
+            var jsonText = ExtractJson(text);
+
+            ModerationDecision? decision;
+            try
+            {
+                decision = JsonSerializer.Deserialize<ModerationDecision>(jsonText, _jsonOpts);
+            }
+            catch (JsonException)
+            {
+                return Fallback($"Could not parse Claude response: {text[..Math.Min(text.Length, 200)]}");
+            }
+
             if (decision is null)
                 return Fallback("Could not parse Claude response.");
 
@@ -104,6 +121,7 @@ public class ClaudeModerationService
                 _               => ModerationStatus.PendingReview,
             };
 
+            Interlocked.Exchange(ref _consecutiveFallbacks, 0);
             return new ModerationResult(status, decision.Reason, decision.Category,
                 ModerationStage.Claude, decision.Confidence);
         }
@@ -111,14 +129,26 @@ public class ClaudeModerationService
         {
             return Fallback("Claude API timed out.");
         }
-        catch
+        catch (Exception ex)
         {
-            return Fallback("Claude API unavailable.");
+            return Fallback($"Claude API unavailable: {ex.GetType().Name}");
         }
     }
 
     private ModerationResult Fallback(string reason)
     {
+        var count = Interlocked.Increment(ref _consecutiveFallbacks);
+        _logger.LogWarning("Claude moderation fallback #{Count}: {Reason}", count, reason);
+
+        if (count == FallbackAlertThreshold)
+        {
+            _logger.LogCritical(
+                "Claude moderation has failed {Count} consecutive times. " +
+                "Content pipeline is degraded — items are falling back to '{FallbackPolicy}'. " +
+                "Check Claude API status and credentials.",
+                count, _opts.FallbackOnTimeout);
+        }
+
         var status = _opts.FallbackOnTimeout switch
         {
             "Approved" => ModerationStatus.Approved,
@@ -126,6 +156,29 @@ public class ClaudeModerationService
             _          => ModerationStatus.PendingReview,
         };
         return new ModerationResult(status, reason, null, ModerationStage.Claude, null);
+    }
+
+    private static string ExtractJson(string text)
+    {
+        // Strip ```json ... ``` fences
+        var trimmed = text.Trim();
+        if (trimmed.StartsWith("```"))
+        {
+            var firstNewline = trimmed.IndexOf('\n');
+            if (firstNewline > 0)
+                trimmed = trimmed[(firstNewline + 1)..];
+            if (trimmed.EndsWith("```"))
+                trimmed = trimmed[..^3];
+            trimmed = trimmed.Trim();
+        }
+
+        // Extract the first JSON object if surrounded by other text
+        var start = trimmed.IndexOf('{');
+        var end = trimmed.LastIndexOf('}');
+        if (start >= 0 && end > start)
+            return trimmed[start..(end + 1)];
+
+        return trimmed;
     }
 
     // ── JSON serialisation helpers ────────────────────────────────────────────

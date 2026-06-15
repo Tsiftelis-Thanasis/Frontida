@@ -35,10 +35,13 @@ public class ReactionsController : Controller
         var userId = _userManager.GetUserId(User)!;
 
         var post = await _db.Posts.FindAsync(postId);
-        if (post is null || post.ModerationStatus != ModerationStatus.Approved)
+        if (post is null || post.ModerationStatus != ModerationStatus.Approved
+            || post.Status != PostStatus.Active)
             return Json(new { error = "Cannot react to this post." });
 
         var reactingUser = await _userManager.FindByIdAsync(userId);
+        if (reactingUser is not null && !reactingUser.EmailConfirmed)
+            return Json(new { error = "Please confirm your email address first." });
         if (reactingUser?.IsBlacklisted == true)
             return Json(new { error = "Ο λογαριασμός σας έχει αποκλειστεί. Δεν μπορείτε να αντιδράτε σε αγγελίες." });
 
@@ -64,7 +67,17 @@ public class ReactionsController : Controller
             liked = true;
         }
 
-        await _db.SaveChangesAsync();
+        try
+        {
+            await _db.SaveChangesAsync();
+        }
+        catch (DbUpdateException)
+        {
+            // Concurrent double-submit — treat as already-applied
+            var currentLiked = await _db.PostReactions.AnyAsync(r => r.PostId == postId && r.UserId == userId);
+            var currentCount = await _db.PostReactions.CountAsync(r => r.PostId == postId);
+            return Json(new { liked = currentLiked, count = currentCount });
+        }
 
         var count = await _db.PostReactions.CountAsync(r => r.PostId == postId);
         return Json(new { liked, count });

@@ -46,6 +46,7 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Microsoft.AspNetCore.RateLimiting.EnableRateLimiting("auth")]
     public async Task<IActionResult> Register(RegisterViewModel model)
     {
         if (ModelState.IsValid)
@@ -70,9 +71,8 @@ public class AccountController : Controller
 
                 // Build confirm URL on the request thread (Url.Action needs HttpContext)
                 var verifyToken    = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                var encodedToken   = System.Net.WebUtility.UrlEncode(verifyToken);
                 var confirmUrl     = Url.Action(nameof(ConfirmEmail), "Account",
-                    new { userId = user.Id, token = encodedToken }, Request.Scheme) ?? "";
+                    new { userId = user.Id, token = verifyToken }, Request.Scheme) ?? "";
 
                 // Send email verification link (fire-and-forget)
                 _ = Task.Run(async () =>
@@ -111,6 +111,7 @@ public class AccountController : Controller
 
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Microsoft.AspNetCore.RateLimiting.EnableRateLimiting("auth")]
     public async Task<IActionResult> Login(LoginViewModel model, string? returnUrl = null)
     {
         ViewData["ReturnUrl"] = returnUrl;
@@ -120,13 +121,19 @@ public class AccountController : Controller
         if (ModelState.IsValid)
         {
             var result = await _signInManager.PasswordSignInAsync(
-                model.Email, model.Password, model.RememberMe, lockoutOnFailure: false);
+                model.Email, model.Password, model.RememberMe, lockoutOnFailure: true);
 
             if (result.Succeeded)
             {
                 var loggedIn = await _userManager.FindByEmailAsync(model.Email);
                 await _log.LogAsync(AppLogLevel.Info, "Account", $"Login: {model.Email}", userId: loggedIn?.Id);
                 return RedirectToLocal(returnUrl);
+            }
+
+            if (result.IsLockedOut)
+            {
+                ModelState.AddModelError(string.Empty, "Account locked out due to too many failed attempts. Please try again later.");
+                return View(model);
             }
 
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
@@ -165,12 +172,28 @@ public class AccountController : Controller
         // No linked login — try to find existing user by email
         var email = info.Principal.FindFirstValue(ClaimTypes.Email);
 
+        // Only trust the email if the provider asserts it is verified
+        var emailVerifiedClaim = info.Principal.FindFirstValue("email_verified");
+        bool providerVerifiedEmail = string.Equals(emailVerifiedClaim, "true", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(emailVerifiedClaim, "True", StringComparison.Ordinal);
+
         if (!string.IsNullOrWhiteSpace(email))
         {
             var existingUser = await _userManager.FindByEmailAsync(email);
 
             if (existingUser is not null)
             {
+                if (!providerVerifiedEmail)
+                {
+                    // Provider did not verify this email — do not auto-link (account takeover risk)
+                    ModelState.AddModelError(string.Empty,
+                        "An account with this email already exists. Please log in with your password to link this provider.");
+                    ViewData["ReturnUrl"] = returnUrl;
+                    ViewData["ExternalProviders"] =
+                        (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+                    return View(nameof(Login), new Models.ViewModels.LoginViewModel { Email = email });
+                }
+
                 // Link the external login to the existing account and sign in
                 await _userManager.AddLoginAsync(existingUser, info);
                 await _signInManager.SignInAsync(existingUser, isPersistent: false);
@@ -277,8 +300,7 @@ public class AccountController : Controller
         if (user is null)
             return View("ConfirmEmailResult", false);
 
-        var decodedToken = System.Net.WebUtility.UrlDecode(token);
-        var result = await _userManager.ConfirmEmailAsync(user, decodedToken);
+        var result = await _userManager.ConfirmEmailAsync(user, token);
 
         if (result.Succeeded)
         {
@@ -316,9 +338,8 @@ public class AccountController : Controller
         }
 
         var verifyToken  = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-        var encodedToken = System.Net.WebUtility.UrlEncode(verifyToken);
         var confirmUrl   = Url.Action(nameof(ConfirmEmail), "Account",
-            new { userId = user.Id, token = encodedToken }, Request.Scheme) ?? "";
+            new { userId = user.Id, token = verifyToken }, Request.Scheme) ?? "";
 
         _ = Task.Run(async () =>
         {
@@ -328,6 +349,99 @@ public class AccountController : Controller
 
         TempData["VerifyInfo"] = "resent";
         return RedirectToAction(nameof(VerifyEmailSent));
+    }
+
+    // ── Forgot / Reset password ─────────────────────────────────────────────
+
+    [HttpGet]
+    public IActionResult ForgotPassword() => View();
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+    {
+        if (!ModelState.IsValid) return View(model);
+
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        // Always redirect to confirmation to avoid email enumeration
+        if (user is null || !await _userManager.IsEmailConfirmedAsync(user))
+            return RedirectToAction(nameof(ForgotPasswordConfirmation));
+
+        var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+        var resetUrl = Url.Action(nameof(ResetPassword), "Account",
+            new { email = user.Email, token }, Request.Scheme) ?? "";
+
+        await SendPasswordResetEmailAsync(user, resetUrl);
+        return RedirectToAction(nameof(ForgotPasswordConfirmation));
+    }
+
+    [HttpGet]
+    public IActionResult ForgotPasswordConfirmation() => View();
+
+    [HttpGet]
+    public IActionResult ResetPassword(string? email, string? token)
+    {
+        if (string.IsNullOrEmpty(token))
+            return BadRequest("A reset token is required.");
+
+        var model = new ResetPasswordViewModel { Email = email ?? "", Token = token };
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+    {
+        if (!ModelState.IsValid) return View(model);
+
+        var user = await _userManager.FindByEmailAsync(model.Email);
+        if (user is null)
+            return RedirectToAction(nameof(ResetPasswordConfirmation));
+
+        var result = await _userManager.ResetPasswordAsync(user, model.Token, model.Password);
+        if (result.Succeeded)
+        {
+            await _log.LogAsync(AppLogLevel.Info, "Account",
+                $"Password reset: {model.Email}", userId: user.Id);
+            return RedirectToAction(nameof(ResetPasswordConfirmation));
+        }
+
+        foreach (var error in result.Errors)
+            ModelState.AddModelError(string.Empty, error.Description);
+
+        return View(model);
+    }
+
+    [HttpGet]
+    public IActionResult ResetPasswordConfirmation() => View();
+
+    // ── Email helpers ────────────────────────────────────────────────────────
+
+    private async Task SendPasswordResetEmailAsync(ApplicationUser user, string resetUrl)
+    {
+        var fromName = _config["Email:FromName"] ?? "frontida4all";
+        var html = $"""
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+              <h2 style="color:#4f46e5">Επαναφορά κωδικού — {fromName}</h2>
+              <p>Γεια σου {System.Net.WebUtility.HtmlEncode(user.FirstName)},</p>
+              <p>Λάβαμε αίτημα για επαναφορά του κωδικού σου. Πάτα το παρακάτω κουμπί:</p>
+              <p style="margin:32px 0">
+                <a href="{resetUrl}"
+                   style="background:#4f46e5;color:#fff;padding:12px 28px;border-radius:6px;
+                          text-decoration:none;font-weight:600;font-size:15px">
+                  Επαναφορά Κωδικού
+                </a>
+              </p>
+              <p style="color:#6b7280;font-size:13px">
+                Αν δεν ζήτησες επαναφορά κωδικού, αγνόησε αυτό το μήνυμα.<br/>
+                Ο σύνδεσμος λήγει σύντομα.
+              </p>
+              <hr style="border:none;border-top:1px solid #e5e7eb;margin:24px 0"/>
+              <p style="color:#9ca3af;font-size:12px">{fromName} · Greece</p>
+            </div>
+            """;
+
+        await _email.SendAsync(user.Email!, "Επαναφορά κωδικού", html);
     }
 
     private async Task SendVerificationEmailAsync(ApplicationUser user, string confirmUrl)

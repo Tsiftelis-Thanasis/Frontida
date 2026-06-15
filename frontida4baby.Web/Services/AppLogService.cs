@@ -16,10 +16,10 @@ public class AppLogService : IAppLogService
         {
             Level       = level,
             Category    = category,
-            Message     = message,
-            Details     = details,
+            Message     = message?.Length > 500 ? message[..500] : message,
+            Details     = details?.Length > 4000 ? details[..4000] : details,
             UserId      = userId,
-            RequestPath = path,
+            RequestPath = path?.Length > 500 ? path[..500] : path,
             CreatedAt   = DateTime.UtcNow
         });
         await _db.SaveChangesAsync();

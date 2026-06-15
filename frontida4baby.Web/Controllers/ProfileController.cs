@@ -43,15 +43,19 @@ public class ProfileController : Controller
 
         var profileUser = await _db.Users
             .Include(u => u.Profile)
-            .Include(u => u.Posts)
             .Include(u => u.ReceivedReviews)
                 .ThenInclude(r => r.ReviewerUser)
+            .AsSplitQuery()
             .FirstOrDefaultAsync(u => u.Id == userId);
 
         if (profileUser is null) return NotFound();
 
-        var recentPosts = profileUser.Posts
-            .Where(p => p.ModerationStatus == ModerationStatus.Approved && p.Status == PostStatus.Active)
+        // Server-side query for recent posts (avoids loading all posts into memory)
+        var recentPosts = await _db.Posts
+            .AsNoTracking()
+            .Where(p => p.AuthorUserId == userId
+                     && p.ModerationStatus == ModerationStatus.Approved
+                     && p.Status == PostStatus.Active)
             .OrderByDescending(p => p.CreatedAt)
             .Take(5)
             .Select(p => new PostListItemViewModel
@@ -63,7 +67,7 @@ public class ProfileController : Controller
                 City        = p.City,
                 CreatedAt   = p.CreatedAt,
             })
-            .ToList();
+            .ToListAsync();
 
         bool isAdmin = User.IsInRole("Admin");
         bool isPaid  = !isAdmin &&
@@ -92,8 +96,8 @@ public class ProfileController : Controller
             City                = profileUser.City,
             IsCaregiver         = profileUser.IsCaregiver,
             Bio                 = profileUser.Profile?.Bio,
-            Phone               = profileUser.PhoneNumber,
-            PhoneVisible        = true,
+            Phone               = (isAdmin || await _subscription.IsPhoneVisibleAsync(viewer.Id)) ? profileUser.PhoneNumber : null,
+            PhoneVisible        = isAdmin || await _subscription.IsPhoneVisibleAsync(viewer.Id),
             IsEmailVerified     = profileUser.EmailConfirmed,
             AverageRating       = profileUser.ReceivedReviews.Any() ? profileUser.ReceivedReviews.Average(r => (double)r.Rating) : 0,
             ReviewCount         = profileUser.ReceivedReviews.Count,

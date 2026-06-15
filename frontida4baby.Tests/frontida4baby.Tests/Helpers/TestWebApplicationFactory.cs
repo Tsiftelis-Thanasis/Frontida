@@ -28,9 +28,10 @@ public class TestWebApplicationFactory : WebApplicationFactory<Program>
             foreach (var d in descriptorsToRemove)
                 services.Remove(d);
 
-            // Add InMemory database
+            // Add InMemory database — capture name once so all scopes share the same DB
+            var dbName = "TestDb_" + Guid.NewGuid();
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseInMemoryDatabase("TestDb_" + Guid.NewGuid()));
+                options.UseInMemoryDatabase(dbName));
 
             // Stub out email
             var emailDescriptor = services.SingleOrDefault(

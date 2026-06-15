@@ -91,7 +91,7 @@ public class WordlistModerationService
 
     private static readonly string[] GreekThreats =
     [
-        "θα σε σκοτωσω", "θα σε σκοτωσω",
+        "θα σε σκοτωσω",
         "θα σε βρω", "θα σε βλαψω",
         "θα σε κανω", "θα σε χτυπησω",
     ];
