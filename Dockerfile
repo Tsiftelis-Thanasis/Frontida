@@ -26,7 +26,7 @@ RUN adduser --disabled-password --gecos "" appuser \
 USER appuser
 
 EXPOSE 8080
-ENV ASPNETCORE_URLS=http://+:8080
 ENV ASPNETCORE_ENVIRONMENT=Production
+ENV PORT=8080
 
-ENTRYPOINT ["dotnet", "frontida4baby.Web.dll"]
+ENTRYPOINT dotnet frontida4baby.Web.dll --urls=http://+:$PORT
