@@ -214,6 +214,7 @@ public class PostsController : Controller
     [Authorize]
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Microsoft.AspNetCore.RateLimiting.EnableRateLimiting("content-create")]
     public async Task<IActionResult> Create(CreatePostViewModel model)
     {
         if (!ModelState.IsValid) return View(model);
@@ -287,6 +288,7 @@ public class PostsController : Controller
     [Authorize]
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Microsoft.AspNetCore.RateLimiting.EnableRateLimiting("content-create")]
     public async Task<IActionResult> Reply(int id, PostDetailViewModel model)
     {
         var post = await _db.Posts

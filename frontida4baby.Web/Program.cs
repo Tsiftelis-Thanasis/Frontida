@@ -73,6 +73,10 @@ if (!string.IsNullOrWhiteSpace(cfg["Authentication:Apple:ServicesId"]))
 builder.Services.Configure<ModerationOptions>(
     builder.Configuration.GetSection("Moderation"));
 
+var moderationConfig = builder.Configuration.GetSection("Moderation").Get<ModerationOptions>()
+    ?? new ModerationOptions();
+var moderationAttemptTimeout = TimeSpan.FromSeconds(moderationConfig.TimeoutSeconds);
+
 builder.Services.AddSingleton<WordlistModerationService>();
 builder.Services.AddHttpClient<ClaudeModerationService>()
     .AddStandardResilienceHandler(options =>
@@ -80,8 +84,8 @@ builder.Services.AddHttpClient<ClaudeModerationService>()
         options.Retry.MaxRetryAttempts = 2;
         options.Retry.UseJitter = true;
         options.CircuitBreaker.SamplingDuration = TimeSpan.FromSeconds(30);
-        options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(15);
-        options.TotalRequestTimeout.Timeout = TimeSpan.FromSeconds(45);
+        options.AttemptTimeout.Timeout = moderationAttemptTimeout;
+        options.TotalRequestTimeout.Timeout = moderationAttemptTimeout * 3;
     });
 builder.Services.AddScoped<IContentModerationService, ContentModerationService>();
 builder.Services.AddScoped<ContentModerationService>(); // needed for LogAsync
@@ -90,6 +94,10 @@ builder.Services.AddHostedService<PendingModerationJob>();
 
 // ── Subscription service ──────────────────────────────────────────────────────
 builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+
+// ── Invoicing (myDATA data-readiness) ─────────────────────────────────────────
+builder.Services.Configure<CompanyOptions>(builder.Configuration.GetSection("Company"));
+builder.Services.AddScoped<IInvoicingService, LocalInvoicingService>();
 
 // ── Email service ─────────────────────────────────────────────────────────────
 builder.Services.Configure<EmailOptions>(builder.Configuration.GetSection("Email"));
@@ -127,6 +135,18 @@ builder.Services.AddRateLimiter(options =>
     {
         o.PermitLimit = 100;
         o.Window = TimeSpan.FromMinutes(1);
+        o.QueueLimit = 0;
+    });
+    options.AddFixedWindowLimiter("content-create", o =>
+    {
+        o.PermitLimit = 20;
+        o.Window = TimeSpan.FromHours(1);
+        o.QueueLimit = 0;
+    });
+    options.AddFixedWindowLimiter("support", o =>
+    {
+        o.PermitLimit = 5;
+        o.Window = TimeSpan.FromMinutes(10);
         o.QueueLimit = 0;
     });
 });

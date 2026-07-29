@@ -6,9 +6,14 @@
         <strong>@L["CookieTitle"]</strong>
         <p class="mb-0 mt-1">@L["CookieMessage"] <a asp-controller="Home" asp-action="Privacy" class="cookie-link">@L["CookieLearnMore"]</a></p>
     </div>
-    <button id="cookie-accept" class="cookie-accept-btn" aria-label="@L["CookieAccept"]">
-        @L["CookieAccept"]
-    </button>
+    <div class="cookie-toast-actions">
+        <button id="cookie-necessary" class="cookie-necessary-btn" aria-label="Μόνο απαραίτητα">
+            Μόνο απαραίτητα
+        </button>
+        <button id="cookie-accept" class="cookie-accept-btn" aria-label="@L["CookieAccept"]">
+            @L["CookieAccept"]
+        </button>
+    </div>
 </div>
 
 <script>
@@ -16,11 +21,13 @@
     if (localStorage.getItem('cookieConsent')) return;
     var toast = document.getElementById('cookie-toast');
     setTimeout(function () { toast.style.display = 'flex'; }, 800);
-    document.getElementById('cookie-accept').addEventListener('click', function () {
+    function dismiss(value) {
         toast.style.opacity = '0';
         toast.style.transition = 'opacity .25s';
         setTimeout(function () { toast.style.display = 'none'; }, 260);
-        localStorage.setItem('cookieConsent', '1');
-    });
+        localStorage.setItem('cookieConsent', value);
+    }
+    document.getElementById('cookie-accept').addEventListener('click', function () { dismiss('accepted'); });
+    document.getElementById('cookie-necessary').addEventListener('click', function () { dismiss('necessary-only'); });
 })();
 </script>

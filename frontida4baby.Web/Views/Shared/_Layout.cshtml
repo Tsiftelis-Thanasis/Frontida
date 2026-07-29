@@ -114,6 +114,16 @@
                                                 <span class="material-symbols-outlined me-2" style="font-size:1.1rem;color:var(--st-primary)">list_alt</span>Logs
                                             </a>
                                         </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Admin" asp-action="Tickets">
+                                                <span class="material-symbols-outlined me-2" style="font-size:1.1rem;color:var(--st-primary)">support_agent</span>Αιτήματα Υποστήριξης
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" asp-controller="Admin" asp-action="Invoices">
+                                                <span class="material-symbols-outlined me-2" style="font-size:1.1rem;color:var(--st-primary)">receipt_long</span>Τιμολόγια
+                                            </a>
+                                        </li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li>
                                             <a class="dropdown-item" asp-controller="Moderation" asp-action="Queue">
@@ -181,6 +191,7 @@
                     <a asp-controller="Home" asp-action="TermsOfService">Όροι Χρήσης</a>
                     <a asp-controller="Home" asp-action="Disclaimer">Αποποίηση Ευθύνης</a>
                     <a asp-controller="Home" asp-action="AiReviewPolicy">Πολιτική AI</a>
+                    <a asp-controller="Home" asp-action="Gdpr">GDPR</a>
                     <a asp-controller="Home" asp-action="Support">Επικοινωνία</a>
                     @if (!(User.Identity?.IsAuthenticated ?? false))
                     {

@@ -1,14 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using frontida4baby.Web.Models.Entities;
 
 namespace frontida4baby.Web.Models.ViewModels;
-
-public enum SupportCategory
-{
-    General,
-    Technical,
-    Billing,
-    Safety
-}
 
 public class SupportViewModel
 {

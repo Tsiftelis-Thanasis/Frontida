@@ -758,6 +758,11 @@
 .st-cookie-toast .cookie-link {
   color: var(--st-primary);
 }
+.st-cookie-toast .cookie-toast-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
 .st-cookie-toast .cookie-accept-btn {
   background: var(--st-primary);
   border-radius: var(--st-radius-md);
@@ -765,6 +770,16 @@
 }
 .st-cookie-toast .cookie-accept-btn:hover {
   background: var(--st-primary-container);
+}
+.st-cookie-toast .cookie-necessary-btn {
+  background: transparent;
+  border: 1px solid var(--st-outline-variant);
+  color: var(--st-on-surface-variant);
+  border-radius: var(--st-radius-md);
+  font-family: var(--st-font-body);
+}
+.st-cookie-toast .cookie-necessary-btn:hover {
+  background: var(--st-surface-container-low);
 }
 @media (max-width: 480px) {
   .st-cookie-toast {

@@ -14,4 +14,9 @@ public class Subscription
     [System.ComponentModel.DataAnnotations.StringLength(255)]
     public string? StripeSubscriptionId { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+    // Refund tracking — one self-service refund per billing period (one per Stripe invoice id)
+    [System.ComponentModel.DataAnnotations.StringLength(255)]
+    public string? LastRefundedInvoiceId { get; set; }
+    public DateTime? RefundedAt { get; set; }
 }

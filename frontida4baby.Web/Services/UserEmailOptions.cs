@@ -9,4 +9,6 @@ public class UserEmailOptions
     public bool PaymentFailed         { get; set; } = true;
     public bool SubscriptionCancelled { get; set; } = true;
     public bool SupportConfirmation   { get; set; } = true;
+    public bool RefundIssued          { get; set; } = true;
+    public bool TicketReply           { get; set; } = true;
 }

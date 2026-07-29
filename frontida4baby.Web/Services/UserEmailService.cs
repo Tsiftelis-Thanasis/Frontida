@@ -73,7 +73,9 @@ public class UserEmailService : IUserEmailService
                 <li>Τήρησε τους όρους χρήσης της πλατφόρμας</li>
               </ul>
               <p style="color:#6b7280;font-size:13px;margin-top:32px">
-                Εάν πιστεύεις ότι πρόκειται για λάθος, επικοινώνησε μαζί μας.
+                Εάν πιστεύεις ότι πρόκειται για λάθος, μπορείς να υποβάλεις ένσταση
+                μέσω της σελίδας <strong>Επικοινωνία</strong> (/contact) — η ομάδα μας
+                θα εξετάσει το αίτημά σου.
               </p>
             </div>
             """;
@@ -197,6 +199,50 @@ public class UserEmailService : IUserEmailService
             """;
 
         await SendAsync(toEmail, "Λάβαμε το μήνυμά σου", html);
+    }
+
+    public async Task SendRefundIssuedAsync(ApplicationUser user, decimal amount, string currency)
+    {
+        if (!_opts.RefundIssued || string.IsNullOrWhiteSpace(user.Email)) return;
+
+        var html = $"""
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+              <h2 style="color:#16a34a">Η επιστροφή χρημάτων σου ολοκληρώθηκε 💶</h2>
+              <p>Γεια σου <strong>{H(user.FirstName)}</strong>,</p>
+              <p>
+                Επιστρέψαμε <strong>{amount:0.00} {currency.ToUpperInvariant()}</strong> στην κάρτα σου
+                και η συνδρομή Premium ακυρώθηκε άμεσα. Ο λογαριασμός σου επέστρεψε στο δωρεάν πλάνο.
+              </p>
+              <p style="color:#6b7280;font-size:13px;margin-top:32px">
+                Η επιστροφή θα εμφανιστεί στην κάρτα σου εντός λίγων εργάσιμων ημερών. — {AppName()}
+              </p>
+            </div>
+            """;
+
+        await SendAsync(user.Email, "Η επιστροφή χρημάτων σου ολοκληρώθηκε", html);
+    }
+
+    public async Task SendTicketReplyAsync(Models.Entities.SupportTicket ticket, string replyBody)
+    {
+        if (!_opts.TicketReply || string.IsNullOrWhiteSpace(ticket.Email)) return;
+
+        var html = $"""
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+              <h2 style="color:#4f46e5">Απάντηση στο αίτημά σου ✉️</h2>
+              <p>Γεια σου <strong>{H(ticket.Name)}</strong>,</p>
+              <p>Λάβαμε απάντηση στο αίτημα υποστήριξης με θέμα: <strong>«{H(ticket.Subject)}»</strong>.</p>
+              <table style="border-collapse:collapse;width:100%;margin:16px 0">
+                <tr>
+                  <td style="padding:8px 12px;background:#ede9fe;white-space:pre-wrap">{H(replyBody)}</td>
+                </tr>
+              </table>
+              <p style="color:#6b7280;font-size:13px;margin-top:32px">
+                Αν χρειάζεσαι κι άλλη βοήθεια, απάντησε ξανά μέσω της σελίδας Επικοινωνία. — {AppName()}
+              </p>
+            </div>
+            """;
+
+        await SendAsync(ticket.Email, $"Απάντηση: {ticket.Subject}", html);
     }
 
     // ── helpers ────────────────────────────────────────────────────────────────

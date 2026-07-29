@@ -40,7 +40,7 @@
                             <div class="col-md-6">
                                 <label asp-for="Category" class="form-label">Κατηγορία</label>
                                 <select asp-for="Category" class="form-select"
-                                        asp-items="Html.GetEnumSelectList<frontida4baby.Web.Models.ViewModels.SupportCategory>()">
+                                        asp-items="Html.GetEnumSelectList<frontida4baby.Web.Models.Entities.SupportCategory>()">
                                 </select>
                             </div>
                             <div class="col-md-6">
@@ -67,6 +67,45 @@
                 </div>
             </div>
 
+            @{
+                var myTickets = ViewBag.MyTickets as List<frontida4baby.Web.Models.Entities.SupportTicket>;
+            }
+            @if (myTickets is { Count: > 0 })
+            {
+                <div class="mt-5">
+                    <h4 class="mb-3">Τα αιτήματά μου</h4>
+                    @foreach (var ticket in myTickets)
+                    {
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <strong>@ticket.Subject</strong>
+                                        <div class="text-muted small">@ticket.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</div>
+                                    </div>
+                                    <span class="badge @(ticket.Status == frontida4baby.Web.Models.Entities.SupportTicketStatus.Open ? "bg-warning text-dark" :
+                                                          ticket.Status == frontida4baby.Web.Models.Entities.SupportTicketStatus.Answered ? "bg-success" : "bg-secondary")">
+                                        @ticket.Status
+                                    </span>
+                                </div>
+                                <p class="mt-2 mb-0">@ticket.Message</p>
+
+                                @if (ticket.Replies.Any())
+                                {
+                                    <hr />
+                                    @foreach (var reply in ticket.Replies.OrderBy(r => r.CreatedAt))
+                                    {
+                                        <div class="p-2 mb-2 rounded" style="background:var(--c-light)">
+                                            <div class="small text-muted">Απάντηση — @reply.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</div>
+                                            <div>@reply.Body</div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
         </div>
     </div>
 </div>

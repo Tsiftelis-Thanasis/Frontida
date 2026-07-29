@@ -1,0 +1,224 @@
+@{
+    ViewData["Title"] = "GDPR / Προστασία Δεδομένων";
+    var isEn = System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName == "en";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="page-header mb-4">
+                <h1><i class="fas fa-shield-halved me-2"></i>@(isEn ? "GDPR Compliance Overview" : "Επισκόπηση Συμμόρφωσης GDPR")</h1>
+                <p class="lead text-muted">@(isEn ? "Last updated: July 2026" : "Τελευταία ενημέρωση: Ιούλιος 2026")</p>
+            </div>
+
+            @if (isEn)
+            {
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-building me-2 text-primary"></i>1. Data Controller</h4>
+                        <p>
+                            <strong>frontida4all</strong> is the data controller for personal data processed
+                            through this Platform. Registered in Greece.<br />
+                            Contact: <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>
+                        </p>
+                        <p class="text-muted small">
+                            Company registration and VAT details are being finalised; this page will be updated
+                            with the registered company's full details once complete.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-scale-balanced me-2 text-primary"></i>2. Legal Bases</h4>
+                        <p>
+                            Personal data is processed on the bases set out in Article 6 GDPR: performance of a
+                            contract, user consent where required, legitimate interest (security and fraud
+                            prevention), and legal obligation. Full detail is in our
+                            <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-user-shield me-2 text-primary"></i>3. Data Protection Contact Point</h4>
+                        <p>
+                            Given the Platform's current scale, a formal Data Protection Officer has not been
+                            designated. Data protection queries and data subject requests are handled directly by
+                            <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>, or via our
+                            <a asp-controller="Home" asp-action="Support">Support</a> page.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-triangle-exclamation me-2 text-warning"></i>4. Data Breach Notification</h4>
+                        <p>
+                            The Platform maintains an internal incident-response process. In the event of a
+                            personal data breach that poses a risk to users' rights and freedoms, we commit to
+                            notifying the Hellenic Data Protection Authority within 72 hours of becoming aware of
+                            it, and informing affected users without undue delay where required by Articles 33–34 GDPR.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-earth-europe me-2 text-primary"></i>5. International Data Transfers</h4>
+                        <p>
+                            Some processors we rely on (including Anthropic for AI moderation and Stripe for
+                            payments) may process data outside the European Economic Area. Where this occurs, it
+                            is carried out under an appropriate GDPR safeguard, in particular the European
+                            Commission's Standard Contractual Clauses (SCCs).
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-clock me-2 text-primary"></i>6. Data Retention</h4>
+                        <p>
+                            Retention periods are summarised in §7 of our
+                            <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a> — in short: account
+                            data for as long as the account is active plus up to 2 years, posts/replies up to 3
+                            years, logs up to 1 year, and transaction data up to 7 years per Greek tax law.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-user-check me-2 text-primary"></i>7. Your Rights</h4>
+                        <p>
+                            You have the rights set out in Articles 12–22 GDPR (access, rectification, erasure,
+                            restriction, portability, objection) — see §8 of our
+                            <a asp-controller="Home" asp-action="Privacy">Privacy Policy</a> for detail on
+                            exercising them.
+                        </p>
+                        <p class="text-muted small">
+                            You also have the right to lodge a complaint with the Hellenic Data Protection
+                            Authority: <a href="https://www.dpa.gr" target="_blank">www.dpa.gr</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="alert alert-secondary small">
+                    <i class="fas fa-circle-info me-2"></i>
+                    This page is a transparency overview prepared for informational purposes. It is not a
+                    substitute for formal legal certification. We recommend review by qualified Greek/EU legal
+                    counsel, particularly once company registration is finalised.
+                </div>
+            }
+            else
+            {
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-building me-2 text-primary"></i>1. Υπεύθυνος Επεξεργασίας</h4>
+                        <p>
+                            Υπεύθυνος επεξεργασίας για τα προσωπικά δεδομένα που επεξεργάζεται η Πλατφόρμα είναι
+                            η <strong>frontida4all</strong>. Έδρα: Ελλάδα.<br />
+                            Επικοινωνία: <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>
+                        </p>
+                        <p class="text-muted small">
+                            Τα στοιχεία σύστασης εταιρείας και ΑΦΜ βρίσκονται σε ολοκλήρωση· η σελίδα θα ενημερωθεί
+                            με τα πλήρη στοιχεία της εταιρείας μόλις ολοκληρωθεί η διαδικασία.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-scale-balanced me-2 text-primary"></i>2. Νομικές Βάσεις</h4>
+                        <p>
+                            Τα προσωπικά δεδομένα επεξεργάζονται βάσει του άρθρου 6 GDPR: εκτέλεση σύμβασης,
+                            συγκατάθεση χρήστη όπου απαιτείται, έννομο συμφέρον (ασφάλεια και πρόληψη απάτης) και
+                            νομική υποχρέωση. Αναλυτικά στην
+                            <a asp-controller="Home" asp-action="Privacy">Πολιτική Απορρήτου</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-user-shield me-2 text-primary"></i>3. Σημείο Επικοινωνίας για Προστασία Δεδομένων</h4>
+                        <p>
+                            Λόγω της τρέχουσας κλίμακας της Πλατφόρμας, δεν έχει οριστεί επίσημος Υπεύθυνος
+                            Προστασίας Δεδομένων (DPO). Τα ερωτήματα προστασίας δεδομένων και τα αιτήματα των
+                            υποκειμένων εξετάζονται απευθείας από το
+                            <a href="mailto:frontida4all@gmail.com">frontida4all@gmail.com</a>, ή μέσω της σελίδας
+                            <a asp-controller="Home" asp-action="Support">Επικοινωνία</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-triangle-exclamation me-2 text-warning"></i>4. Ειδοποίηση Παραβίασης Δεδομένων</h4>
+                        <p>
+                            Η Πλατφόρμα διατηρεί εσωτερική διαδικασία διαχείρισης περιστατικών. Σε περίπτωση
+                            παραβίασης προσωπικών δεδομένων που ενέχει κίνδυνο για τα δικαιώματα και τις
+                            ελευθερίες των χρηστών, δεσμευόμαστε να ενημερώσουμε την Αρχή Προστασίας Δεδομένων
+                            Προσωπικού Χαρακτήρα εντός 72 ωρών από τη στιγμή που λάβουμε γνώση, καθώς και τους
+                            θιγόμενους χρήστες χωρίς αδικαιολόγητη καθυστέρηση, όπου απαιτείται βάσει των άρθρων 33–34 GDPR.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-earth-europe me-2 text-primary"></i>5. Διεθνείς Διαβιβάσεις Δεδομένων</h4>
+                        <p>
+                            Ορισμένοι πάροχοι στους οποίους βασιζόμαστε (μεταξύ άλλων η Anthropic για την εποπτεία
+                            AI και η Stripe για τις πληρωμές) ενδέχεται να επεξεργάζονται δεδομένα εκτός του
+                            Ευρωπαϊκού Οικονομικού Χώρου. Στην περίπτωση αυτή, η διαβίβαση πραγματοποιείται βάσει
+                            κατάλληλης εγγύησης του GDPR, ιδίως των Τυποποιημένων Συμβατικών Ρητρών (SCCs).
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-clock me-2 text-primary"></i>6. Διατήρηση Δεδομένων</h4>
+                        <p>
+                            Οι περίοδοι διατήρησης συνοψίζονται στην §7 της
+                            <a asp-controller="Home" asp-action="Privacy">Πολιτικής Απορρήτου</a> — συνοπτικά:
+                            δεδομένα λογαριασμού για όσο ο λογαριασμός είναι ενεργός και έως 2 έτη μετά, αγγελίες
+                            και απαντήσεις έως 3 έτη, logs έως 1 έτος, και δεδομένα συναλλαγών έως 7 έτη σύμφωνα με
+                            την ελληνική φορολογική νομοθεσία.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-user-check me-2 text-primary"></i>7. Τα Δικαιώματά σου</h4>
+                        <p>
+                            Έχεις τα δικαιώματα των άρθρων 12–22 GDPR (πρόσβαση, διόρθωση, διαγραφή, περιορισμό,
+                            φορητότητα, εναντίωση) — δες την §8 της
+                            <a asp-controller="Home" asp-action="Privacy">Πολιτικής Απορρήτου</a> για τον τρόπο άσκησής τους.
+                        </p>
+                        <p class="text-muted small">
+                            Έχεις επίσης δικαίωμα καταγγελίας στην Αρχή Προστασίας Δεδομένων Προσωπικού Χαρακτήρα:
+                            <a href="https://www.dpa.gr" target="_blank">www.dpa.gr</a>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="alert alert-secondary small">
+                    <i class="fas fa-circle-info me-2"></i>
+                    Η παρούσα σελίδα αποτελεί επισκόπηση διαφάνειας για ενημερωτικούς σκοπούς και δεν υποκαθιστά
+                    επίσημη νομική πιστοποίηση. Συνιστάται έλεγχος από αρμόδιο δικηγόρο ελληνικού/ενωσιακού δικαίου,
+                    ιδίως μόλις ολοκληρωθεί η σύσταση της εταιρείας.
+                </div>
+            }
+
+            <div class="text-center mt-4">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary">
+                    <i class="fas fa-arrow-left me-2"></i>@(isEn ? "Back to Home" : "Επιστροφή στην Αρχική")
+                </a>
+            </div>
+        </div>
+    </div>
+</div>

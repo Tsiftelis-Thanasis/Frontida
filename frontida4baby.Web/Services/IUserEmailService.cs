@@ -11,4 +11,6 @@ public interface IUserEmailService
     Task SendPaymentFailedAsync(ApplicationUser user);
     Task SendSubscriptionCancelledAsync(ApplicationUser user);
     Task SendSupportConfirmationAsync(string toEmail, string name, string subject);
+    Task SendRefundIssuedAsync(ApplicationUser user, decimal amount, string currency);
+    Task SendTicketReplyAsync(SupportTicket ticket, string replyBody);
 }

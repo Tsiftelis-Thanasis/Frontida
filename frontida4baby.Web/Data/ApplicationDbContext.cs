@@ -23,6 +23,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<Subscription> Subscriptions { get; set; }
     public DbSet<AppLog> AppLogs { get; set; }
     public DbSet<ProcessedStripeEvent> ProcessedStripeEvents { get; set; }
+    public DbSet<SupportTicket> SupportTickets { get; set; }
+    public DbSet<SupportTicketReply> SupportTicketReplies { get; set; }
+    public DbSet<Invoice> Invoices { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
@@ -147,5 +150,49 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
             .WithOne(s => s.User)
             .HasForeignKey<Subscription>(s => s.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+
+        // SupportTicket
+        builder.Entity<SupportTicket>()
+            .HasOne(t => t.User)
+            .WithMany()
+            .HasForeignKey(t => t.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.Entity<SupportTicket>()
+            .HasIndex(t => t.Status);
+
+        builder.Entity<SupportTicketReply>()
+            .HasOne(r => r.Ticket)
+            .WithMany(t => t.Replies)
+            .HasForeignKey(r => r.TicketId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        builder.Entity<SupportTicketReply>()
+            .HasOne(r => r.RepliedByUser)
+            .WithMany()
+            .HasForeignKey(r => r.RepliedByUserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        // Invoice
+        builder.Entity<Invoice>()
+            .HasOne(i => i.User)
+            .WithMany()
+            .HasForeignKey(i => i.UserId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Entity<Invoice>()
+            .HasIndex(i => i.Number)
+            .IsUnique();
+
+        builder.Entity<Invoice>()
+            .HasIndex(i => i.StripeInvoiceId)
+            .IsUnique();
+
+        builder.Entity<Invoice>()
+            .Property(i => i.NetAmount).HasPrecision(18, 2);
+        builder.Entity<Invoice>()
+            .Property(i => i.VatAmount).HasPrecision(18, 2);
+        builder.Entity<Invoice>()
+            .Property(i => i.TotalAmount).HasPrecision(18, 2);
     }
 }

@@ -70,18 +70,30 @@ public class HomeController : Controller
         return View();
     }
 
+    [Route("gdpr")]
+    public IActionResult Gdpr()
+    {
+        return View();
+    }
+
     [Route("contact")]
     [HttpGet]
-    public IActionResult Support()
+    public async Task<IActionResult> Support()
     {
         var model = new SupportViewModel();
         if (User.Identity?.IsAuthenticated == true)
         {
-            var user = _userManager.GetUserAsync(User).GetAwaiter().GetResult();
+            var user = await _userManager.GetUserAsync(User);
             if (user is not null)
             {
                 model.Name  = $"{user.FirstName} {user.LastName}".Trim();
                 model.Email = user.Email ?? "";
+
+                ViewBag.MyTickets = await _db.SupportTickets
+                    .Include(t => t.Replies)
+                    .Where(t => t.UserId == user.Id)
+                    .OrderByDescending(t => t.CreatedAt)
+                    .ToListAsync();
             }
         }
         return View(model);
@@ -90,6 +102,7 @@ public class HomeController : Controller
     [Route("contact")]
     [HttpPost]
     [ValidateAntiForgeryToken]
+    [Microsoft.AspNetCore.RateLimiting.EnableRateLimiting("support")]
     public async Task<IActionResult> Support(SupportViewModel model)
     {
         if (!ModelState.IsValid)
@@ -102,6 +115,18 @@ public class HomeController : Controller
             SupportCategory.Safety    => "Ασφάλεια",
             _                         => "Γενικό"
         };
+
+        var userId = User.Identity?.IsAuthenticated == true ? _userManager.GetUserId(User) : null;
+        _db.SupportTickets.Add(new SupportTicket
+        {
+            UserId  = userId,
+            Name    = model.Name,
+            Email   = model.Email,
+            Subject = model.Subject,
+            Category = model.Category,
+            Message = model.Message,
+        });
+        await _db.SaveChangesAsync();
 
         _ = Task.Run(async () =>
         {

@@ -38,6 +38,14 @@
                 </div>
             </div>
         </div>
+        <div class="col-sm-6 col-xl-3">
+            <a asp-action="Tickets" class="card text-decoration-none text-dark bg-light h-100">
+                <div class="card-body">
+                    <h6 class="card-title">Ανοιχτά Αιτήματα</h6>
+                    <div class="display-5 fw-bold">@ViewBag.OpenTickets</div>
+                </div>
+            </a>
+        </div>
     </div>
 
     <div class="row g-3">
@@ -70,6 +78,22 @@
                 <div class="card-body text-center py-4">
                     <i class="fas fa-credit-card fa-2x text-success mb-2 d-block"></i>
                     <strong>Πληρωμές</strong>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a asp-action="Invoices" class="card text-decoration-none h-100">
+                <div class="card-body text-center py-4">
+                    <i class="fas fa-file-invoice fa-2x text-success mb-2 d-block"></i>
+                    <strong>Τιμολόγια (myDATA prep)</strong>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a asp-action="Tickets" class="card text-decoration-none h-100">
+                <div class="card-body text-center py-4">
+                    <i class="fas fa-headset fa-2x text-primary mb-2 d-block"></i>
+                    <strong>Αιτήματα Υποστήριξης</strong>
                 </div>
             </a>
         </div>

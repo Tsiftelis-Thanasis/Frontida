@@ -1,7 +1,10 @@
 @{
     ViewData["Title"] = L["SubTitle"].Value;
-    var currentPlan   = (frontida4baby.Web.Models.Entities.SubscriptionPlan)ViewBag.CurrentPlan;
-    var stripeEnabled = (bool)ViewBag.StripeEnabled;
+    var currentPlan       = (frontida4baby.Web.Models.Entities.SubscriptionPlan)ViewBag.CurrentPlan;
+    var stripeEnabled     = (bool)ViewBag.StripeEnabled;
+    var hasStripeCustomer = ViewBag.HasStripeCustomer as bool? ?? false;
+    var refundEligible    = ViewBag.RefundEligible as bool? ?? false;
+    var refundWindowDays  = ViewBag.RefundWindowDays as int? ?? 14;
 }
 
 <div class="container py-5">
@@ -84,4 +87,57 @@
             </div>
         </div>
     </div>
+
+    @if (currentPlan == frontida4baby.Web.Models.Entities.SubscriptionPlan.Paid && stripeEnabled)
+    {
+        <div class="row justify-content-center mt-4">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="mb-3">Διαχείριση Συνδρομής</h5>
+
+                        @if (TempData["SubscriptionMessage"] != null)
+                        {
+                            <div class="alert alert-success">@TempData["SubscriptionMessage"]</div>
+                        }
+                        @if (TempData["SubscriptionError"] != null)
+                        {
+                            <div class="alert alert-warning">@TempData["SubscriptionError"]</div>
+                        }
+
+                        <div class="d-flex flex-wrap gap-2">
+                            <a asp-action="Billing" class="btn btn-outline-secondary">
+                                <i class="fas fa-file-invoice me-2"></i>Ιστορικό Πληρωμών
+                            </a>
+
+                            @if (hasStripeCustomer)
+                            {
+                                <a asp-action="Portal" class="btn btn-outline-secondary">
+                                    <i class="fas fa-credit-card me-2"></i>Διαχείριση Χρέωσης
+                                </a>
+                            }
+
+                            @if (refundEligible)
+                            {
+                                <form asp-action="Refund" method="post"
+                                      onsubmit="return confirm('Να ακυρωθεί η συνδρομή και να επιστραφεί ολόκληρο το ποσό της τρέχουσας χρέωσης;');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-outline-danger">
+                                        <i class="fas fa-undo me-2"></i>Ακύρωση &amp; Πλήρης Επιστροφή (εντός @refundWindowDays ημερών)
+                                    </button>
+                                </form>
+                            }
+                            else
+                            {
+                                <span class="btn btn-outline-secondary disabled" title="Η επιστροφή είναι διαθέσιμη μόνο εντός @refundWindowDays ημερών από τη χρέωση, μία φορά ανά περίοδο χρέωσης.">
+                                    <i class="fas fa-undo me-2"></i>Επιστροφή μη διαθέσιμη
+                                </span>
+                                <a asp-controller="Home" asp-action="Support" class="btn btn-link">Επικοινωνία για βοήθεια</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>

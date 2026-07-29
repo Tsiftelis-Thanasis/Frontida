@@ -1,0 +1,98 @@
+@model List<frontida4baby.Web.Models.Entities.SupportTicket>
+@using frontida4baby.Web.Models.Entities
+@{
+    ViewData["Title"] = "Αιτήματα Υποστήριξης";
+    var statusFilter = ViewBag.StatusFilter as SupportTicketStatus?;
+}
+
+<div class="container py-4">
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <h2 class="mb-0"><i class="fas fa-headset me-2"></i>Αιτήματα Υποστήριξης (@Model.Count)</h2>
+        <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+            <i class="fas fa-arrow-left me-1"></i>Dashboard
+        </a>
+    </div>
+
+    @if (TempData["AdminMsg"] != null)
+    {
+        <div class="alert alert-success">@TempData["AdminMsg"]</div>
+    }
+
+    <div class="mb-3 d-flex gap-2">
+        <a asp-action="Tickets" class="btn btn-sm @(statusFilter == null ? "btn-primary" : "btn-outline-secondary")">Όλα</a>
+        <a asp-action="Tickets" asp-route-status="@SupportTicketStatus.Open"
+           class="btn btn-sm @(statusFilter == SupportTicketStatus.Open ? "btn-warning" : "btn-outline-warning")">Ανοιχτά</a>
+        <a asp-action="Tickets" asp-route-status="@SupportTicketStatus.Answered"
+           class="btn btn-sm @(statusFilter == SupportTicketStatus.Answered ? "btn-success" : "btn-outline-success")">Απαντημένα</a>
+        <a asp-action="Tickets" asp-route-status="@SupportTicketStatus.Closed"
+           class="btn btn-sm @(statusFilter == SupportTicketStatus.Closed ? "btn-secondary" : "btn-outline-secondary")">Κλειστά</a>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">Δεν υπάρχουν αιτήματα.</div>
+    }
+
+    @foreach (var ticket in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+                    <div>
+                        <strong>@ticket.Subject</strong>
+                        <span class="badge bg-light text-dark ms-1">@ticket.Category</span>
+                        <div class="text-muted small">
+                            @ticket.Name &lt;@ticket.Email&gt; — @ticket.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <span class="badge @(ticket.Status == SupportTicketStatus.Open ? "bg-warning text-dark" :
+                                              ticket.Status == SupportTicketStatus.Answered ? "bg-success" : "bg-secondary")">
+                            @ticket.Status
+                        </span>
+                        <a href="mailto:@ticket.Email" class="btn btn-sm btn-outline-secondary" title="Απευθείας επικοινωνία">
+                            <i class="fas fa-envelope me-1"></i>Απευθείας
+                        </a>
+                        @if (ticket.Status != SupportTicketStatus.Closed)
+                        {
+                            <form asp-action="CloseTicket" asp-route-id="@ticket.Id" method="post" class="d-inline">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-sm btn-outline-dark">Κλείσιμο</button>
+                            </form>
+                        }
+                    </div>
+                </div>
+
+                <p class="mt-3 mb-2">@ticket.Message</p>
+
+                @if (ticket.Replies.Any())
+                {
+                    <div class="mt-2">
+                        @foreach (var reply in ticket.Replies.OrderBy(r => r.CreatedAt))
+                        {
+                            <div class="p-2 mb-2 rounded bg-light">
+                                <div class="small text-muted">
+                                    @(reply.RepliedByUser?.Email ?? "Admin") — @reply.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm")
+                                </div>
+                                <div>@reply.Body</div>
+                            </div>
+                        }
+                    </div>
+                }
+
+                @if (ticket.Status != SupportTicketStatus.Closed)
+                {
+                    <form asp-action="ReplyToTicket" asp-route-id="@ticket.Id" method="post" class="mt-2">
+                        @Html.AntiForgeryToken()
+                        <div class="input-group">
+                            <textarea name="replyBody" class="form-control" rows="2" placeholder="Γράψε απάντηση..." required></textarea>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane me-1"></i>Απάντηση
+                            </button>
+                        </div>
+                    </form>
+                }
+            </div>
+        </div>
+    }
+</div>

@@ -1,0 +1,63 @@
+@model List<frontida4baby.Web.Models.ViewModels.PaymentViewModel>
+@{
+    ViewData["Title"] = "Ιστορικό Πληρωμών";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-9">
+
+            <div class="d-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0"><i class="fas fa-file-invoice me-2"></i>Ιστορικό Πληρωμών</h1>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-sm">
+                    <i class="fas fa-arrow-left me-1"></i>Πίσω στη Συνδρομή
+                </a>
+            </div>
+
+            @if (!Model.Any())
+            {
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>Δεν υπάρχουν πληρωμές ακόμα.
+                </div>
+            }
+            else
+            {
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Ημερομηνία</th>
+                                <th class="text-end">Ποσό</th>
+                                <th>Κατάσταση</th>
+                                <th class="text-center">Τιμολόγιο</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var p in Model)
+                            {
+                                <tr>
+                                    <td><small>@p.PaidAt.ToLocalTime().ToString("dd/MM/yyyy")</small></td>
+                                    <td class="text-end fw-semibold">@p.Amount.ToString("N2") @p.Currency</td>
+                                    <td><span class="badge bg-success">Πληρώθηκε</span></td>
+                                    <td class="text-center">
+                                        @if (!string.IsNullOrEmpty(p.HostedInvoiceUrl))
+                                        {
+                                            <a href="@p.HostedInvoiceUrl" target="_blank" class="btn btn-sm btn-outline-primary">
+                                                <i class="fas fa-file-pdf me-1"></i>Προβολή
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">–</span>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>

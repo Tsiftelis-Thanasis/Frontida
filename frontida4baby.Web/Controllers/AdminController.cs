@@ -1,6 +1,7 @@
 using frontida4baby.Web.Data;
 using frontida4baby.Web.Models.Entities;
 using frontida4baby.Web.Models.ViewModels;
+using frontida4baby.Web.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -33,11 +34,13 @@ public class AdminController : Controller
                          + await _db.Replies.CountAsync(r => r.ModerationStatus == ModerationStatus.PendingReview);
         var errorsRecent  = await _db.AppLogs.CountAsync(l =>
             l.Level == AppLogLevel.Error && l.CreatedAt >= DateTime.UtcNow.AddDays(-1));
+        var openTickets   = await _db.SupportTickets.CountAsync(t => t.Status == SupportTicketStatus.Open);
 
         ViewBag.TotalUsers    = totalUsers;
         ViewBag.PostsToday    = postsToday;
         ViewBag.PendingMod    = pendingMod;
         ViewBag.ErrorsRecent  = errorsRecent;
+        ViewBag.OpenTickets   = openTickets;
         return View();
     }
 
@@ -230,5 +233,86 @@ public class AdminController : Controller
         // Stripe.net 50.x: charge receipt URL is not directly accessible; redirect to hosted invoice
         if (string.IsNullOrEmpty(invoice?.HostedInvoiceUrl)) return NotFound();
         return Redirect(invoice.HostedInvoiceUrl);
+    }
+
+    // GET /admin/invoices — local myDATA-readiness invoice records (not a live myDATA submission)
+    public async Task<IActionResult> Invoices()
+    {
+        var invoices = await _db.Invoices
+            .Include(i => i.User)
+            .OrderByDescending(i => i.IssuedAt)
+            .Take(200)
+            .ToListAsync();
+
+        return View(invoices);
+    }
+
+    // GET /admin/tickets
+    public async Task<IActionResult> Tickets(SupportTicketStatus? status)
+    {
+        var query = _db.SupportTickets
+            .Include(t => t.Replies).ThenInclude(r => r.RepliedByUser)
+            .AsQueryable();
+
+        if (status.HasValue)
+            query = query.Where(t => t.Status == status.Value);
+
+        var tickets = await query
+            .OrderBy(t => t.Status == SupportTicketStatus.Open ? 0 : t.Status == SupportTicketStatus.Answered ? 1 : 2)
+            .ThenByDescending(t => t.CreatedAt)
+            .Take(200)
+            .ToListAsync();
+
+        ViewBag.StatusFilter = status;
+        return View(tickets);
+    }
+
+    // POST /admin/tickets/{id}/reply
+    [HttpPost("/admin/tickets/{id}/reply")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ReplyToTicket(int id, string replyBody, [FromServices] IUserEmailService userEmail)
+    {
+        var ticket = await _db.SupportTickets.FindAsync(id);
+        if (ticket is null) return NotFound();
+
+        if (string.IsNullOrWhiteSpace(replyBody))
+        {
+            TempData["AdminMsg"] = "Η απάντηση δεν μπορεί να είναι κενή.";
+            return RedirectToAction(nameof(Tickets));
+        }
+
+        var adminId = _userManager.GetUserId(User)!;
+        _db.SupportTicketReplies.Add(new Models.Entities.SupportTicketReply
+        {
+            TicketId = id,
+            Body = replyBody,
+            RepliedByUserId = adminId,
+        });
+        ticket.Status = SupportTicketStatus.Answered;
+        await _db.SaveChangesAsync();
+
+        _ = Task.Run(async () =>
+        {
+            try { await userEmail.SendTicketReplyAsync(ticket, replyBody); }
+            catch { /* best-effort */ }
+        });
+
+        TempData["AdminMsg"] = "Η απάντηση στάλθηκε.";
+        return RedirectToAction(nameof(Tickets));
+    }
+
+    // POST /admin/tickets/{id}/close
+    [HttpPost("/admin/tickets/{id}/close")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> CloseTicket(int id)
+    {
+        var ticket = await _db.SupportTickets.FindAsync(id);
+        if (ticket is null) return NotFound();
+
+        ticket.Status = SupportTicketStatus.Closed;
+        await _db.SaveChangesAsync();
+
+        TempData["AdminMsg"] = "Το αίτημα έκλεισε.";
+        return RedirectToAction(nameof(Tickets));
     }
 }

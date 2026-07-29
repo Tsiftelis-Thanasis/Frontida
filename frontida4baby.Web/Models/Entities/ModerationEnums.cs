@@ -5,5 +5,5 @@ public enum PostStatus        { Active, Closed, Deleted }
 public enum ContentType       { Post, Reply }
 public enum ModerationStage   { Wordlist, Claude, Manual }
 public enum SubscriptionPlan  { Free, Paid }
-public enum SubscriptionStatus { Active, Cancelled, Expired }
+public enum SubscriptionStatus { Active, Cancelled, Expired, PastDue }
 public enum AppLogLevel       { Info, Warning, Error }
