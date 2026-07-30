@@ -15,6 +15,16 @@
   --transition:  var(--st-transition, .22s ease);
 }
 
+/* ─── Site-wide warning banner (SiteBanner:Message config) ─────────────────── */
+.site-banner-warning {
+  background: #dc2626;
+  color: #fff;
+  text-align: center;
+  font-weight: 700;
+  font-size: .9rem;
+  padding: .6rem 1rem;
+}
+
 /* ─── Base ───────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 

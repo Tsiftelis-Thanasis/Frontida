@@ -1,3 +1,4 @@
+@inject Microsoft.Extensions.Configuration.IConfiguration Configuration
 <!DOCTYPE html>
 <html lang="@System.Globalization.CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
 <head>
@@ -19,6 +20,14 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
+
+    @{ var siteBannerMessage = Configuration["SiteBanner:Message"]; }
+    @if (!string.IsNullOrWhiteSpace(siteBannerMessage))
+    {
+        <div class="site-banner-warning">
+            <i class="fas fa-triangle-exclamation me-2"></i>@siteBannerMessage
+        </div>
+    }
 
     @* ─── Navbar ──────────────────────────────────────────────────────────── *@
     <header>
