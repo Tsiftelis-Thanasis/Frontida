@@ -20,10 +20,10 @@ COPY --from=build /app/publish .
 # Ensure upload directory exists and is writable
 RUN mkdir -p wwwroot/uploads/profiles
 
-# Run as non-root
-RUN adduser --disabled-password --gecos "" appuser \
-    && chown -R appuser:appuser /app
-USER appuser
+# Run as non-root — a fixed numeric UID/GID works on every base image variant
+# (some ASP.NET runtime image flavors don't include adduser/useradd at all).
+RUN chown -R 1000:1000 /app
+USER 1000:1000
 
 EXPOSE 8080
 ENV ASPNETCORE_ENVIRONMENT=Production
