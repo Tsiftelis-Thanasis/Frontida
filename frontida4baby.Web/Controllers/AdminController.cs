@@ -45,18 +45,49 @@ public class AdminController : Controller
     }
 
     // GET /admin/users
-    public async Task<IActionResult> Users(int page = 1)
+    public async Task<IActionResult> Users(string? search, string? role, int page = 1)
     {
         const int pageSize = 20;
-        var users = await _db.Users
-            .Include(u => u.Subscription)
+
+        var adminRoleId = await _db.Roles
+            .Where(r => r.Name == "Admin")
+            .Select(r => r.Id)
+            .FirstOrDefaultAsync();
+        var adminUserIds = adminRoleId is null
+            ? new HashSet<string>()
+            : (await _db.UserRoles.Where(ur => ur.RoleId == adminRoleId).Select(ur => ur.UserId).ToListAsync())
+                .ToHashSet();
+
+        var query = _db.Users.Include(u => u.Subscription).AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var pattern = $"%{search.Trim()}%";
+            query = query.Where(u =>
+                EF.Functions.ILike(u.Email ?? "", pattern) ||
+                EF.Functions.ILike(u.FirstName ?? "", pattern) ||
+                EF.Functions.ILike(u.LastName ?? "", pattern));
+        }
+
+        if (role == "Admin")
+            query = query.Where(u => adminUserIds.Contains(u.Id));
+        else if (role == "Caregiver")
+            query = query.Where(u => u.IsCaregiver);
+        else if (role == "Family")
+            query = query.Where(u => !u.IsCaregiver && !adminUserIds.Contains(u.Id));
+
+        var total = await query.CountAsync();
+        var users = await query
             .OrderByDescending(u => u.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
 
-        ViewBag.Page  = page;
-        ViewBag.Total = await _db.Users.CountAsync();
+        ViewBag.Page        = page;
+        ViewBag.Total       = total;
+        ViewBag.Search      = search;
+        ViewBag.RoleFilter  = role;
+        ViewBag.AdminUserIds = adminUserIds;
         return View(users);
     }
 

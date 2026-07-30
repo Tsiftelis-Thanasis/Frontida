@@ -105,6 +105,31 @@ public class NotificationService : INotificationService
         await SendToAdminAsync("Content Rejected", authorEmail, Truncate(contentSnippet, 60), html);
     }
 
+    public async Task NotifyPendingReviewAsync(string contentType, string authorEmail, string contentSnippet)
+    {
+        if (!_notifOpts.PendingReview) return;
+
+        var html = $"""
+            <div style="font-family:sans-serif;max-width:600px">
+              <h2 style="color:#d97706">🔎 Χρειάζεται Χειροκίνητο Έλεγχο — frontida4all</h2>
+              <table style="border-collapse:collapse;width:100%">
+                <tr><td style="padding:6px 12px;background:#fef3c7;font-weight:bold;width:120px">Τύπος</td>
+                    <td style="padding:6px 12px;background:#fffbeb">{System.Net.WebUtility.HtmlEncode(contentType)}</td></tr>
+                <tr><td style="padding:6px 12px;background:#fef3c7;font-weight:bold">Συγγραφέας</td>
+                    <td style="padding:6px 12px;background:#fffbeb">{System.Net.WebUtility.HtmlEncode(authorEmail)}</td></tr>
+                <tr><td style="padding:6px 12px;background:#fef3c7;font-weight:bold">Περιεχόμενο</td>
+                    <td style="padding:6px 12px;background:#fffbeb"><em>{System.Net.WebUtility.HtmlEncode(Truncate(contentSnippet, 200))}</em></td></tr>
+              </table>
+              <p style="color:#6b7280;font-size:13px;margin-top:16px">
+                Η αυτόματη εποπτεία δεν μπόρεσε να αποφασίσει με βεβαιότητα. Ελέγξτε το χειροκίνητα στην
+                ουρά εποπτείας (Admin → Εποπτεία).
+              </p>
+            </div>
+            """;
+
+        await SendToAdminAsync("Χρειάζεται Έλεγχο", authorEmail, Truncate(contentSnippet, 60), html);
+    }
+
     public async Task NotifySupportRequestAsync(string name, string email, string subject, string category, string message)
     {
         if (!_notifOpts.SupportRequest) return;

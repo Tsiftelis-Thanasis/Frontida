@@ -142,6 +142,18 @@
                         </form>
                     }
 
+                    @* Close as admin, with a required comment (someone else's post) *@
+                    @if (Model.CanCloseAsAdmin)
+                    {
+                        <form asp-action="Close" asp-route-id="@Model.PostId" method="post" class="d-inline"
+                              onsubmit="var r=prompt('Λόγος κλεισίματος (θα φανεί στον συγγραφέα):'); if(!r){return false;} this.querySelector('[name=reason]').value=r;">
+                            <input type="hidden" name="reason" value="" />
+                            <button class="btn btn-sm btn-outline-danger">
+                                <i class="fas fa-lock me-1"></i>Κλείσιμο (Admin)
+                            </button>
+                        </form>
+                    }
+
                     @* View Profile (caregivers who have reacted) *@
                     @if (Model.ViewerIsCaregiver && Model.AuthorId != currentUserId)
                     {
@@ -325,7 +337,13 @@
         }
         else
         {
-            <div class="alert alert-secondary mt-4">@L["PostClosedMsg"]</div>
+            <div class="alert alert-secondary mt-4">
+                @L["PostClosedMsg"]
+                @if (!string.IsNullOrEmpty(Model.ClosedReason))
+                {
+                    <div class="mt-2"><strong>Σχόλιο διαχειριστή:</strong> @Model.ClosedReason</div>
+                }
+            </div>
         }
 
         <div class="mt-3">

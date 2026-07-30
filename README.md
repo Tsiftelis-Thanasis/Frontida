@@ -26,7 +26,7 @@ frontida4baby (Φροντίδα = "care" in Greek) is a web application that hel
 | Layer | Technology |
 |---|---|
 | Backend | .NET 10, ASP.NET Core MVC |
-| Database | SQL Server + Entity Framework Core |
+| Database | PostgreSQL + Entity Framework Core |
 | Auth | ASP.NET Core Identity + OAuth |
 | Frontend | Bootstrap 5, Font Awesome 6, jQuery |
 | Payments | Stripe |
@@ -37,7 +37,7 @@ frontida4baby (Φροντίδα = "care" in Greek) is a web application that hel
 ## Prerequisites
 
 - .NET 10 SDK
-- SQL Server 2019+ (or SQL Server Express)
+- PostgreSQL 16+ (or `docker run -e POSTGRES_PASSWORD=... postgres:16`)
 - Visual Studio 2022 / VS Code with C# extension
 
 ## Getting Started
@@ -57,14 +57,11 @@ dotnet restore
 
 ### 3. Configure
 
-Update `frontida4baby.Web/appsettings.json` with your connection string:
+Set your connection string via user secrets (don't put it in `appsettings.json`):
 
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=frontida4babyDB;Trusted_Connection=True;TrustServerCertificate=True;"
-  }
-}
+```bash
+cd frontida4baby.Web
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=frontida4baby;Username=postgres;Password=your-local-password"
 ```
 
 Set secrets for sensitive values (never commit these):

@@ -41,7 +41,14 @@
                 <h1>@L["HeroTitle"]<br><span style="font-weight:400">@L["HeroSubtitle"]</span></h1>
                 <p>@L["SvcSubtitle"]</p>
                 <a asp-controller="Caregivers" asp-action="Index" class="t4-btn-white">@L["NavBrowse"]</a>
-                <a asp-controller="Account" asp-action="Register" class="t4-btn-outline">@L["NavRegister"]</a>
+                @if (User.Identity?.IsAuthenticated == true)
+                {
+                    <a asp-controller="Posts" asp-action="Index" class="t4-btn-outline">@L["NavFindHelp"]</a>
+                }
+                else
+                {
+                    <a asp-controller="Account" asp-action="Register" class="t4-btn-outline">@L["NavRegister"]</a>
+                }
             </div>
         </div>
     </div>

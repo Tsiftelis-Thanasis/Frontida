@@ -148,6 +148,26 @@ body {
   background-color: var(--st-primary);
   border-color: var(--st-primary);
 }
+.password-input-wrapper { position: relative; }
+.password-input-wrapper .form-control { padding-right: 2.75rem; }
+.password-toggle-btn {
+  position: absolute;
+  right: .25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--c-muted);
+  cursor: pointer;
+  padding: .25rem .5rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.25rem;
+  min-height: 2.25rem;
+}
+.password-toggle-btn:hover { color: var(--c-primary); }
 
 /* ─── Section Headings ───────────────────────────────────────────────────── */
 .section-title {

@@ -127,6 +127,7 @@ public class CaregiversController : Controller
                                         Description = s.Description
                                     }).ToList() ?? new(),
             Phone             = phoneVisible ? caregiver.PhoneNumber : null,
+            PhoneVisible      = phoneVisible,
             IsAuthenticated   = isAuthenticated,
             CanSeeReviews     = canSeeReviews,
             Reviews           = canSeeReviews

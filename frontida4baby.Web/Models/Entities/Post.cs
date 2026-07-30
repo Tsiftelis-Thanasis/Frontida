@@ -28,6 +28,12 @@ public class Post
     public string? ModerationReason { get; set; }
     public int ModerationAttempts { get; set; }
 
+    // Set when an admin closes someone else's post with an explanatory comment
+    [StringLength(500)]
+    public string? ClosedReason { get; set; }
+    public string? ClosedByUserId { get; set; }
+    public DateTime? ClosedAt { get; set; }
+
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? EditedAt { get; set; }
 

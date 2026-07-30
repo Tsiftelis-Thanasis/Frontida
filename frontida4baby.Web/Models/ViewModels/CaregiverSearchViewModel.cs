@@ -18,7 +18,8 @@ public class CaregiverProfileViewModel
     public List<ServiceWithDescription> Services { get; set; } = new();
 
     // Gated by subscription
-    public string?  Phone          { get; set; }   // null = not visible
+    public string?  Phone          { get; set; }   // null = not visible OR not on file
+    public bool     PhoneVisible   { get; set; }   // true if the viewer is allowed to see phone (admin/paid) — independent of whether one is on file
     public bool     IsAuthenticated { get; set; }
     public bool     CanSeeReviews  { get; set; }
     public List<ReviewDetailItem>  Reviews { get; set; } = new();

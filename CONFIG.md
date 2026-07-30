@@ -12,7 +12,7 @@ File: `frontida4baby.Web/appsettings.json`
 ```jsonc
 {
   "ConnectionStrings": {
-    "DefaultConnection": "..."        // ← SQL Server connection string (see §1.1)
+    "DefaultConnection": "..."        // ← PostgreSQL connection string (see §1.1)
   },
 
   "Moderation": {
@@ -50,14 +50,11 @@ Place in `appsettings.json` (or user secrets / environment variable for producti
 
 ```json
 "ConnectionStrings": {
-  "DefaultConnection": "Server=YOUR_SERVER;Database=frontida4all;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True"
+  "DefaultConnection": "Host=YOUR_HOST;Port=5432;Database=frontida4baby;Username=YOUR_USER;Password=YOUR_PASS"
 }
 ```
 
-For a SQL Server instance with a login:
-```json
-"DefaultConnection": "Server=YOUR_SERVER;Database=frontida4all;User Id=YOUR_USER;Password=YOUR_PASS;TrustServerCertificate=True"
-```
+For a managed Postgres host requiring SSL (Supabase, Neon, Railway, etc.), add `SSL Mode=Require;Trust Server Certificate=true`.
 
 ### 1.2 Claude / Anthropic API key
 
@@ -103,13 +100,13 @@ dotnet user-secrets set "Moderation:ClaudeApiKey" "sk-ant-..."
 dotnet user-secrets set "Email:Password"           "your-smtp-app-password"
 dotnet user-secrets set "Stripe:SecretKey"         "sk_test_..."
 dotnet user-secrets set "Stripe:WebhookSecret"     "whsec_..."
-dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=...;..."
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=...;Port=5432;Database=...;Username=...;Password=..."
 ```
 
 For **production**, set environment variables (or use Azure Key Vault / AWS Secrets Manager):
 
 ```
-ConnectionStrings__DefaultConnection=Server=...
+ConnectionStrings__DefaultConnection=Host=...;Port=5432;Database=...;Username=...;Password=...
 Moderation__ClaudeApiKey=sk-ant-...
 Email__Password=...
 Stripe__SecretKey=sk_live_...

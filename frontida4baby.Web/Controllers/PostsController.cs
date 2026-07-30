@@ -17,6 +17,7 @@ public class PostsController : Controller
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ISubscriptionService _subscription;
     private readonly IAppLogService       _log;
+    private readonly INotificationService _notifications;
 
     public PostsController(
         ApplicationDbContext      db,
@@ -24,7 +25,8 @@ public class PostsController : Controller
         ContentModerationService  moderationLog,
         UserManager<ApplicationUser> userManager,
         ISubscriptionService subscription,
-        IAppLogService       log)
+        IAppLogService       log,
+        INotificationService notifications)
     {
         _db            = db;
         _moderation    = moderation;
@@ -32,6 +34,7 @@ public class PostsController : Controller
         _userManager   = userManager;
         _subscription  = subscription;
         _log           = log;
+        _notifications = notifications;
     }
 
     // ── GET /posts ────────────────────────────────────────────────────────────
@@ -164,6 +167,8 @@ public class PostsController : Controller
             CurrentUserLiked     = liked,
             CurrentUserSaved     = saved,
             CanEdit              = currentUserId == post.AuthorUserId,
+            CanCloseAsAdmin      = isAdmin && currentUserId != post.AuthorUserId && post.Status == PostStatus.Active,
+            ClosedReason         = post.ClosedReason,
             ViewerIsCaregiver    = viewerIsCaregiver,
             CanViewAuthorProfile = canViewProfile,
             IsViewerApprovedReactor = isViewerApprovedReactor,
@@ -277,6 +282,16 @@ public class PostsController : Controller
 
         if (result.Status == ModerationStatus.PendingReview)
         {
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _notifications.NotifyPendingReviewAsync(
+                        "Post", currentUser?.Email ?? userId, $"{model.Title}\n{model.Body}");
+                }
+                catch { /* best-effort */ }
+            });
+
             TempData["PostStatus"] = "Pending";
             return RedirectToAction(nameof(Index));
         }
@@ -379,6 +394,19 @@ public class PostsController : Controller
         await _log.LogAsync(AppLogLevel.Info, "Post",
             $"Reply #{reply.Id} on post #{post.Id}", userId: currentUserId);
 
+        if (result.Status == ModerationStatus.PendingReview)
+        {
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _notifications.NotifyPendingReviewAsync(
+                        "Reply", replyUser?.Email ?? currentUserId, model.ReplyBody);
+                }
+                catch { /* best-effort */ }
+            });
+        }
+
         TempData["ReplyStatus"] = result.Status == ModerationStatus.Approved
             ? "Approved" : "Pending";
 
@@ -389,16 +417,28 @@ public class PostsController : Controller
     [Authorize]
     [HttpPost]
     [ValidateAntiForgeryToken]
-    public async Task<IActionResult> Close(int id)
+    public async Task<IActionResult> Close(int id, string? reason = null, string? returnUrl = null)
     {
         var userId = _userManager.GetUserId(User);
         var post   = await _db.Posts.FindAsync(id);
 
-        if (post is null || post.AuthorUserId != userId) return Forbid();
+        bool isAdmin = User.IsInRole("Admin");
+        if (post is null || (post.AuthorUserId != userId && !isAdmin)) return Forbid();
 
         post.Status = PostStatus.Closed;
+
+        // Only record an admin closure comment when an admin closes someone else's post
+        if (isAdmin && post.AuthorUserId != userId && !string.IsNullOrWhiteSpace(reason))
+        {
+            post.ClosedReason   = reason;
+            post.ClosedByUserId = userId;
+            post.ClosedAt       = DateTime.UtcNow;
+        }
+
         await _db.SaveChangesAsync();
 
+        if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
+            return Redirect(returnUrl);
         return RedirectToAction(nameof(Index));
     }
 

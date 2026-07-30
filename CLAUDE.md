@@ -5,7 +5,7 @@ frontida4baby (Φροντίδα - Greek for "care") is a simplified caregiving p
 
 ## Technical Stack
 - **Framework**: .NET 10
-- **Database**: SQL Server
+- **Database**: PostgreSQL
 - **ORM**: Entity Framework Core
 - **Frontend**: ASP.NET Core MVC/Razor Pages
 - **Authentication**: ASP.NET Core Identity

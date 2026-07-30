@@ -11,11 +11,32 @@ using frontida4baby.Web.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 // ── Database ──────────────────────────────────────────────────────────────────
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
+var rawConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
+// Managed Postgres hosts (Railway, Render, Heroku, etc.) commonly hand out
+// postgres://user:pass@host:port/db URIs rather than Npgsql's native
+// Host=...;Username=...;Password=... key-value format. Accept either.
+var connectionString = NpgsqlConnectionStringFromUri(rawConnectionString);
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseNpgsql(connectionString));
+
+static string NpgsqlConnectionStringFromUri(string value)
+{
+    if (!value.StartsWith("postgres://", StringComparison.OrdinalIgnoreCase)
+        && !value.StartsWith("postgresql://", StringComparison.OrdinalIgnoreCase))
+        return value;
+
+    var uri = new Uri(value);
+    var userInfo = uri.UserInfo.Split(':', 2);
+    var database = uri.AbsolutePath.TrimStart('/');
+
+    return $"Host={uri.Host};Port={(uri.Port > 0 ? uri.Port : 5432)};Database={database};" +
+           $"Username={Uri.UnescapeDataString(userInfo[0])};" +
+           $"Password={Uri.UnescapeDataString(userInfo.Length > 1 ? userInfo[1] : "")};" +
+           "SSL Mode=Require;Trust Server Certificate=true";
+}
 
 // ── Identity ──────────────────────────────────────────────────────────────────
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>

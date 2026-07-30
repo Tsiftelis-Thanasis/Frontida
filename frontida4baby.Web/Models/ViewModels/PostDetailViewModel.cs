@@ -20,6 +20,8 @@ public class PostDetailViewModel
     public bool         CurrentUserLiked  { get; set; }
     public bool         CurrentUserSaved  { get; set; }
     public bool         CanEdit              { get; set; }
+    public bool         CanCloseAsAdmin      { get; set; }
+    public string?      ClosedReason         { get; set; }
     public bool         CanViewAuthorProfile { get; set; }
     public bool         ViewerIsCaregiver    { get; set; }
     public bool         AuthorIsCaregiver    { get; set; }

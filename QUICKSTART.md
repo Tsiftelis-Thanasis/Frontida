@@ -67,7 +67,7 @@ frontida4baby/
 
 ### 1. Set Up Database
 
-Make sure SQL Server is running, then apply migrations:
+Make sure PostgreSQL is running (`docker run -d -e POSTGRES_PASSWORD=... -p 5432:5432 postgres:16`), then apply migrations:
 
 ```bash
 cd C:\Develop\frontida4baby\frontida4baby.Web
@@ -85,14 +85,10 @@ Then navigate to: `https://localhost:5001`
 
 ### 3. Customize Connection String
 
-Edit `frontida4baby.Web/appsettings.json` if needed:
+Set it via user secrets, not `appsettings.json`:
 
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=frontida4babyDB;Trusted_Connection=True;TrustServerCertificate=True;"
-  }
-}
+```bash
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=frontida4baby;Username=postgres;Password=your-local-password"
 ```
 
 ## 🎯 Features Implemented
@@ -100,7 +96,7 @@ Edit `frontida4baby.Web/appsettings.json` if needed:
 ✅ **Core Architecture**
 - .NET 10 MVC application
 - ASP.NET Core Identity for authentication
-- Entity Framework Core with SQL Server
+- Entity Framework Core with PostgreSQL
 - Repository pattern ready structure
 
 ✅ **Authentication**

@@ -287,3 +287,6 @@ FodyWeavers.xsd
 
 # Claude Code local settings
 **/.claude/settings.local.json
+
+# Local secrets for docker-compose deployment — never commit real values
+.env

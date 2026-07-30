@@ -82,6 +82,19 @@
                                     </button>
                                 </form>
                             }
+                            @if (post.Status == PostStatus.Active)
+                            {
+                                <form asp-controller="Posts" asp-action="Close" method="post" class="d-inline"
+                                      onsubmit="var r=prompt('Λόγος κλεισίματος (θα φανεί στον συγγραφέα):'); if(!r){return false;} this.querySelector('[name=reason]').value=r;">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@post.Id" />
+                                    <input type="hidden" name="reason" value="" />
+                                    <input type="hidden" name="returnUrl" value="@Context.Request.Path@Context.Request.QueryString" />
+                                    <button type="submit" class="btn btn-sm btn-outline-dark" title="Κλείσιμο με σχόλιο">
+                                        <i class="fas fa-lock me-1"></i>Κλείσιμο
+                                    </button>
+                                </form>
+                            }
                         </td>
                     </tr>
                 }

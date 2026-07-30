@@ -130,6 +130,16 @@
             </div>
         </div>
     }
+    else if (Model.PhoneVisible)
+    {
+        @* Viewer is allowed to see the phone (admin or paid plan) — there just isn't one on file. *@
+        <div class="card mb-4 border-0 shadow-sm bg-light">
+            <div class="card-body p-4 d-flex align-items-center gap-3">
+                <i class="fa-solid fa-phone-slash fa-xl text-muted"></i>
+                <div class="text-muted small">Δεν έχει καταχωρηθεί τηλέφωνο.</div>
+            </div>
+        </div>
+    }
     else if (!Model.IsAuthenticated)
     {
         <div class="card mb-4 border-0 shadow-sm bg-light">

@@ -4,10 +4,37 @@
     ViewData["Title"] = "Διαχείριση Χρηστών";
     int page = ViewBag.Page;
     int total = ViewBag.Total;
+    string? search = ViewBag.Search;
+    string? roleFilter = ViewBag.RoleFilter;
+    var adminUserIds = ViewBag.AdminUserIds as HashSet<string> ?? new HashSet<string>();
 }
 
 <div class="container py-4">
     <h2 class="mb-4"><i class="fas fa-users me-2"></i>Χρήστες (@total)</h2>
+
+    <form method="get" asp-action="Users" class="row g-2 mb-3">
+        <div class="col-sm-5 col-md-4">
+            <input type="text" name="search" value="@search" class="form-control"
+                   placeholder="Αναζήτηση με όνομα ή email..." />
+        </div>
+        <div class="col-sm-4 col-md-3">
+            <select name="role" class="form-select">
+                <option value="">Όλοι οι ρόλοι</option>
+                <option value="Family" selected="@(roleFilter == "Family")">Οικογένεια</option>
+                <option value="Caregiver" selected="@(roleFilter == "Caregiver")">Φροντιστής</option>
+                <option value="Admin" selected="@(roleFilter == "Admin")">Admin</option>
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="submit" class="btn btn-primary">
+                <i class="fas fa-search me-1"></i>Φίλτρο
+            </button>
+            @if (!string.IsNullOrEmpty(search) || !string.IsNullOrEmpty(roleFilter))
+            {
+                <a asp-action="Users" class="btn btn-outline-secondary">Καθαρισμός</a>
+            }
+        </div>
+    </form>
 
     <div class="table-responsive">
         <table class="table table-hover">
@@ -15,8 +42,8 @@
                 <tr>
                     <th>Email</th>
                     <th>Όνομα</th>
+                    <th>Ρόλος</th>
                     <th>Πλάνο</th>
-                    <th>Φροντιστής</th>
                     <th>Εγγραφή</th>
                     <th></th>
                 </tr>
@@ -28,6 +55,20 @@
                         <td>@user.Email</td>
                         <td>@user.FirstName @user.LastName</td>
                         <td>
+                            @if (adminUserIds.Contains(user.Id))
+                            {
+                                <span class="badge bg-danger">Admin</span>
+                            }
+                            else if (user.IsCaregiver)
+                            {
+                                <span class="badge bg-info text-dark">Φροντιστής</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-light text-dark border">Οικογένεια</span>
+                            }
+                        </td>
+                        <td>
                             @if (user.Subscription?.Plan == SubscriptionPlan.Paid)
                             {
                                 <span class="badge bg-warning text-dark">Premium</span>
@@ -35,12 +76,6 @@
                             else
                             {
                                 <span class="badge bg-secondary">Free</span>
-                            }
-                        </td>
-                        <td>
-                            @if (user.IsCaregiver)
-                            {
-                                <i class="fas fa-check text-success"></i>
                             }
                         </td>
                         <td><small>@user.CreatedAt.ToLocalTime().ToString("dd/MM/yyyy")</small></td>
@@ -61,7 +96,8 @@
                 @for (int i = 1; i <= (int)Math.Ceiling(total / 20.0); i++)
                 {
                     <li class="page-item @(i == page ? "active" : "")">
-                        <a class="page-link" asp-action="Users" asp-route-page="@i">@i</a>
+                        <a class="page-link" asp-action="Users" asp-route-page="@i"
+                           asp-route-search="@search" asp-route-role="@roleFilter">@i</a>
                     </li>
                 }
             </ul>

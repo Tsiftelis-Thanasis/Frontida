@@ -6,5 +6,6 @@ public interface INotificationService
     Task NotifyNewRegistrationAsync(string email);
     Task NotifyUserBlacklistedAsync(string email, string userId, string reason);
     Task NotifyPostRejectedAsync(string authorEmail, string authorId, string contentSnippet, string rejectionReason);
+    Task NotifyPendingReviewAsync(string contentType, string authorEmail, string contentSnippet);
     Task NotifySupportRequestAsync(string name, string email, string subject, string category, string message);
 }
