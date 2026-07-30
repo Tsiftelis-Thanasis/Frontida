@@ -253,6 +253,20 @@ app.Use(async (context, next) =>
     context.Response.Headers["X-Frame-Options"] = "DENY";
     context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
     context.Response.Headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()";
+
+    // Never let a browser or intermediary proxy/CDN cache a stale HTML page —
+    // config-driven content (e.g. the site-wide banner) must always reflect
+    // the current server state, not a previous deploy's snapshot.
+    context.Response.OnStarting(() =>
+    {
+        if (context.Response.ContentType?.Contains("text/html", StringComparison.OrdinalIgnoreCase) == true)
+        {
+            context.Response.Headers["Cache-Control"] = "no-store, no-cache, must-revalidate";
+            context.Response.Headers["Pragma"] = "no-cache";
+        }
+        return Task.CompletedTask;
+    });
+
     await next();
 });
 
