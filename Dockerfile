@@ -15,6 +15,13 @@ RUN dotnet publish -c Release -o /app/publish --no-restore
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS runtime
 WORKDIR /app
 
+# Npgsql probes for GSS encryption support during connection setup (even when
+# not using Kerberos auth) and needs libgssapi_krb5, which the slim runtime
+# image doesn't include by default.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libgssapi-krb5-2 \
+    && rm -rf /var/lib/apt/lists/*
+
 COPY --from=build /app/publish .
 
 # Ensure upload directory exists and is writable
