@@ -11,8 +11,13 @@ using frontida4baby.Web.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 // ── Database ──────────────────────────────────────────────────────────────────
-var rawConnectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var rawConnectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrWhiteSpace(rawConnectionString))
+    throw new InvalidOperationException(
+        "Connection string 'DefaultConnection' is missing or empty. " +
+        "Check the ConnectionStrings__DefaultConnection environment variable — " +
+        "if it uses a ${{ }} reference (e.g. Railway variable references), confirm it actually " +
+        "resolved to a real value rather than an empty string.");
 
 // Managed Postgres hosts (Railway, Render, Heroku, etc.) commonly hand out
 // postgres://user:pass@host:port/db URIs rather than Npgsql's native
