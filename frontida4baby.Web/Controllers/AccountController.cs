@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authentication;
 using frontida4baby.Web.Models.Entities;
 using frontida4baby.Web.Models.ViewModels;
 using frontida4baby.Web.Services;
+using Microsoft.Extensions.Logging;
 
 namespace frontida4baby.Web.Controllers;
 
@@ -17,6 +18,7 @@ public class AccountController : Controller
     private readonly INotificationService _notifications;
     private readonly IUserEmailService   _userEmail;
     private readonly IConfiguration      _config;
+    private readonly ILogger<AccountController> _logger;
 
     public AccountController(
         UserManager<ApplicationUser>   userManager,
@@ -25,7 +27,8 @@ public class AccountController : Controller
         IAppLogService      log,
         INotificationService notifications,
         IUserEmailService   userEmail,
-        IConfiguration      config)
+        IConfiguration      config,
+        ILogger<AccountController> logger)
     {
         _userManager   = userManager;
         _signInManager = signInManager;
@@ -34,6 +37,7 @@ public class AccountController : Controller
         _notifications = notifications;
         _userEmail     = userEmail;
         _config        = config;
+        _logger        = logger;
     }
 
     [HttpGet]
@@ -78,14 +82,20 @@ public class AccountController : Controller
                 _ = Task.Run(async () =>
                 {
                     try { await SendVerificationEmailAsync(user, confirmUrl); }
-                    catch { /* best-effort */ }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Failed to send verification email to {Email}", model.Email);
+                    }
                 });
 
                 // Fire-and-forget admin notification
                 _ = Task.Run(async () =>
                 {
                     try { await _notifications.NotifyNewRegistrationAsync(model.Email); }
-                    catch { /* best-effort */ }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Failed to send new registration notification for {Email}", model.Email);
+                    }
                 });
 
                 return RedirectToAction(nameof(VerifyEmailSent));
@@ -344,7 +354,10 @@ public class AccountController : Controller
         _ = Task.Run(async () =>
         {
             try { await SendVerificationEmailAsync(user, confirmUrl); }
-            catch { /* best-effort */ }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to resend verification email to {Email}", user.Email);
+            }
         });
 
         TempData["VerifyInfo"] = "resent";
