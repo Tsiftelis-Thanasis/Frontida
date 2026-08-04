@@ -1,7 +1,16 @@
 {
   "permissions": {
     "allow": [
-      "Bash(dotnet build:*)"
+      "Bash(dotnet build:*)",
+      "Bash(dotnet user-secrets *)",
+      "Bash(sqllocaldb info *)",
+      "Bash(where sqlcmd *)",
+      "Bash(powershell -Command 'Get-Service | Where-Object {$_.Name -like '\\\\''*SQL*'\\\\''} | Select-Object Name, Status')",
+      "Bash(dotnet ef *)",
+      "Bash(sqlcmd *)",
+      "WebSearch",
+      "WebFetch(domain:help.railway.com)",
+      "Bash(dotnet test *)"
     ]
   }
 }
