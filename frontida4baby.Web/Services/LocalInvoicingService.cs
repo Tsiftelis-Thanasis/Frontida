@@ -35,37 +35,51 @@ public class LocalInvoicingService : IInvoicingService
 
         var year = issuedAt.Year;
         var prefix = $"{year}-";
-        var lastNumber = await _db.Invoices
-            .Where(i => i.Number.StartsWith(prefix))
-            .OrderByDescending(i => i.Number)
-            .Select(i => i.Number)
-            .FirstOrDefaultAsync();
+        var maxRetries = 5;
 
-        var nextSeq = 1;
-        if (lastNumber is not null && int.TryParse(lastNumber.AsSpan(prefix.Length), out var parsed))
-            nextSeq = parsed + 1;
-
-        var invoice = new Invoice
+        for (var attempt = 0; attempt < maxRetries; attempt++)
         {
-            Number          = $"{prefix}{nextSeq:D5}",
-            StripeInvoiceId = stripeInvoiceId,
-            UserId          = buyer.Id,
-            IssuedAt        = issuedAt,
-            // No VAT breakdown yet — Stripe Automatic Tax is off by default until
-            // the owner's Stripe Tax settings are configured (Stripe:AutomaticTaxEnabled).
-            NetAmount       = totalAmount,
-            VatAmount       = 0m,
-            TotalAmount     = totalAmount,
-            Currency        = currency,
-            BuyerName       = $"{buyer.FirstName} {buyer.LastName}".Trim(),
-            BuyerEmail      = buyer.Email ?? "",
-            SellerName      = _company.Name,
-            SellerVatNumber = _company.VatNumber,
-            Status          = InvoiceStatus.Issued,
-        };
+            var lastNumber = await _db.Invoices
+                .Where(i => i.Number.StartsWith(prefix))
+                .OrderByDescending(i => i.Number)
+                .Select(i => i.Number)
+                .FirstOrDefaultAsync();
 
-        _db.Invoices.Add(invoice);
-        await _db.SaveChangesAsync();
-        return invoice;
+            var nextSeq = 1;
+            if (lastNumber is not null && int.TryParse(lastNumber.AsSpan(prefix.Length), out var parsed))
+                nextSeq = parsed + 1;
+
+            var invoice = new Invoice
+            {
+                Number          = $"{prefix}{nextSeq:D5}",
+                StripeInvoiceId = stripeInvoiceId,
+                UserId          = buyer.Id,
+                IssuedAt        = issuedAt,
+                NetAmount       = totalAmount,
+                VatAmount       = 0m,
+                TotalAmount     = totalAmount,
+                Currency        = currency,
+                BuyerName       = $"{buyer.FirstName} {buyer.LastName}".Trim(),
+                BuyerEmail      = buyer.Email ?? "",
+                SellerName      = _company.Name,
+                SellerVatNumber = _company.VatNumber,
+                Status          = InvoiceStatus.Issued,
+            };
+
+            _db.Invoices.Add(invoice);
+            try
+            {
+                await _db.SaveChangesAsync();
+                return invoice;
+            }
+            catch (DbUpdateException ex) when (ex.InnerException?.Message.Contains("duplicate key") ?? false)
+            {
+                _db.Invoices.Remove(invoice);
+                if (attempt == maxRetries - 1)
+                    throw;
+            }
+        }
+
+        throw new InvalidOperationException("Failed to generate unique invoice number after max retries");
     }
 }

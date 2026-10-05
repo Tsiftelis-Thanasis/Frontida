@@ -34,13 +34,20 @@ static string NpgsqlConnectionStringFromUri(string value)
         return value;
 
     var uri = new Uri(value);
-    var userInfo = uri.UserInfo.Split(':', 2);
     var database = uri.AbsolutePath.TrimStart('/');
+    var connectionString = $"Host={uri.Host};Port={(uri.Port > 0 ? uri.Port : 5432)};Database={database};" +
+                          "SSL Mode=Require;Trust Server Certificate=true";
 
-    return $"Host={uri.Host};Port={(uri.Port > 0 ? uri.Port : 5432)};Database={database};" +
-           $"Username={Uri.UnescapeDataString(userInfo[0])};" +
-           $"Password={Uri.UnescapeDataString(userInfo.Length > 1 ? userInfo[1] : "")};" +
-           "SSL Mode=Require;Trust Server Certificate=true";
+    if (!string.IsNullOrEmpty(uri.UserInfo))
+    {
+        var userInfo = uri.UserInfo.Split(':', 2);
+        connectionString = $"Host={uri.Host};Port={(uri.Port > 0 ? uri.Port : 5432)};Database={database};" +
+                          $"Username={Uri.UnescapeDataString(userInfo[0])};" +
+                          $"Password={Uri.UnescapeDataString(userInfo.Length > 1 ? userInfo[1] : "")};" +
+                          "SSL Mode=Require;Trust Server Certificate=true";
+    }
+
+    return connectionString;
 }
 
 // ── Identity ──────────────────────────────────────────────────────────────────
