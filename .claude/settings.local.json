@@ -12,7 +12,8 @@
       "WebFetch(domain:help.railway.com)",
       "Bash(dotnet test *)",
       "Bash(git add *)",
-      "Bash(git commit -m ' *)"
+      "Bash(git commit -m ' *)",
+      "Bash(git commit *)"
     ]
   }
 }
