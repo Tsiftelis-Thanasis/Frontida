@@ -1,0 +1,14 @@
+.git
+.gitignore
+.github
+bin
+obj
+*.user
+*.suo
+.vs
+.vscode
+node_modules
+*.log
+*.txt
+README.md
+.DS_Store

@@ -1,0 +1,30 @@
+# Railway Environment Variables Template
+# Copy these into Railway Dashboard → Variables tab
+# Replace xxx values with your actual keys
+
+ASPNETCORE_ENVIRONMENT=Production
+ASPNETCORE_HTTP_PORTS=8080
+
+# Database (Railway auto-generates this, don't set manually)
+# DefaultConnection=postgresql://user:password@host:port/database
+
+# Stripe API Keys (https://dashboard.stripe.com/apikeys)
+Stripe__SecretKey=sk_live_xxxxxxxxxxxx
+Stripe__PublishableKey=pk_live_xxxxxxxxxxxx
+
+# Email Configuration (Gmail example)
+SMTP_Host=smtp.gmail.com
+SMTP_Port=587
+SMTP_Username=your-email@gmail.com
+SMTP_Password=your-app-specific-password
+SMTP_From=noreply@frontida4all.com
+SMTP_EnableSSL=true
+
+# Optional: Site-wide banner message
+# SiteBanner__Message=Maintenance in progress...
+
+# Optional: Custom domain
+# RailwayDomain=frontida4all.com
+
+# ApplicationInsights (for monitoring - optional)
+# APPINSIGHTS_INSTRUMENTATIONKEY=your-key
