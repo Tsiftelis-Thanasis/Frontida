@@ -3,107 +3,658 @@
 }
 
 <style>
+    /* ─── Hero Section (Modern, gradient-based) ────────────────────────────────── */
     .t4-hero {
-        background-image: url('https://images.unsplash.com/photo-1476703993599-0035a21b17a9?w=1200');
-        background-size: cover;
-        background-position: center;
-        min-height: 440px;
+        background: linear-gradient(135deg, #004D51 0%, #006067 50%, #007b83 100%);
+        min-height: 540px;
+        position: relative;
+        overflow: hidden;
+    }
+    .t4-hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image:
+            radial-gradient(circle at 20% 80%, rgba(255, 183, 128, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(132, 71, 11, 0.08) 0%, transparent 50%);
+        pointer-events: none;
     }
     .t4-hero-overlay {
-        background: rgba(0, 96, 103, 0.78);
-        padding: 90px 0 70px;
-        min-height: 440px;
+        padding: 100px 0 80px;
+        min-height: 540px;
         display: flex;
         align-items: center;
+        position: relative;
+        z-index: 1;
     }
-    .t4-hero h1 { font-size: 2.7rem; font-weight: 800; color: #fff; line-height: 1.2; }
-    .t4-hero p  { color: rgba(255,255,255,0.9); font-size: 1.05rem; margin: 1.2rem 0 2rem; }
-    .t4-btn-white   { background: #fff; color: var(--st-primary); border: none; padding: 12px 28px; border-radius: 8px; font-weight: 600; text-decoration: none; display: inline-block; }
-    .t4-btn-white:hover { background: var(--st-surface-container-low); color: var(--st-primary); }
-    .t4-btn-outline { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,0.7); padding: 10px 24px; border-radius: 8px; font-weight: 600; text-decoration: none; margin-left: 12px; display: inline-block; }
-    .t4-btn-outline:hover { border-color: #fff; background: rgba(255,255,255,0.1); color: #fff; }
+    .t4-hero-content {
+        animation: fadeInUp 0.8s ease-out;
+    }
+    .t4-hero h1 {
+        font-size: clamp(2rem, 6vw, 3.2rem);
+        font-weight: 800;
+        color: #fff;
+        line-height: 1.15;
+        margin-bottom: 0.8rem;
+        letter-spacing: -0.02em;
+    }
+    .t4-hero-tagline {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.95);
+        font-weight: 500;
+        margin-bottom: 2rem;
+        max-width: 500px;
+        line-height: 1.5;
+    }
+
+    /* Trust badges */
+    .t4-trust-badges {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.5rem;
+        margin: 2.5rem 0 2.8rem;
+        padding-bottom: 2.2rem;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .t4-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-size: 0.9rem;
+        color: rgba(255, 255, 255, 0.9);
+        font-weight: 500;
+    }
+    .t4-badge-icon {
+        width: 28px;
+        height: 28px;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    /* CTA buttons with micro-copy */
+    .t4-cta-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.2rem;
+        align-items: flex-start;
+    }
+    .t4-cta-wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+    }
+    .t4-cta-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        color: rgba(255, 255, 255, 0.7);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    .t4-btn-white {
+        background: #fff;
+        color: var(--st-primary);
+        border: none;
+        padding: 14px 32px;
+        border-radius: 10px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+    .t4-btn-white:hover {
+        background: var(--st-surface-container-low);
+        color: var(--st-primary);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+        text-decoration: none;
+    }
+    .t4-btn-outline {
+        background: rgba(255, 255, 255, 0.12);
+        color: #fff;
+        border: 2px solid rgba(255, 255, 255, 0.5);
+        padding: 12px 30px;
+        border-radius: 10px;
+        font-weight: 700;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s ease;
+    }
+    .t4-btn-outline:hover {
+        border-color: #fff;
+        background: rgba(255, 255, 255, 0.2);
+        color: #fff;
+        transform: translateY(-2px);
+        text-decoration: none;
+    }
+
+    /* ─── Social Proof / Stats Section ────────────────────────────────────────── */
+    .t4-stats-section {
+        background: var(--st-surface);
+        padding: 4.5rem 0;
+        margin-top: -40px;
+        position: relative;
+        z-index: 2;
+    }
+    .t4-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 2.5rem;
+        margin-bottom: 4rem;
+    }
+    .t4-stat-card {
+        text-align: center;
+        padding: 2rem 1.5rem;
+        background: var(--st-surface-container-lowest);
+        border-radius: 16px;
+        border: 1px solid var(--st-outline-variant);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        animation: slideInUp 0.6s ease-out;
+    }
+    .t4-stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 24px rgba(0, 96, 103, 0.1);
+    }
+    .t4-stat-value {
+        font-size: clamp(1.8rem, 4vw, 2.6rem);
+        font-weight: 800;
+        color: var(--st-primary);
+        margin-bottom: 0.5rem;
+        line-height: 1;
+    }
+    .t4-stat-label {
+        font-size: 0.95rem;
+        color: var(--st-on-surface-variant);
+        font-weight: 500;
+    }
+
+    /* ─── Why Choose Frontida ──────────────────────────────────────────────────── */
+    .t4-why-section {
+        margin-top: 2rem;
+    }
+    .t4-section-heading {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: var(--st-on-surface);
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+    .t4-why-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 2rem;
+    }
+    .t4-why-card {
+        padding: 2rem;
+        background: var(--st-surface-container-low);
+        border-radius: 14px;
+        border-left: 4px solid var(--st-primary);
+        transition: all 0.3s ease;
+        animation: fadeInUp 0.6s ease-out;
+    }
+    .t4-why-card:nth-child(1) { animation-delay: 0.1s; }
+    .t4-why-card:nth-child(2) { animation-delay: 0.2s; }
+    .t4-why-card:nth-child(3) { animation-delay: 0.3s; }
+    .t4-why-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 32px rgba(0, 96, 103, 0.12);
+        background: var(--st-surface-container);
+    }
+    .t4-why-icon {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+        display: inline-block;
+    }
+    .t4-why-card h5 {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--st-on-surface);
+        margin-bottom: 0.6rem;
+    }
+    .t4-why-card p {
+        color: var(--st-on-surface-variant);
+        font-size: 0.95rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* ─── Services Section ──────────────────────────────────────────────────────── */
+    .t4-services-section {
+        padding: 5rem 0;
+        background: var(--st-surface-container-lowest);
+    }
+    .t4-services-heading {
+        font-size: 1.8rem;
+        font-weight: 800;
+        color: var(--st-on-surface);
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    .t4-services-subheading {
+        text-align: center;
+        color: var(--st-on-surface-variant);
+        font-size: 1.05rem;
+        margin-bottom: 3rem;
+        max-width: 500px;
+        margin-left: auto;
+        margin-right: auto;
+    }
     .t4-subtitle { color: var(--st-on-surface-variant); font-size: 1rem; }
-    .t4-features { padding-bottom: 70px; }
-    .t4-feature-card { background: var(--st-surface-container-lowest); border-radius: 12px; padding: 30px 24px; height: 100%; box-shadow: 0 2px 20px rgba(0,0,0,0.07); border: 1px solid var(--st-outline-variant); text-align: center; }
-    .t4-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; margin: 0 auto 16px; display: block; border: 3px solid var(--st-primary-fixed); }
-    .t4-feature-card h5 { font-weight: 700; margin-bottom: 8px; color: var(--st-on-surface); }
-    .t4-feature-card p  { color: var(--st-on-surface-variant); font-size: 0.92rem; margin-bottom: 16px; }
-    .t4-find-btn { background: var(--st-primary); color: var(--st-on-primary); border: none; padding: 8px 20px; border-radius: 6px; font-size: 0.88rem; font-weight: 600; text-decoration: none; display: inline-block; }
-    .t4-find-btn:hover { background: var(--st-primary-container); color: var(--st-on-primary); }
-    .t4-section-label { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; color: var(--st-primary-fixed); text-transform: uppercase; margin-bottom: 6px; }
+    .t4-features { padding-bottom: 0; }
+    .t4-feature-card {
+        background: var(--st-surface-container-lowest);
+        border-radius: 16px;
+        padding: 2.2rem 1.8rem;
+        height: 100%;
+        box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+        border: 1px solid var(--st-outline-variant);
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    .t4-feature-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 12px 40px rgba(0, 96, 103, 0.15);
+        border-color: var(--st-primary);
+    }
+    .t4-avatar {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 1.2rem;
+        display: block;
+        border: 3px solid var(--st-primary-fixed);
+    }
+    .t4-feature-card h5 {
+        font-weight: 700;
+        margin-bottom: 0.6rem;
+        color: var(--st-on-surface);
+        font-size: 1.05rem;
+    }
+    .t4-feature-card p  {
+        color: var(--st-on-surface-variant);
+        font-size: 0.95rem;
+        margin-bottom: 1.2rem;
+        line-height: 1.5;
+    }
+    .t4-find-btn {
+        background: var(--st-primary);
+        color: var(--st-on-primary);
+        border: none;
+        padding: 10px 24px;
+        border-radius: 8px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-block;
+        transition: all 0.3s ease;
+    }
+    .t4-find-btn:hover {
+        background: var(--st-primary-container);
+        color: var(--st-on-primary);
+        transform: translateY(-2px);
+        text-decoration: none;
+    }
+    .t4-section-label {
+        font-size: 0.8rem;
+        font-weight: 600;
+        letter-spacing: 0.08em;
+        color: var(--st-primary-fixed);
+        text-transform: uppercase;
+        margin-bottom: 6px;
+    }
+
+    /* ─── Testimonials Section ──────────────────────────────────────────────────── */
+    .t4-testimonials-section {
+        padding: 5rem 0;
+        background: var(--st-surface);
+    }
+    .t4-testimonials-heading {
+        font-size: 2rem;
+        font-weight: 800;
+        color: var(--st-on-surface);
+        text-align: center;
+        margin-bottom: 0.8rem;
+        animation: fadeInUp 0.6s ease-out;
+    }
+    .t4-testimonials-subtitle {
+        font-size: 1.05rem;
+        color: var(--st-on-surface-variant);
+        text-align: center;
+        margin-bottom: 4rem;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        animation: fadeInUp 0.6s ease-out 0.1s both;
+    }
+    .t4-testimonials-carousel-container {
+        max-width: 700px;
+        margin: 0 auto;
+        animation: fadeInUp 0.6s ease-out 0.2s both;
+    }
+    .t4-testimonial-card {
+        background: var(--st-surface-container-lowest);
+        border-radius: 16px;
+        padding: 2.5rem;
+        box-shadow: 0 2px 16px rgba(0, 96, 103, 0.08);
+        border: 1px solid var(--st-outline-variant);
+        text-align: center;
+        min-height: 380px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+    .t4-testimonial-avatar {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 1.2rem;
+        display: block;
+        border: 3px solid var(--st-primary-fixed);
+    }
+    .t4-testimonial-name {
+        font-size: 1.05rem;
+        font-weight: 700;
+        color: var(--st-on-surface);
+        margin-bottom: 0.3rem;
+    }
+    .t4-testimonial-role {
+        font-size: 0.85rem;
+        color: var(--st-on-surface-variant);
+        margin-bottom: 1rem;
+        font-weight: 500;
+    }
+    .t4-testimonial-stars {
+        color: #ffc107;
+        margin-bottom: 1rem;
+        font-size: 1rem;
+        letter-spacing: 2px;
+    }
+    .t4-testimonial-text {
+        font-size: 0.95rem;
+        color: var(--st-on-surface);
+        line-height: 1.7;
+        margin-bottom: 1rem;
+        font-style: italic;
+    }
+    .t4-testimonial-date {
+        font-size: 0.8rem;
+        color: var(--st-on-surface-variant);
+    }
+    .t4-carousel-slide {
+        display: none;
+        animation: fadeIn 0.5s ease;
+    }
+    .t4-carousel-slide.active {
+        display: block;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    .t4-carousel-controls {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        margin-top: 3rem;
+    }
+    .t4-carousel-btn {
+        background: var(--st-primary);
+        color: var(--st-on-primary);
+        border: none;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+    .t4-carousel-btn:hover {
+        background: var(--st-primary-container);
+        transform: translateY(-2px);
+    }
+    .t4-carousel-dots {
+        display: flex;
+        gap: 8px;
+    }
+    .t4-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: var(--st-outline-variant);
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    .t4-dot:hover {
+        background: var(--st-primary);
+    }
+    .t4-dot.active {
+        background: var(--st-primary);
+        width: 28px;
+        border-radius: 5px;
+    }
+
+    /* ─── Animations ───────────────────────────────────────────────────────────── */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    @keyframes slideInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* ─── Responsive ───────────────────────────────────────────────────────────── */
+    @@media (max-width: 768px) {
+        .t4-hero h1 { font-size: 1.8rem; }
+        .t4-hero-tagline { font-size: 1rem; }
+        .t4-trust-badges { gap: 1rem; margin: 2rem 0 1.8rem; flex-direction: column; }
+        .t4-cta-group { flex-direction: column; gap: 0.8rem; }
+        .t4-btn-white, .t4-btn-outline { width: 100%; justify-content: center; }
+        .t4-stat-card { padding: 1.5rem 1rem; }
+    }
+    @@media (max-width: 480px) {
+        .t4-hero { min-height: 480px; }
+        .t4-hero-overlay { padding: 60px 0 50px; min-height: 480px; }
+        .t4-hero h1 { font-size: 1.6rem; margin-bottom: 0.6rem; }
+        .t4-hero-tagline { font-size: 0.95rem; margin-bottom: 1.5rem; }
+        .t4-trust-badges { padding-bottom: 1.5rem; }
+        .t4-badge { font-size: 0.8rem; }
+        .t4-badge-icon { width: 24px; height: 24px; font-size: 0.9rem; }
+        .t4-btn-white { padding: 12px 20px; font-size: 0.9rem; }
+        .t4-btn-outline { padding: 10px 18px; font-size: 0.9rem; }
+        .t4-why-grid { grid-template-columns: 1fr; }
+    }
 </style>
 
+@* ─── MODERNIZED HERO SECTION ──────────────────────────────────────────────────── *@
 <section class="t4-hero">
     <div class="t4-hero-overlay">
         <div class="container">
-            <div class="col-lg-6">
+            <div class="t4-hero-content" style="max-width: 620px;">
                 <div class="t4-section-label">Φροντίδα για όλους</div>
-                <h1>@L["HeroTitle"]<br><span style="font-weight:400">@L["HeroSubtitle"]</span></h1>
-                <p>@L["SvcSubtitle"]</p>
-                <a asp-controller="Caregivers" asp-action="Index" class="t4-btn-white">@L["NavBrowse"]</a>
-                @if (User.Identity?.IsAuthenticated == true)
-                {
-                    <a asp-controller="Posts" asp-action="Index" class="t4-btn-outline">@L["NavFindHelp"]</a>
-                }
-                else
-                {
-                    <a asp-controller="Account" asp-action="Register" class="t4-btn-outline">@L["NavRegister"]</a>
-                }
+                <h1>@L["HeroTitle"]</h1>
+                <p class="t4-hero-tagline">@L["HeroSubtitle"]</p>
+
+                @* Trust Badges *@
+                <div class="t4-trust-badges">
+                    <div class="t4-badge">
+                        <div class="t4-badge-icon">✓</div>
+                        <span>500+ Verified Caregivers</span>
+                    </div>
+                    <div class="t4-badge">
+                        <div class="t4-badge-icon">👨‍👩‍👧‍👦</div>
+                        <span>1000+ Happy Families</span>
+                    </div>
+                    <div class="t4-badge">
+                        <div class="t4-badge-icon">✔️</div>
+                        <span>100% Background Checked</span>
+                    </div>
+                </div>
+
+                @* CTA Buttons with Micro-copy *@
+                <div class="t4-cta-group">
+                    <div class="t4-cta-wrapper">
+                        <span class="t4-cta-label">Find Caregivers Now</span>
+                        <a asp-controller="Caregivers" asp-action="Index" class="t4-btn-white">
+                            <span>Browse Profiles</span>
+                            <span style="font-size: 0.9rem;">→</span>
+                        </a>
+                    </div>
+                    @if (User.Identity?.IsAuthenticated == true)
+                    {
+                        <div class="t4-cta-wrapper">
+                            <span class="t4-cta-label">Post Your Needs</span>
+                            <a asp-controller="Posts" asp-action="Index" class="t4-btn-outline">
+                                <span>View Requests</span>
+                                <span style="font-size: 0.9rem;">→</span>
+                            </a>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="t4-cta-wrapper">
+                            <span class="t4-cta-label">Join the Community</span>
+                            <a asp-controller="Account" asp-action="Register" class="t4-btn-outline">
+                                <span>Create Account</span>
+                                <span style="font-size: 0.9rem;">→</span>
+                            </a>
+                        </div>
+                    }
+                </div>
             </div>
         </div>
     </div>
 </section>
 
-<div class="container text-center py-4 pb-2">
-    <p class="t4-subtitle">@L["HowSubtitle"]</p>
-</div>
-
-<section class="t4-features pb-5">
+@* ─── SOCIAL PROOF: STATS SECTION ──────────────────────────────────────────────── *@
+<section class="t4-stats-section">
     <div class="container">
-        <div class="row g-4 justify-content-center">
-            <div class="col-lg-4 col-md-6">
-                <div class="t4-feature-card">
-                    <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=200"
-                         alt="@L["SvcChildcareTitle"]" class="t4-avatar">
-                    <h5>@L["SvcChildcareTitle"]</h5>
-                    <p>@L["SvcChildcareDesc"]</p>
-                    <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="Childcare" class="t4-find-btn">@L["NavBrowse"]</a>
+        <div class="t4-stats-grid">
+            <div class="t4-stat-card">
+                <div class="t4-stat-value">@L["Stat2Value"]</div>
+                <div class="t4-stat-label">@L["Stat2Label"]</div>
+            </div>
+            <div class="t4-stat-card">
+                <div class="t4-stat-value">@L["Stat1Value"]</div>
+                <div class="t4-stat-label">@L["Stat1Label"]</div>
+            </div>
+            <div class="t4-stat-card">
+                <div class="t4-stat-value">@L["Stat3Value"]</div>
+                <div class="t4-stat-label">@L["Stat3Label"]</div>
+            </div>
+        </div>
+
+        @* ─── WHY CHOOSE FRONTIDA ─────────────────────────────────────────────────── *@
+        <div class="t4-why-section">
+            <h2 class="t4-section-heading">@L["TrustTitle"]</h2>
+            <div class="t4-why-grid">
+                <div class="t4-why-card">
+                    <div class="t4-why-icon">🛡️</div>
+                    <h5>@L["TrustVerifiedTitle"]</h5>
+                    <p>@L["TrustVerifiedDesc"]</p>
+                </div>
+                <div class="t4-why-card">
+                    <div class="t4-why-icon">🤖</div>
+                    <h5>@L["TrustSafeTitle"]</h5>
+                    <p>@L["TrustSafeDesc"]</p>
+                </div>
+                <div class="t4-why-card">
+                    <div class="t4-why-icon">🕐</div>
+                    <h5>@L["Trust24Title"]</h5>
+                    <p>@L["Trust24Desc"]</p>
                 </div>
             </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="t4-feature-card">
-                    <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200"
-                         alt="@L["SvcElderlyTitle"]" class="t4-avatar">
-                    <h5>@L["SvcElderlyTitle"]</h5>
-                    <p>@L["SvcElderlyDesc"]</p>
-                    <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="ElderlyCare" class="t4-find-btn">@L["NavBrowse"]</a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="t4-feature-card">
-                    <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=200"
-                         alt="@L["SvcTutoringTitle"]" class="t4-avatar">
-                    <h5>@L["SvcTutoringTitle"]</h5>
-                    <p>@L["SvcTutoringDesc"]</p>
-                    <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="Tutoring" class="t4-find-btn">@L["NavBrowse"]</a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="t4-feature-card">
-                    <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=200"
-                         alt="@L["SvcHousekeepingTitle"]" class="t4-avatar">
-                    <h5>@L["SvcHousekeepingTitle"]</h5>
-                    <p>@L["SvcHousekeepingDesc"]</p>
-                    <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="Housekeeping" class="t4-find-btn">@L["NavBrowse"]</a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-md-6">
-                <div class="t4-feature-card">
-                    <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=200"
-                         alt="@L["SvcPetTitle"]" class="t4-avatar">
-                    <h5>@L["SvcPetTitle"]</h5>
-                    <p>@L["SvcPetDesc"]</p>
-                    <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="PetCare" class="t4-find-btn">@L["NavBrowse"]</a>
+        </div>
+    </div>
+</section>
+
+@* ─── SERVICES SECTION ─────────────────────────────────────────────────────────── *@
+<section class="t4-services-section">
+    <div class="container">
+        <div class="t4-section-label" style="text-align: center; margin-bottom: 1rem;">
+            <span style="color: var(--st-primary);">Our Services</span>
+        </div>
+        <h2 class="t4-services-heading">@L["SvcTitle"]</h2>
+        <p class="t4-services-subheading">@L["SvcSubtitle"]</p>
+
+        <div class="t4-features pb-5">
+            <div class="container p-0">
+                <div class="row g-4 justify-content-center">
+                    <div class="col-lg-4 col-md-6">
+                        <div class="t4-feature-card">
+                            <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?w=200"
+                                 alt="@L["SvcChildcareTitle"]" class="t4-avatar">
+                            <h5>@L["SvcChildcareTitle"]</h5>
+                            <p>@L["SvcChildcareDesc"]</p>
+                            <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="Childcare" class="t4-find-btn">@L["NavBrowse"]</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="t4-feature-card">
+                            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200"
+                                 alt="@L["SvcElderlyTitle"]" class="t4-avatar">
+                            <h5>@L["SvcElderlyTitle"]</h5>
+                            <p>@L["SvcElderlyDesc"]</p>
+                            <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="ElderlyCare" class="t4-find-btn">@L["NavBrowse"]</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="t4-feature-card">
+                            <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=200"
+                                 alt="@L["SvcTutoringTitle"]" class="t4-avatar">
+                            <h5>@L["SvcTutoringTitle"]</h5>
+                            <p>@L["SvcTutoringDesc"]</p>
+                            <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="Tutoring" class="t4-find-btn">@L["NavBrowse"]</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="t4-feature-card">
+                            <img src="https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=200"
+                                 alt="@L["SvcHousekeepingTitle"]" class="t4-avatar">
+                            <h5>@L["SvcHousekeepingTitle"]</h5>
+                            <p>@L["SvcHousekeepingDesc"]</p>
+                            <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="Housekeeping" class="t4-find-btn">@L["NavBrowse"]</a>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="t4-feature-card">
+                            <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=200"
+                                 alt="@L["SvcPetTitle"]" class="t4-avatar">
+                            <h5>@L["SvcPetTitle"]</h5>
+                            <p>@L["SvcPetDesc"]</p>
+                            <a asp-controller="Caregivers" asp-action="Index" asp-route-ServiceType="PetCare" class="t4-find-btn">@L["NavBrowse"]</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
