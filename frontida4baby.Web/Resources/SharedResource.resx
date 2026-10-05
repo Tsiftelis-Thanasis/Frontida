@@ -53,6 +53,12 @@
   <data name="Stat3Value"  xml:space="preserve"><value>4.8/5</value></data>
   <data name="Stat3Label"  xml:space="preserve"><value>Average Rating</value></data>
 
+  <!-- Testimonials -->
+  <data name="TestimonialsHeading"  xml:space="preserve"><value>What Families Say</value></data>
+  <data name="TestimonialsSubtitle"  xml:space="preserve"><value>Read stories from families who found trusted care through frontida4baby.</value></data>
+  <data name="TestimonialPrev"       xml:space="preserve"><value>Previous</value></data>
+  <data name="TestimonialNext"       xml:space="preserve"><value>Next</value></data>
+
   <!-- CTA -->
   <data name="CtaFamilyTitle"     xml:space="preserve"><value>Need a Caregiver?</value></data>
   <data name="CtaFamilyDesc"      xml:space="preserve"><value>Post your request and receive responses from qualified professionals.</value></data>

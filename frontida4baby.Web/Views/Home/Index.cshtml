@@ -58,6 +58,7 @@
         margin: 2.5rem 0 2.8rem;
         padding-bottom: 2.2rem;
         border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+        animation: fadeInUp 0.6s ease 0.25s backwards;
     }
     .t4-badge {
         display: flex;
@@ -66,6 +67,10 @@
         font-size: 0.9rem;
         color: rgba(255, 255, 255, 0.9);
         font-weight: 500;
+        transition: transform 0.2s ease;
+    }
+    .t4-badge:hover {
+        transform: translateY(-2px);
     }
     .t4-badge-icon {
         width: 28px;
@@ -77,6 +82,11 @@
         justify-content: center;
         font-size: 1rem;
         flex-shrink: 0;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .t4-badge:hover .t4-badge-icon {
+        background: rgba(255, 255, 255, 0.35);
+        transform: scale(1.15);
     }
 
     /* CTA buttons with micro-copy */
@@ -160,12 +170,15 @@
         background: var(--st-surface-container-lowest);
         border-radius: 16px;
         border: 1px solid var(--st-outline-variant);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
-        animation: slideInUp 0.6s ease-out;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s ease;
+        animation: slideInUp 0.6s ease-out backwards;
     }
+    .t4-stat-card:nth-child(1) { animation-delay: 0.1s; }
+    .t4-stat-card:nth-child(2) { animation-delay: 0.2s; }
+    .t4-stat-card:nth-child(3) { animation-delay: 0.3s; }
     .t4-stat-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(0, 96, 103, 0.1);
+        transform: translateY(-6px) scale(1.01);
+        box-shadow: 0 12px 32px rgba(0, 96, 103, 0.15);
     }
     .t4-stat-value {
         font-size: clamp(1.8rem, 4vw, 2.6rem);
@@ -173,6 +186,10 @@
         color: var(--st-primary);
         margin-bottom: 0.5rem;
         line-height: 1;
+        transition: transform 0.2s ease;
+    }
+    .t4-stat-card:hover .t4-stat-value {
+        transform: scale(1.08);
     }
     .t4-stat-label {
         font-size: 0.95rem;
@@ -201,27 +218,36 @@
         background: var(--st-surface-container-low);
         border-radius: 14px;
         border-left: 4px solid var(--st-primary);
-        transition: all 0.3s ease;
-        animation: fadeInUp 0.6s ease-out;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        animation: fadeInUp 0.6s ease-out backwards;
     }
     .t4-why-card:nth-child(1) { animation-delay: 0.1s; }
     .t4-why-card:nth-child(2) { animation-delay: 0.2s; }
     .t4-why-card:nth-child(3) { animation-delay: 0.3s; }
     .t4-why-card:hover {
-        transform: translateY(-6px);
+        transform: translateY(-6px) scale(1.01);
         box-shadow: 0 12px 32px rgba(0, 96, 103, 0.12);
         background: var(--st-surface-container);
+        border-left-color: var(--st-tertiary);
     }
     .t4-why-icon {
         font-size: 1.8rem;
         margin-bottom: 1rem;
         display: inline-block;
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .t4-why-card:hover .t4-why-icon {
+        transform: scale(1.15) rotate(8deg);
     }
     .t4-why-card h5 {
         font-size: 1.1rem;
         font-weight: 700;
         color: var(--st-on-surface);
         margin-bottom: 0.6rem;
+        transition: transform 0.2s ease;
+    }
+    .t4-why-card:hover h5 {
+        transform: translateY(-2px);
     }
     .t4-why-card p {
         color: var(--st-on-surface-variant);
@@ -261,10 +287,16 @@
         box-shadow: 0 2px 20px rgba(0,0,0,0.07);
         border: 1px solid var(--st-outline-variant);
         text-align: center;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        animation: fadeInUp 0.6s ease-out backwards;
     }
+    .t4-feature-card:nth-child(1) { animation-delay: 0.1s; }
+    .t4-feature-card:nth-child(2) { animation-delay: 0.2s; }
+    .t4-feature-card:nth-child(3) { animation-delay: 0.3s; }
+    .t4-feature-card:nth-child(4) { animation-delay: 0.4s; }
+    .t4-feature-card:nth-child(5) { animation-delay: 0.5s; }
     .t4-feature-card:hover {
-        transform: translateY(-8px);
+        transform: translateY(-8px) scale(1.01);
         box-shadow: 0 12px 40px rgba(0, 96, 103, 0.15);
         border-color: var(--st-primary);
     }
@@ -276,12 +308,20 @@
         margin: 0 auto 1.2rem;
         display: block;
         border: 3px solid var(--st-primary-fixed);
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .t4-feature-card:hover .t4-avatar {
+        transform: scale(1.1);
     }
     .t4-feature-card h5 {
         font-weight: 700;
         margin-bottom: 0.6rem;
         color: var(--st-on-surface);
         font-size: 1.05rem;
+        transition: transform 0.2s ease;
+    }
+    .t4-feature-card:hover h5 {
+        transform: translateY(-2px);
     }
     .t4-feature-card p  {
         color: var(--st-on-surface-variant);
@@ -299,13 +339,14 @@
         font-weight: 600;
         text-decoration: none;
         display: inline-block;
-        transition: all 0.3s ease;
+        transition: all 0.2s ease;
     }
     .t4-find-btn:hover {
         background: var(--st-primary-container);
         color: var(--st-on-primary);
-        transform: translateY(-2px);
+        transform: translateY(-2px) scale(1.05);
         text-decoration: none;
+        box-shadow: 0 4px 12px rgba(0, 96, 103, 0.2);
     }
     .t4-section-label {
         font-size: 0.8rem;
@@ -355,6 +396,12 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .t4-testimonial-card:hover {
+        transform: translateY(-4px) scale(1.01);
+        box-shadow: 0 8px 28px rgba(0, 96, 103, 0.12);
+        border-color: var(--st-primary);
     }
     .t4-testimonial-avatar {
         width: 70px;
@@ -364,12 +411,20 @@
         margin: 0 auto 1.2rem;
         display: block;
         border: 3px solid var(--st-primary-fixed);
+        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .t4-testimonial-card:hover .t4-testimonial-avatar {
+        transform: scale(1.08);
     }
     .t4-testimonial-name {
         font-size: 1.05rem;
         font-weight: 700;
         color: var(--st-on-surface);
         margin-bottom: 0.3rem;
+        transition: transform 0.2s ease;
+    }
+    .t4-testimonial-card:hover .t4-testimonial-name {
+        transform: translateY(-2px);
     }
     .t4-testimonial-role {
         font-size: 0.85rem;
@@ -382,6 +437,11 @@
         margin-bottom: 1rem;
         font-size: 1rem;
         letter-spacing: 2px;
+        transition: transform 0.2s ease;
+        display: inline-block;
+    }
+    .t4-testimonial-card:hover .t4-testimonial-stars {
+        transform: scale(1.1);
     }
     .t4-testimonial-text {
         font-size: 0.95rem;
@@ -424,11 +484,15 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .t4-carousel-btn:hover {
         background: var(--st-primary-container);
-        transform: translateY(-2px);
+        transform: translateY(-3px) scale(1.08);
+        box-shadow: 0 4px 12px rgba(0, 96, 103, 0.2);
+    }
+    .t4-carousel-btn:active {
+        transform: translateY(-1px) scale(0.96);
     }
     .t4-carousel-dots {
         display: flex;
@@ -440,15 +504,17 @@
         border-radius: 50%;
         background: var(--st-outline-variant);
         cursor: pointer;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .t4-dot:hover {
         background: var(--st-primary);
+        transform: scale(1.2);
     }
     .t4-dot.active {
         background: var(--st-primary);
         width: 28px;
         border-radius: 5px;
+        animation: pulse 0.6s ease-out;
     }
 
     /* ─── Animations ───────────────────────────────────────────────────────────── */
@@ -472,6 +538,16 @@
             transform: translateY(0);
         }
     }
+    @keyframes pulse {
+        0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+        }
+        50% {
+            opacity: 0.85;
+            transform: scale(1.1);
+        }
+    }
 
     /* ─── Responsive ───────────────────────────────────────────────────────────── */
     @@media (max-width: 768px) {
@@ -481,6 +557,12 @@
         .t4-cta-group { flex-direction: column; gap: 0.8rem; }
         .t4-btn-white, .t4-btn-outline { width: 100%; justify-content: center; }
         .t4-stat-card { padding: 1.5rem 1rem; }
+
+        .t4-testimonials-heading { font-size: 1.6rem; }
+        .t4-testimonials-subtitle { font-size: 0.95rem; margin-bottom: 2.5rem; }
+        .t4-testimonial-card { padding: 1.8rem 1.2rem; min-height: 360px; }
+        .t4-carousel-controls { gap: 1.5rem; margin-top: 2.5rem; }
+        .t4-carousel-btn { width: 38px; height: 38px; font-size: 1rem; }
     }
     @@media (max-width: 480px) {
         .t4-hero { min-height: 480px; }
@@ -598,6 +680,80 @@
     </div>
 </section>
 
+@* ─── TESTIMONIALS SECTION ────────────────────────────────────────────────────────── *@
+<section class="t4-testimonials-section">
+    <div class="container">
+        <div class="t4-section-label" style="text-align: center;">
+            <span style="color: var(--st-primary);">Success Stories</span>
+        </div>
+        <h2 class="t4-testimonials-heading">@L["TestimonialsHeading"]</h2>
+        <p class="t4-testimonials-subtitle">@L["TestimonialsSubtitle"]</p>
+
+        <div class="t4-testimonials-carousel-container">
+            <div id="testimonialsCarousel">
+                @* Testimonial 1 *@
+                <div class="t4-carousel-slide active">
+                    <div class="t4-testimonial-card">
+                        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150&h=150&fit=crop"
+                             alt="Sarah M." class="t4-testimonial-avatar">
+                        <h4 class="t4-testimonial-name">Sarah M.</h4>
+                        <p class="t4-testimonial-role">Parent, Athens</p>
+                        <div class="t4-testimonial-stars">★★★★★</div>
+                        <p class="t4-testimonial-text">"Finding Maria through frontida4baby was a lifesaver! She's been caring for our children for 2 years and has become part of our family. The verification process gave us complete peace of mind."</p>
+                        <p class="t4-testimonial-date">June 2024</p>
+                    </div>
+                </div>
+
+                @* Testimonial 2 *@
+                <div class="t4-carousel-slide">
+                    <div class="t4-testimonial-card">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop"
+                             alt="Dimitris P." class="t4-testimonial-avatar">
+                        <h4 class="t4-testimonial-name">Dimitris P.</h4>
+                        <p class="t4-testimonial-role">Business Owner, Thessaloniki</p>
+                        <div class="t4-testimonial-stars">★★★★★</div>
+                        <p class="t4-testimonial-text">"I needed help with elderly care for my mother. The caregivers on frontida4baby are professional and compassionate. Elena visits twice a week and makes such a difference in my mum's life."</p>
+                        <p class="t4-testimonial-date">August 2024</p>
+                    </div>
+                </div>
+
+                @* Testimonial 3 *@
+                <div class="t4-carousel-slide">
+                    <div class="t4-testimonial-card">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop"
+                             alt="Elena K." class="t4-testimonial-avatar">
+                        <h4 class="t4-testimonial-name">Elena K.</h4>
+                        <p class="t4-testimonial-role">Teacher & Parent, Patras</p>
+                        <div class="t4-testimonial-stars">★★★★★</div>
+                        <p class="t4-testimonial-text">"The platform is so easy to use! I found the perfect tutor for my son within days. Stavros has improved his grades significantly. Highly recommend frontida4baby to all parents!"</p>
+                        <p class="t4-testimonial-date">September 2024</p>
+                    </div>
+                </div>
+
+                @* Testimonial 4 *@
+                <div class="t4-carousel-slide">
+                    <div class="t4-testimonial-card">
+                        <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&h=150&fit=crop"
+                             alt="Nikos V." class="t4-testimonial-avatar">
+                        <h4 class="t4-testimonial-name">Nikos V.</h4>
+                        <p class="t4-testimonial-role">Homeowner, Heraklion</p>
+                        <div class="t4-testimonial-stars">★★★★★</div>
+                        <p class="t4-testimonial-text">"I was nervous about hiring help, but the screening process was thorough and professional. My housekeeper Klara is reliable and does excellent work. Great platform!"</p>
+                        <p class="t4-testimonial-date">July 2024</p>
+                    </div>
+                </div>
+            </div>
+
+            @* Carousel Controls *@
+            <div class="t4-carousel-controls">
+                <button type="button" class="t4-carousel-btn" id="prevBtn" aria-label="Previous testimonial">❮</button>
+                <div class="t4-carousel-dots" id="dotsContainer"></div>
+                <button type="button" class="t4-carousel-btn" id="nextBtn" aria-label="Next testimonial">❯</button>
+            </div>
+        </div>
+    </div>
+</section>
+
 @* ─── SERVICES SECTION ─────────────────────────────────────────────────────────── *@
 <section class="t4-services-section">
     <div class="container">
@@ -660,3 +816,62 @@
         </div>
     </div>
 </section>
+
+<script>
+(function() {
+    const testimonials = document.querySelectorAll('.t4-carousel-slide');
+    const totalTestimonials = testimonials.length;
+    let currentIndex = 0;
+
+    // Create dots
+    const dotsContainer = document.getElementById('dotsContainer');
+    for (let i = 0; i < totalTestimonials; i++) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 't4-dot' + (i === 0 ? ' active' : '');
+        dot.setAttribute('aria-label', `Testimonial ${i + 1}`);
+        dot.setAttribute('data-index', i);
+        dot.addEventListener('click', () => goToSlide(i));
+        dotsContainer.appendChild(dot);
+    }
+
+    function showSlide(index) {
+        testimonials.forEach((slide, i) => {
+            if (i === index) {
+                slide.classList.add('active');
+            } else {
+                slide.classList.remove('active');
+            }
+        });
+
+        document.querySelectorAll('.t4-dot').forEach((dot, i) => {
+            if (i === index) {
+                dot.classList.add('active');
+            } else {
+                dot.classList.remove('active');
+            }
+        });
+    }
+
+    function goToSlide(index) {
+        currentIndex = (index + totalTestimonials) % totalTestimonials;
+        showSlide(currentIndex);
+    }
+
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % totalTestimonials;
+        showSlide(currentIndex);
+    }
+
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + totalTestimonials) % totalTestimonials;
+        showSlide(currentIndex);
+    }
+
+    document.getElementById('nextBtn').addEventListener('click', nextSlide);
+    document.getElementById('prevBtn').addEventListener('click', prevSlide);
+
+    // Optional: Auto-rotate testimonials every 6 seconds
+    setInterval(nextSlide, 6000);
+})();
+</script>

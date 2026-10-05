@@ -53,6 +53,12 @@
   <data name="Stat3Value"  xml:space="preserve"><value>4,8/5</value></data>
   <data name="Stat3Label"  xml:space="preserve"><value>Μέση Βαθμολογία</value></data>
 
+  <!-- Μαρτυρίες -->
+  <data name="TestimonialsHeading"  xml:space="preserve"><value>Τι Λένε οι Οικογένειες</value></data>
+  <data name="TestimonialsSubtitle"  xml:space="preserve"><value>Διαβάστε ιστορίες οικογενειών που βρήκαν αξιόπιστη φροντίδα στο frontida4baby.</value></data>
+  <data name="TestimonialPrev"       xml:space="preserve"><value>Προηγούμενη</value></data>
+  <data name="TestimonialNext"       xml:space="preserve"><value>Επόμενη</value></data>
+
   <!-- CTA -->
   <data name="CtaFamilyTitle"     xml:space="preserve"><value>Χρειάζεστε Φροντιστή;</value></data>
   <data name="CtaFamilyDesc"      xml:space="preserve"><value>Δημοσιεύστε το αίτημά σας και λάβετε απαντήσεις από ειδικούς.</value></data>

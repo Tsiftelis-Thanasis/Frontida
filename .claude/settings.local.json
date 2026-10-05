@@ -10,7 +10,9 @@
       "Bash(sqlcmd *)",
       "WebSearch",
       "WebFetch(domain:help.railway.com)",
-      "Bash(dotnet test *)"
+      "Bash(dotnet test *)",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)"
     ]
   }
 }

@@ -90,75 +90,137 @@
             }
             else
             {
-                <div class="row g-3">
+                <div class="row g-4">
                     @foreach (var c in Model.Caregivers)
                     {
-                        <div class="col-sm-6 col-xl-4">
+                        <div class="col-sm-6 col-lg-6 col-xl-4">
                             <a asp-controller="Caregivers" asp-action="Details" asp-route-id="@c.UserId"
                                class="card caregiver-card h-100 text-decoration-none text-reset caregiver-card-link">
-                                <div class="card-body p-3">
-                                    <div class="d-flex align-items-start gap-3 mb-3">
-                                        @if (!string.IsNullOrEmpty(c.ProfileImageUrl))
-                                        {
-                                            <img src="@c.ProfileImageUrl" class="caregiver-avatar" alt="@c.FullName" />
-                                        }
-                                        else
-                                        {
-                                            <div class="caregiver-initials">
-                                                @(c.FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries)
-                                                    .Take(2)
-                                                    .Aggregate("", (s, w) => s + w[0]))
-                                            </div>
-                                        }
-                                        <div class="flex-grow-1 min-w-0">
-                                            <div class="fw-bold text-truncate">@c.FullName</div>
-                                            @if (!string.IsNullOrEmpty(c.City))
-                                            {
-                                                <small class="text-muted">
-                                                    <i class="fa-solid fa-location-dot me-1"></i>@c.City
-                                                </small>
-                                            }
-                                            @if (c.IsVerified)
-                                            {
-                                                <div class="mt-1">
-                                                    <span class="badge-verified">
-                                                        <i class="fa-solid fa-circle-check"></i>@L["TrustVerifiedTitle"]
-                                                    </span>
-                                                </div>
-                                            }
+
+                                @* ─── Profile Image with Verification Badge ─── *@
+                                <div class="caregiver-card-image-wrapper">
+                                    @if (!string.IsNullOrEmpty(c.ProfileImageUrl))
+                                    {
+                                        <img src="@c.ProfileImageUrl" class="caregiver-card-image" alt="@c.FullName" />
+                                    }
+                                    else
+                                    {
+                                        <div class="caregiver-card-initials">
+                                            @(c.FullName.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                                                .Take(2)
+                                                .Aggregate("", (s, w) => s + w[0]))
                                         </div>
+                                    }
+
+                                    @* Verification Badge Overlay *@
+                                    @if (c.IsVerified)
+                                    {
+                                        <div class="badge-verified-overlay">
+                                            <i class="fa-solid fa-circle-check"></i>
+                                        </div>
+                                    }
+
+                                    @* Rating Badge *@
+                                    @if (c.AverageRating > 0)
+                                    {
+                                        <div class="badge-rating-overlay">
+                                            <i class="fa-solid fa-star"></i> @c.AverageRating.ToString("0.0")
+                                        </div>
+                                    }
+                                </div>
+
+                                <div class="card-body p-4 d-flex flex-column">
+                                    @* ─── Name and Location ─── *@
+                                    <div class="mb-2">
+                                        <h5 class="fw-bold mb-1">@c.FullName</h5>
+                                        @if (!string.IsNullOrEmpty(c.City))
+                                        {
+                                            <small class="text-muted d-flex align-items-center gap-1">
+                                                <i class="fa-solid fa-location-dot"></i>@c.City
+                                            </small>
+                                        }
                                     </div>
 
+                                    @* ─── Trust Badges ─── *@
+                                    <div class="mb-3 d-flex flex-wrap gap-2">
+                                        @if (c.IsVerified)
+                                        {
+                                            <span class="badge badge-success-subtle">
+                                                <i class="fa-solid fa-circle-check"></i> @L["TrustVerifiedTitle"]
+                                            </span>
+                                        }
+                                        @if (c.AverageRating >= 4.5 && c.ReviewCount >= 10)
+                                        {
+                                            <span class="badge badge-warning-subtle">
+                                                <i class="fa-solid fa-crown"></i> Highly Rated
+                                            </span>
+                                        }
+                                        @if (c.ReviewCount >= 10)
+                                        {
+                                            <span class="badge badge-info-subtle">
+                                                <i class="fa-solid fa-check-double"></i> Trusted by many
+                                            </span>
+                                        }
+                                    </div>
+
+                                    @* ─── Services ─── *@
                                     @if (c.Services.Any())
                                     {
-                                        <div class="d-flex flex-wrap gap-1 mb-3">
-                                            @foreach (var svc in c.Services.Take(3))
+                                        <div class="d-flex flex-wrap gap-2 mb-3">
+                                            @foreach (var svc in c.Services.Take(2))
                                             {
                                                 <span class="service-badge">@svc</span>
+                                            }
+                                            @if (c.Services.Count > 2)
+                                            {
+                                                <span class="service-badge service-badge-more">+@(c.Services.Count - 2)</span>
                                             }
                                         </div>
                                     }
 
-                                    <div class="d-flex justify-content-between align-items-center mt-auto">
+                                    @* ─── Stats (Hourly Rate & Experience) ─── *@
+                                    <div class="mb-3 d-flex gap-3 flex-wrap">
                                         @if (c.HourlyRate.HasValue)
                                         {
-                                            <span class="fw-bold text-primary">
-                                                €@c.HourlyRate
-                                                <small class="fw-normal text-muted">@L["CaregiverHourly"]</small>
-                                            </span>
+                                            <div class="stat-item">
+                                                <div class="stat-value text-primary fw-bold">€@c.HourlyRate</div>
+                                                <div class="stat-label">@L["CaregiverHourly"]</div>
+                                            </div>
+                                        }
+                                        @if (c.YearsOfExperience.HasValue)
+                                        {
+                                            <div class="stat-item">
+                                                <div class="stat-value fw-bold">@c.YearsOfExperience</div>
+                                                <div class="stat-label">@L["CgProfileYearsExp"]</div>
+                                            </div>
+                                        }
+                                    </div>
+
+                                    @* ─── Rating & Review Count ─── *@
+                                    <div class="mt-auto pt-3 border-top">
+                                        @if (c.AverageRating > 0)
+                                        {
+                                            <div class="d-flex align-items-center justify-content-between">
+                                                <div class="rating-info">
+                                                    <span class="rating-stars">
+                                                        <i class="fa-solid fa-star"></i>
+                                                        <span class="fw-bold">@c.AverageRating.ToString("0.0")</span>
+                                                    </span>
+                                                </div>
+                                                <small class="text-muted">@c.ReviewCount @L["CaregiverReviews"]</small>
+                                            </div>
                                         }
                                         else
                                         {
-                                            <span></span>
+                                            <small class="text-muted d-block text-center">No reviews yet</small>
                                         }
-                                        @if (c.AverageRating > 0)
-                                        {
-                                            <span class="rating-stars small">
-                                                <i class="fa-solid fa-star"></i>
-                                                @c.AverageRating.ToString("0.0")
-                                                <span class="text-muted">(@c.ReviewCount @L["CaregiverReviews"])</span>
-                                            </span>
-                                        }
+                                    </div>
+
+                                    @* ─── CTA Button ─── *@
+                                    <div class="mt-3">
+                                        <button type="button" class="btn btn-primary btn-sm w-100">
+                                            @L["PostViewProfile"]
+                                        </button>
                                     </div>
                                 </div>
                             </a>
@@ -169,8 +231,3 @@
         </div>
     </div>
 </div>
-
-<style>
-.caregiver-card-link { display: flex; flex-direction: column; }
-.caregiver-card-link:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,.10); transition: transform .2s, box-shadow .2s; }
-</style>
