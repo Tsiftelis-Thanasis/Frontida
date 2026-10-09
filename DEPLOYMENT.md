@@ -34,17 +34,17 @@ ASPNETCORE_HTTP_PORTS=8080
 DefaultConnection=${DATABASE_URL}
 Stripe__SecretKey=sk_live_xxxx (get from Stripe dashboard)
 Stripe__PublishableKey=pk_live_xxxx (get from Stripe dashboard)
-SMTP_Host=smtp.gmail.com (or your email provider)
-SMTP_Port=587
-SMTP_Username=your-email@gmail.com
-SMTP_Password=your-app-password (use app-specific password)
-SMTP_From=noreply@frontida4all.com
+Email__SmtpHost=smtp.gmail.com (or your email provider)
+Email__SmtpPort=587
+Email__SmtpUser=your-email@gmail.com
+Email__SmtpPass=your-app-password (use app-specific password)
+Email__FromAddress=noreply@frontida4all.com
 ```
 
 **⚠️ For Gmail:**
 - Enable 2-factor authentication
 - Create an [App Password](https://myaccount.google.com/apppasswords)
-- Use that password in `SMTP_Password`
+- Use that password in `Email__SmtpPass`
 
 ## Step 4: Run Database Migrations
 

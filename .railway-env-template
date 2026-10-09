@@ -13,12 +13,12 @@ Stripe__SecretKey=sk_live_xxxxxxxxxxxx
 Stripe__PublishableKey=pk_live_xxxxxxxxxxxx
 
 # Email Configuration (Gmail example)
-SMTP_Host=smtp.gmail.com
-SMTP_Port=587
-SMTP_Username=your-email@gmail.com
-SMTP_Password=your-app-specific-password
-SMTP_From=noreply@frontida4all.com
-SMTP_EnableSSL=true
+Email__SmtpHost=smtp.gmail.com
+Email__SmtpPort=587
+Email__SmtpUser=your-email@gmail.com
+Email__SmtpPass=your-app-specific-password
+Email__FromAddress=noreply@frontida4all.com
+Email__AdminEmail=you@example.com
 
 # Optional: Site-wide banner message
 # SiteBanner__Message=Maintenance in progress...

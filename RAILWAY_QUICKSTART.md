@@ -30,11 +30,11 @@ Get Stripe keys from: https://dashboard.stripe.com/apikeys
 
 ### Step 4: Email (1 min)
 ```
-SMTP_Host=smtp.gmail.com
-SMTP_Port=587
-SMTP_Username=your-email@gmail.com
-SMTP_Password=app-specific-password
-SMTP_From=noreply@frontida4all.com
+Email__SmtpHost=smtp.gmail.com
+Email__SmtpPort=587
+Email__SmtpUser=your-email@gmail.com
+Email__SmtpPass=app-specific-password
+Email__FromAddress=noreply@frontida4all.com
 ```
 
 [Get Gmail app password here](https://myaccount.google.com/apppasswords)
