@@ -17,14 +17,14 @@ Email__SmtpHost=smtp.gmail.com
 Email__SmtpPort=587
 Email__SmtpUser=your-email@gmail.com
 Email__SmtpPass=your-app-specific-password
-Email__FromAddress=noreply@frontida4all.com
+Email__FromAddress=noreply@frontida4all.gr
 Email__AdminEmail=you@example.com
 
 # Optional: Site-wide banner message
 # SiteBanner__Message=Maintenance in progress...
 
 # Optional: Custom domain
-# RailwayDomain=frontida4all.com
+# RailwayDomain=frontida4all.gr
 
 # ApplicationInsights (for monitoring - optional)
 # APPINSIGHTS_INSTRUMENTATIONKEY=your-key

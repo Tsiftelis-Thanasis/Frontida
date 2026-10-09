@@ -38,7 +38,7 @@ Email__SmtpHost=smtp.gmail.com (or your email provider)
 Email__SmtpPort=587
 Email__SmtpUser=your-email@gmail.com
 Email__SmtpPass=your-app-password (use app-specific password)
-Email__FromAddress=noreply@frontida4all.com
+Email__FromAddress=noreply@frontida4all.gr
 ```
 
 **⚠️ For Gmail:**
@@ -65,7 +65,7 @@ railway run dotnet ef database update
 
 1. In Railway dashboard, go to **Settings** → **Networking**
 2. Click **"Add Domain"**
-3. Enter your domain (e.g., `frontida4all.com`)
+3. Enter your domain (e.g., `frontida4all.gr`)
 4. Update your domain DNS settings to Railway's CNAME
 5. Railway provides free SSL certificate automatically
 

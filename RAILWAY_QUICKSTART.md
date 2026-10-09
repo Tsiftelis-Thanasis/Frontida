@@ -34,7 +34,7 @@ Email__SmtpHost=smtp.gmail.com
 Email__SmtpPort=587
 Email__SmtpUser=your-email@gmail.com
 Email__SmtpPass=app-specific-password
-Email__FromAddress=noreply@frontida4all.com
+Email__FromAddress=noreply@frontida4all.gr
 ```
 
 [Get Gmail app password here](https://myaccount.google.com/apppasswords)
