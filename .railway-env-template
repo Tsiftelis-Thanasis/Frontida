@@ -12,13 +12,17 @@ ASPNETCORE_HTTP_PORTS=8080
 Stripe__SecretKey=sk_live_xxxxxxxxxxxx
 Stripe__PublishableKey=pk_live_xxxxxxxxxxxx
 
-# Email Configuration (Gmail example)
-Email__SmtpHost=smtp.gmail.com
+# App email via Resend SMTP (verify host/port/username against Resend's SMTP docs)
+Email__SmtpHost=smtp.resend.com
 Email__SmtpPort=587
-Email__SmtpUser=your-email@gmail.com
-Email__SmtpPass=your-app-specific-password
-Email__FromAddress=noreply@frontida4all.gr
-Email__AdminEmail=you@example.com
+Email__SmtpUser=resend
+Email__SmtpPass=<Resend API key>
+Email__FromAddress=noreply@mail.frontida4all.gr
+Email__AdminEmail=admin@frontida4all.gr
+
+# Seeded admin account, created on first start only
+Admin__Email=admin@frontida4all.gr
+Admin__Password=<strong unique password>
 
 # Optional: Site-wide banner message
 # SiteBanner__Message=Maintenance in progress...

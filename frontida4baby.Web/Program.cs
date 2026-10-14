@@ -208,31 +208,20 @@ using (var scope = app.Services.CreateScope())
     var adminEmail    = builder.Configuration["Admin:Email"];
     var adminPassword = builder.Configuration["Admin:Password"];
 
-    if (app.Environment.IsProduction() && (string.IsNullOrWhiteSpace(adminEmail) || string.IsNullOrWhiteSpace(adminPassword)))
+    if (!string.IsNullOrWhiteSpace(adminEmail) && !string.IsNullOrWhiteSpace(adminPassword)
+        && await userManager.FindByEmailAsync(adminEmail) is null)
     {
-        // In Production, admin credentials MUST be set via environment variables or User Secrets.
-        // Do not auto-seed with defaults.
-    }
-    else
-    {
-        // In Development, fall back to defaults if not configured
-        adminEmail    ??= "admin@frontida4baby.gr";
-        adminPassword ??= "Admin1234!";
-
-        if (await userManager.FindByEmailAsync(adminEmail) is null)
+        var adminUser = new ApplicationUser
         {
-            var adminUser = new ApplicationUser
-            {
-                UserName       = adminEmail,
-                Email          = adminEmail,
-                EmailConfirmed = true,
-                FirstName      = "Admin",
-                LastName       = "Admin",
-            };
-            var created = await userManager.CreateAsync(adminUser, adminPassword);
-            if (created.Succeeded)
-                await userManager.AddToRoleAsync(adminUser, "Admin");
-        }
+            UserName       = adminEmail,
+            Email          = adminEmail,
+            EmailConfirmed = true,
+            FirstName      = "Admin",
+            LastName       = "Admin",
+        };
+        var created = await userManager.CreateAsync(adminUser, adminPassword);
+        if (created.Succeeded)
+            await userManager.AddToRoleAsync(adminUser, "Admin");
     }
 
     // ── Dev seed data (demo users, posts, replies) ────────────────────────

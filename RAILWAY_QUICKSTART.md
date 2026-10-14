@@ -30,14 +30,19 @@ Get Stripe keys from: https://dashboard.stripe.com/apikeys
 
 ### Step 4: Email (1 min)
 ```
-Email__SmtpHost=smtp.gmail.com
+Email__SmtpHost=smtp.resend.com
 Email__SmtpPort=587
-Email__SmtpUser=your-email@gmail.com
-Email__SmtpPass=app-specific-password
-Email__FromAddress=noreply@frontida4all.gr
-```
+Email__SmtpUser=resend
+Email__SmtpPass=<Resend API key>
+Email__FromAddress=noreply@mail.frontida4all.gr
+Email__AdminEmail=admin@frontida4all.gr
+Admin__Email=admin@frontida4all.gr
+Admin__Password=<strong unique password>
+`
+`
+`
 
-[Get Gmail app password here](https://myaccount.google.com/apppasswords)
+Get the Resend API key from the Resend dashboard. Never commit it.
 
 ### Step 5: Deploy! (immediate)
 Click the green **Deploy** button

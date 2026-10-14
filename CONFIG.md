@@ -115,20 +115,11 @@ Stripe__WebhookSecret=whsec_...
 
 ---
 
-## 3. `Program.cs` — Seed Admin Account (hardcoded)
+## 3. Seed Admin Account
 
 File: `frontida4baby.Web/Program.cs` lines ~112–126
 
-```csharp
-const string adminEmail    = "admin@frontida4baby.gr";  // ← change before first run
-const string adminPassword = "Admin1234!";              // ← CHANGE THIS — minimum 6 chars,
-                                                        //   uppercase + digit required
-```
-
-**This user is auto-created once** (only if the email doesn't exist yet). After first run,
-change the password in the Admin panel or delete and recreate the user.
-
-> ⚠️ The seed credentials are in plain source code. Move them to appsettings/secrets before deploying.
+Admin seed credentials come from configuration: set `Admin:Email` and `Admin:Password` (environment variables or User Secrets). The account is created only if it does not already exist, and nothing is seeded if either value is missing. Use a strong, unique password.
 
 ---
 
@@ -278,7 +269,7 @@ The site name `"frontida4all"` appears in several places that are not localisati
 | Footer brand | `_Layout.cshtml` lines 153, 174 |
 | Legal page body text | All 4 legal views |
 | Email `FromName` | `appsettings.json` |
-| Seed admin email | `Program.cs` line 112 |
+| Seed admin email | `Admin:Email` config |
 
 ---
 
@@ -348,7 +339,7 @@ flow entirely and do not see the dashboard banner.
 - [ ] Set `ConnectionStrings:DefaultConnection` (use secrets)
 - [ ] Configure SMTP (`Email:SmtpHost/Port/FromAddress/FromName/Username/Password`) so verification emails send
 - [ ] Set `Moderation:ClaudeApiKey` (use secrets)
-- [ ] Change seed admin email & password in `Program.cs`
+- [ ] Set `Admin:Email` and `Admin:Password` (environment variables, never in source)
 - [ ] Set `Email:SmtpHost`, `SmtpPort`, `FromAddress`, `FromName`, `Username`, `Password`
 - [ ] Set `Email:AdminEmail` to receive alerts
 - [ ] Configure Stripe keys (or set `Stripe:Enabled: false` to skip)

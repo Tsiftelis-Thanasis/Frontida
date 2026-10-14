@@ -34,17 +34,21 @@ ASPNETCORE_HTTP_PORTS=8080
 DefaultConnection=${DATABASE_URL}
 Stripe__SecretKey=sk_live_xxxx (get from Stripe dashboard)
 Stripe__PublishableKey=pk_live_xxxx (get from Stripe dashboard)
-Email__SmtpHost=smtp.gmail.com (or your email provider)
+# App email via Resend SMTP (verify host/port/username against Resend's SMTP docs)
+Email__SmtpHost=smtp.resend.com
 Email__SmtpPort=587
-Email__SmtpUser=your-email@gmail.com
-Email__SmtpPass=your-app-password (use app-specific password)
-Email__FromAddress=noreply@frontida4all.gr
-```
+Email__SmtpUser=resend
+Email__SmtpPass=<Resend API key>
+Email__FromAddress=noreply@mail.frontida4all.gr
+Email__AdminEmail=admin@frontida4all.gr
+# Seeded admin account, created on first start only
+Admin__Email=admin@frontida4all.gr
+Admin__Password=<strong unique password>
+`
+`
+`
 
-**⚠️ For Gmail:**
-- Enable 2-factor authentication
-- Create an [App Password](https://myaccount.google.com/apppasswords)
-- Use that password in `Email__SmtpPass`
+Never commit these values. Set them only in Railway's **Variables** tab.
 
 ## Step 4: Run Database Migrations
 
