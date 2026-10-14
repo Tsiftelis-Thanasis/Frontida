@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", function () {
     );
 
     heroElements.forEach(function (el, index) {
-        el.style.opacity = "0";
-        el.style.animation = "fadeInUp 0.6s ease 0.1s" + (index * 0.1) + "s both";
+        el.style.animation = "fadeInUp 0.6s ease both";
+        el.style.animationDelay = (0.1 + index * 0.1) + "s";
     });
 });
