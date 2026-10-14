@@ -130,6 +130,7 @@ builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 
 // ── Invoicing (myDATA data-readiness) ─────────────────────────────────────────
 builder.Services.Configure<CompanyOptions>(builder.Configuration.GetSection("Company"));
+builder.Services.Configure<MyDataOptions>(builder.Configuration.GetSection("MyData"));
 builder.Services.AddScoped<IInvoicingService, LocalInvoicingService>();
 
 // ── Email service ─────────────────────────────────────────────────────────────
