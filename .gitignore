@@ -290,3 +290,6 @@ FodyWeavers.xsd
 
 # Local secrets for docker-compose deployment — never commit real values
 .env
+
+# Sandbox output from StripeAadeSandboxTests (test payments, invoices, dummy AADE payloads)
+local-output/
