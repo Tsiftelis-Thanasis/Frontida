@@ -17,6 +17,9 @@ public class NotificationOptions
     /// <summary>Send email when a new post/reply lands in PendingReview (ambiguous — needs a human look).</summary>
     public bool PendingReview   { get; set; } = true;
 
+    /// <summary>Send email to admin when Claude moderation fails and posts fall back to the default policy.</summary>
+    public bool ModerationDegraded { get; set; } = true;
+
     /// <summary>Send email to admin when a support request is submitted.</summary>
     public bool SupportRequest  { get; set; } = true;
 }

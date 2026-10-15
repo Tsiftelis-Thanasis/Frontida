@@ -130,6 +130,29 @@ public class NotificationService : INotificationService
         await SendToAdminAsync("Χρειάζεται Έλεγχο", authorEmail, Truncate(contentSnippet, 60), html);
     }
 
+    public async Task NotifyModerationDegradedAsync(string reason, int consecutiveFailures)
+    {
+        if (!_notifOpts.ModerationDegraded) return;
+
+        var html = $"""
+            <div style="font-family:sans-serif;max-width:700px">
+              <h2 style="color:#b45309">⚠️ Content Moderation Degraded — frontida4all</h2>
+              <p>Claude moderation failed, so new posts and replies fall back to the default policy until it recovers.</p>
+              <table style="border-collapse:collapse;width:100%;margin-bottom:16px">
+                <tr><td style="padding:6px 12px;background:#fef3c7;font-weight:bold;width:160px">Time</td>
+                    <td style="padding:6px 12px;background:#fffbeb">{DateTime.UtcNow:yyyy-MM-dd HH:mm:ss} UTC</td></tr>
+                <tr><td style="padding:6px 12px;background:#fef3c7;font-weight:bold">Consecutive failures</td>
+                    <td style="padding:6px 12px;background:#fffbeb">{consecutiveFailures}</td></tr>
+                <tr><td style="padding:6px 12px;background:#fef3c7;font-weight:bold">Reason</td>
+                    <td style="padding:6px 12px;background:#fffbeb">{System.Net.WebUtility.HtmlEncode(reason)}</td></tr>
+              </table>
+              <p style="color:#6b7280;font-size:13px">Alerts repeat at most once an hour while failures continue. Details are in the admin Logs page.</p>
+            </div>
+            """;
+
+        await SendToAdminAsync("Moderation Degraded", Truncate(reason, 80), $"{consecutiveFailures} consecutive", html);
+    }
+
     public async Task NotifySupportRequestAsync(string name, string email, string subject, string category, string message)
     {
         if (!_notifOpts.SupportRequest) return;

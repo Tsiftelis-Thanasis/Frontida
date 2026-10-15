@@ -13,11 +13,15 @@ namespace frontida4baby.Web.Services;
 /// </summary>
 public class ClaudeModerationService
 {
+    private static int _consecutiveFallbacks;
+    private static DateTime _lastFallbackAlertUtc = DateTime.MinValue;
+    private static readonly TimeSpan FallbackAlertInterval = TimeSpan.FromMinutes(60);
+
     private readonly HttpClient _http;
     private readonly ModerationOptions _opts;
     private readonly ILogger<ClaudeModerationService> _logger;
-    private int _consecutiveFallbacks;
-    private const int FallbackAlertThreshold = 5;
+    private readonly IAppLogService _appLog;
+    private readonly INotificationService _notifications;
 
     private const string SystemPrompt = """
         You are a content moderation system for frontida4baby, a Greek childcare and
@@ -52,11 +56,18 @@ public class ClaudeModerationService
         Valid category values: Profanity, Threat, HateSpeech, IllegalOffer, SexualContent, Spam, ContactInfo, null
         """;
 
-    public ClaudeModerationService(HttpClient http, IOptions<ModerationOptions> opts, ILogger<ClaudeModerationService> logger)
+    public ClaudeModerationService(
+        HttpClient http,
+        IOptions<ModerationOptions> opts,
+        ILogger<ClaudeModerationService> logger,
+        IAppLogService appLog,
+        INotificationService notifications)
     {
         _opts = opts.Value;
         _http = http;
         _logger = logger;
+        _appLog = appLog;
+        _notifications = notifications;
         _http.BaseAddress ??= new Uri("https://api.anthropic.com");
         if (!_http.DefaultRequestHeaders.Contains("x-api-key"))
             _http.DefaultRequestHeaders.Add("x-api-key", _opts.ClaudeApiKey);
@@ -67,7 +78,7 @@ public class ClaudeModerationService
     public async Task<ModerationResult> CheckAsync(string? title, string body)
     {
         if (string.IsNullOrWhiteSpace(_opts.ClaudeApiKey))
-            return Fallback("API key not configured.");
+            return await FallbackAsync("API key not configured.");
 
         var userContent = title is null
             ? $"REPLY:\n{body}"
@@ -89,14 +100,18 @@ public class ClaudeModerationService
                 new StringContent(json, Encoding.UTF8, "application/json"));
 
             if (!response.IsSuccessStatusCode)
-                return Fallback($"Claude API error: {response.StatusCode}");
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                return await FallbackAsync(
+                    $"Claude API error: {(int)response.StatusCode} {response.StatusCode} — {ExtractErrorMessage(errorBody)}");
+            }
 
             var responseJson = await response.Content.ReadAsStringAsync();
             var claudeResponse = JsonSerializer.Deserialize<ClaudeResponse>(responseJson, _jsonOpts);
             var text = claudeResponse?.Content?.FirstOrDefault()?.Text;
 
             if (string.IsNullOrWhiteSpace(text))
-                return Fallback("Empty response from Claude.");
+                return await FallbackAsync("Empty response from Claude.");
 
             // Strip markdown fences if Claude wraps the JSON
             var jsonText = ExtractJson(text);
@@ -108,11 +123,11 @@ public class ClaudeModerationService
             }
             catch (JsonException)
             {
-                return Fallback($"Could not parse Claude response: {text[..Math.Min(text.Length, 200)]}");
+                return await FallbackAsync($"Could not parse Claude response: {text[..Math.Min(text.Length, 200)]}");
             }
 
             if (decision is null)
-                return Fallback("Could not parse Claude response.");
+                return await FallbackAsync("Could not parse Claude response.");
 
             var status = decision.Decision switch
             {
@@ -127,26 +142,48 @@ public class ClaudeModerationService
         }
         catch (TaskCanceledException)
         {
-            return Fallback("Claude API timed out.");
+            return await FallbackAsync("Claude API timed out.");
         }
         catch (Exception ex)
         {
-            return Fallback($"Claude API unavailable: {ex.GetType().Name}");
+            return await FallbackAsync($"Claude API unavailable: {ex.GetType().Name}");
         }
     }
 
-    private ModerationResult Fallback(string reason)
+    private static string ExtractErrorMessage(string body)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(body);
+            return doc.RootElement.GetProperty("error").GetProperty("message").GetString() ?? body;
+        }
+        catch (Exception ex) when (ex is JsonException or KeyNotFoundException or InvalidOperationException)
+        {
+            return body[..Math.Min(body.Length, 200)];
+        }
+    }
+
+    private async Task<ModerationResult> FallbackAsync(string reason)
     {
         var count = Interlocked.Increment(ref _consecutiveFallbacks);
         _logger.LogWarning("Claude moderation fallback #{Count}: {Reason}", count, reason);
 
-        if (count == FallbackAlertThreshold)
+        try
         {
-            _logger.LogCritical(
-                "Claude moderation has failed {Count} consecutive times. " +
-                "Content pipeline is degraded — items are falling back to '{FallbackPolicy}'. " +
-                "Check Claude API status and credentials.",
-                count, _opts.FallbackOnTimeout);
+            await _appLog.LogAsync(AppLogLevel.Error, "Moderation",
+                $"Claude moderation failed: {reason}",
+                details: $"Consecutive failures: {count}. Fallback policy: {_opts.FallbackOnTimeout}.");
+
+            var now = DateTime.UtcNow;
+            if (count == 1 || now - _lastFallbackAlertUtc >= FallbackAlertInterval)
+            {
+                _lastFallbackAlertUtc = now;
+                await _notifications.NotifyModerationDegradedAsync(reason, count);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to record or announce Claude moderation failure.");
         }
 
         var status = _opts.FallbackOnTimeout switch
