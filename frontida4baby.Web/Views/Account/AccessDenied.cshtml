@@ -1,0 +1,9 @@
+@{
+    ViewData["Title"] = L["AccessDeniedTitle"].Value;
+}
+
+<div class="container py-5 text-center">
+    <h1 class="h3 mb-3">@L["AccessDeniedTitle"]</h1>
+    <p class="text-muted mb-4">@L["AccessDeniedBody"]</p>
+    <a asp-controller="Dashboard" asp-action="Index" class="btn btn-primary">@L["NavDashboard"]</a>
+</div>

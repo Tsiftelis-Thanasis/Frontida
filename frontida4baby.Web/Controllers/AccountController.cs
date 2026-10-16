@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
@@ -495,4 +496,7 @@ public class AccountController : Controller
 
         return RedirectToAction("Index", "Home");
     }
+
+    [AllowAnonymous]
+    public IActionResult AccessDenied() => View();
 }
