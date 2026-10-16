@@ -12,6 +12,7 @@
   <data name="NavLogout"       xml:space="preserve"><value>Αποσύνδεση</value></data>
   <data name="NavModeration"   xml:space="preserve"><value>Διαχείριση</value></data>
   <data name="NavDashboard"    xml:space="preserve"><value>Ο λογαριασμός μου</value></data>
+  <data name="NavProfile" xml:space="preserve"><value>Το προφίλ μου</value></data>
   <data name="NavSubscription" xml:space="preserve"><value>Συνδρομή</value></data>
 
   <!-- Hero -->

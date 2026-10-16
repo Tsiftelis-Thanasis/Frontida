@@ -36,7 +36,7 @@ public class ClaudeModerationService
         - Hate speech based on ethnicity, religion, gender, sexual orientation, or disability
         - Illegal offers: drugs, weapons, counterfeit goods, unlicensed medical services
         - Sexual solicitation or explicit content
-        - Spam or commercial advertising unrelated to caregiving
+        - Spam or commercial advertising unrelated to the platform's care services
         - Requests to share personal contact information to bypass the platform
 
         MARK AS PENDING REVIEW (uncertain) if:
@@ -47,6 +47,10 @@ public class ClaudeModerationService
         APPROVE if none of the above apply. Normal caregiving requests, caregiver
         introductions, experience descriptions, availability, rate discussions,
         and follow-up questions are always acceptable.
+
+        The platform offers five service categories: childcare, elderly care, tutoring,
+        housekeeping, and pet care. Requests and offers in any of these categories are
+        always acceptable, including pet sitting and dog walking.
 
         Respond ONLY with valid JSON — no markdown, no text outside the object:
         {"decision":"Approved","reason":null,"category":null,"confidence":0.98}

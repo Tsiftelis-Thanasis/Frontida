@@ -82,6 +82,11 @@
 
                         @if (User.Identity?.IsAuthenticated == true)
                         {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="Profile" asp-action="Details" asp-route-userId="@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value">
+                                    <span class="material-symbols-outlined me-1" style="font-size:1.1rem">account_circle</span>@L["NavProfile"]
+                                </a>
+                            </li>
                             @if (!User.IsInRole("Admin"))
                             {
                                 <li class="nav-item">

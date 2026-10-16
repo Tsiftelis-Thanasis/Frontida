@@ -12,6 +12,7 @@
   <data name="NavLogout"       xml:space="preserve"><value>Log out</value></data>
   <data name="NavModeration"   xml:space="preserve"><value>Moderation</value></data>
   <data name="NavDashboard"    xml:space="preserve"><value>My Dashboard</value></data>
+  <data name="NavProfile" xml:space="preserve"><value>My Profile</value></data>
   <data name="NavSubscription" xml:space="preserve"><value>Subscription</value></data>
 
   <!-- Hero -->
