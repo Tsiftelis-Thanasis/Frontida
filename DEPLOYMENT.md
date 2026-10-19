@@ -44,9 +44,7 @@ Email__AdminEmail=admin@frontida4all.gr
 # Seeded admin account, created on first start only
 Admin__Email=admin@frontida4all.gr
 Admin__Password=<strong unique password>
-`
-`
-`
+```
 
 Never commit these values. Set them only in Railway's **Variables** tab.
 

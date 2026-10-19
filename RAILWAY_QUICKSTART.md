@@ -38,9 +38,7 @@ Email__FromAddress=noreply@mail.frontida4all.gr
 Email__AdminEmail=admin@frontida4all.gr
 Admin__Email=admin@frontida4all.gr
 Admin__Password=<strong unique password>
-`
-`
-`
+```
 
 Get the Resend API key from the Resend dashboard. Never commit it.
 
