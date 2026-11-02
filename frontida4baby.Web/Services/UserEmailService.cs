@@ -245,6 +245,47 @@ public class UserEmailService : IUserEmailService
         await SendAsync(ticket.Email, $"Απάντηση: {ticket.Subject}", html);
     }
 
+    public async Task SendVerificationReviewAsync(
+        ApplicationUser user, VerificationDocumentType type, bool approved, string? reason)
+    {
+        if (string.IsNullOrWhiteSpace(user.Email)) return;
+        var what = type == VerificationDocumentType.CriminalRecord ? "το πιστοποιητικό ποινικού μητρώου" : "η απόδειξη διεύθυνσης";
+        var title = approved ? "Εγκρίθηκε" : "Χρειάζεται νέο αρχείο";
+        var color = approved ? "#4E5B3A" : "#B9573A";
+        var body = approved
+            ? $"<p>Το έγγραφο που ανέβασες ({H(what)}) εγκρίθηκε. Ευχαριστούμε!</p>"
+            : $"<p>Δεν μπορέσαμε να εγκρίνουμε το έγγραφο που ανέβασες ({H(what)}).</p><p><strong>Λόγος:</strong> {H(reason)}</p><p>Ανέβασε ξανά νέο αρχείο από τη σελίδα «Επαλήθευση προφίλ».</p>";
+        var html = $"""
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+              <h2 style="color:{color}">{title}</h2>
+              <p>Γεια σου <strong>{H(user.FirstName)}</strong>,</p>
+              {body}
+              <p style="color:#6b7280;font-size:13px;margin-top:32px">— {AppName()}</p>
+            </div>
+            """;
+        await SendAsync(user.Email, approved ? "Το έγγραφό σου εγκρίθηκε" : "Το έγγραφό σου δεν εγκρίθηκε", html);
+    }
+
+    public async Task SendVerificationExpiryAsync(
+        ApplicationUser user, VerificationDocumentType type, DateTime expiresOn, bool expired)
+    {
+        if (string.IsNullOrWhiteSpace(user.Email)) return;
+        var what = type == VerificationDocumentType.CriminalRecord ? "Το πιστοποιητικό ποινικού μητρώου" : "Η απόδειξη διεύθυνσης";
+        var line = expired
+            ? $"{H(what)} <strong>έχει λήξει</strong> και το προφίλ σου δεν εμφανίζεται πλέον ως πλήρως επαληθευμένο. Ανέβασε νέο για να ξανακερδίσεις τη σήμανση."
+            : $"{H(what)} λήγει στις <strong>{expiresOn:dd/MM/yyyy}</strong>. Ανέβασε νέο πριν λήξει ώστε το προφίλ σου να παραμείνει πλήρως επαληθευμένο.";
+        var html = $"""
+            <div style="font-family:sans-serif;max-width:600px;margin:0 auto">
+              <h2 style="color:#B9573A">{(expired ? "Έληξε ένα έγγραφο επαλήθευσης" : "Λήγει σύντομα ένα έγγραφο επαλήθευσης")}</h2>
+              <p>Γεια σου <strong>{H(user.FirstName)}</strong>,</p>
+              <p>{line}</p>
+              <p>Μπες στο λογαριασμό σου και άνοιξε «Επαλήθευση προφίλ».</p>
+              <p style="color:#6b7280;font-size:13px;margin-top:32px">— {AppName()}</p>
+            </div>
+            """;
+        await SendAsync(user.Email, expired ? "Έληξε έγγραφο επαλήθευσης" : "Λήγει έγγραφο επαλήθευσης", html);
+    }
+
     // ── helpers ────────────────────────────────────────────────────────────────
 
     private async Task SendAsync(string to, string subject, string html)

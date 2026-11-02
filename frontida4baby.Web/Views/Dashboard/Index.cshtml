@@ -29,6 +29,17 @@
         </div>
     }
 
+    @if (Model.VerificationCheck && Model.VerificationMissing.Any())
+    {
+        <div class="alert alert-warning mb-4">
+            <i class="fa-solid fa-shield-halved me-2"></i>
+            <strong>Το προφίλ σας δεν είναι πλήρως επαληθευμένο.</strong>
+            Λείπουν: @string.Join(", ", Model.VerificationMissing).
+            Οι οικογένειες βλέπουν ότι το προφίλ σας δεν είναι ολοκληρωμένο.
+            <a href="/verification" class="alert-link">Ολοκληρώστε την επαλήθευση</a>
+        </div>
+    }
+
     @if (Model.IsCaregiver && !Model.HasServices)
     {
         <div class="alert alert-warning mb-4">

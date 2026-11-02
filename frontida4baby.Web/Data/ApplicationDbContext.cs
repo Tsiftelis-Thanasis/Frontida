@@ -26,10 +26,24 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     public DbSet<SupportTicket> SupportTickets { get; set; }
     public DbSet<SupportTicketReply> SupportTicketReplies { get; set; }
     public DbSet<Invoice> Invoices { get; set; }
+    public DbSet<UserVerification> UserVerifications { get; set; }
+    public DbSet<VerificationDocument> VerificationDocuments { get; set; }
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<UserVerification>(e =>
+        {
+            e.HasIndex(v => v.UserId).IsUnique();
+            e.HasOne(v => v.User).WithMany().HasForeignKey(v => v.UserId).OnDelete(DeleteBehavior.Cascade);
+        });
+        builder.Entity<VerificationDocument>(e =>
+        {
+            e.HasIndex(d => new { d.UserId, d.Type, d.Status });
+            e.HasIndex(d => d.Status);
+            e.HasOne(d => d.User).WithMany().HasForeignKey(d => d.UserId).OnDelete(DeleteBehavior.Cascade);
+        });
 
         // ApplicationUser → Profile
         builder.Entity<ApplicationUser>()

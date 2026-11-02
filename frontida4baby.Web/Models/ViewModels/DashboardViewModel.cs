@@ -13,6 +13,8 @@ public class DashboardViewModel
     public bool                        IsEmailVerified  { get; set; }
     public bool                        IsCaregiver      { get; set; }
     public bool                        HasServices      { get; set; }
+    public List<string>                VerificationMissing { get; set; } = new();
+    public bool                        VerificationCheck   { get; set; }
 }
 
 public class ReplyDashboardItem

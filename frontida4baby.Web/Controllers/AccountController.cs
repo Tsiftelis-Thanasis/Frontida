@@ -317,6 +317,7 @@ public class AccountController : Controller
         {
             await _log.LogAsync(AppLogLevel.Info, "Account",
                 $"Email confirmed: {user.Email}", userId: user.Id);
+            await HttpContext.RequestServices.GetRequiredService<IVerificationService>().SyncProfileAsync(user.Id);
 
             _ = Task.Run(async () =>
             {

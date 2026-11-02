@@ -614,23 +614,49 @@ body { animation: fadeIn var(--anim-duration-base) var(--anim-easing-natural); }
   letter-spacing: -0.05em;
 }
 
-/* ─── Verification Badge (Overlay) ─── */
+/* ─── Verification stamp (overlay, top right of the profile image) ─── */
 .badge-verified-overlay {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  background: #10b981;
-  color: white;
-  width: 40px;
-  height: 40px;
+  top: 10px;
+  right: 10px;
+  width: 78px;
+  height: 78px;
   border-radius: 50%;
+  background: rgba(255, 251, 245, 0.94);
+  color: var(--st-tertiary);
+  border: 3px double var(--st-tertiary);
+  outline: 2px solid rgba(255, 251, 245, 0.94);
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: 1.2rem;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
-  border: 3px solid white;
+  gap: 1px;
+  transform: rotate(-12deg);
+  box-shadow: 0 6px 16px -6px rgba(47, 54, 39, 0.55);
+  text-align: center;
+  line-height: 1;
   animation: scaleIn 0.3s ease;
+  z-index: 2;
+}
+.badge-verified-overlay i { font-size: 1.35rem; }
+.badge-verified-overlay span {
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+/* Verification checklist chips + notice */
+.vf-list { display: flex; flex-wrap: wrap; gap: .4rem; margin: 0; padding: 0; list-style: none; }
+.vf-chip {
+  display: inline-flex; align-items: center; gap: .35rem;
+  font-size: .78rem; font-weight: 600; padding: .25rem .65rem; border-radius: 999px;
+  background: var(--st-secondary-container); color: var(--st-on-secondary-container);
+}
+.vf-chip.off { background: var(--st-surface-container); color: var(--st-on-surface-variant); font-weight: 500; }
+.vf-notice {
+  background: var(--st-tertiary-fixed); color: #5a4310; border-radius: var(--st-radius-lg);
+  padding: .75rem 1rem; font-size: .9rem;
 }
 
 /* ─── Rating Badge (Overlay) ─── */
@@ -667,8 +693,8 @@ body { animation: fadeIn var(--anim-duration-base) var(--anim-easing-natural); }
 }
 
 .badge-success-subtle {
-  background: rgba(16, 185, 129, 0.1);
-  color: #047857;
+  background: var(--st-secondary-container);
+  color: var(--st-on-secondary-container);
   font-size: 0.75rem;
   font-weight: 600;
   padding: 0.4rem 0.8rem;
@@ -824,9 +850,8 @@ body { animation: fadeIn var(--anim-duration-base) var(--anim-easing-natural); }
   }
 
   .badge-verified-overlay {
-    width: 36px;
-    height: 36px;
-    font-size: 1rem;
+    width: 66px;
+    height: 66px;
   }
 }
 

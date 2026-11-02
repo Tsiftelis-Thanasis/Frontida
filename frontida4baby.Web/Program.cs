@@ -145,6 +145,12 @@ builder.Services.AddScoped<INotificationService, NotificationService>();
 builder.Services.Configure<UserEmailOptions>(builder.Configuration.GetSection("UserEmails"));
 builder.Services.AddScoped<IUserEmailService, UserEmailService>();
 
+// ── Caregiver verification ────────────────────────────────────────────────────
+builder.Services.Configure<VerificationOptions>(builder.Configuration.GetSection("Verification"));
+builder.Services.AddHttpClient<ISmsSender, SmsSender>();
+builder.Services.AddScoped<IVerificationService, VerificationService>();
+builder.Services.AddHostedService<VerificationExpiryJob>();
+
 // ── Application log service ───────────────────────────────────────────────────
 builder.Services.AddScoped<IAppLogService, AppLogService>();
 

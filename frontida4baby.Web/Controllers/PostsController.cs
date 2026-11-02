@@ -208,6 +208,16 @@ public class PostsController : Controller
                 .ToList(),
         };
 
+        // Verification status of reacting caregivers, so the post author sees who is not fully verified.
+        var reactorIds = vm.ReactingUsers.Where(r => r.IsCaregiver).Select(r => r.UserId).ToList();
+        if (reactorIds.Count > 0)
+        {
+            var summaries = await HttpContext.RequestServices
+                .GetRequiredService<IVerificationService>().GetSummariesAsync(reactorIds);
+            foreach (var reactor in vm.ReactingUsers.Where(r => summaries.ContainsKey(r.UserId)))
+                reactor.Verification = summaries[reactor.UserId];
+        }
+
         return View(vm);
     }
 

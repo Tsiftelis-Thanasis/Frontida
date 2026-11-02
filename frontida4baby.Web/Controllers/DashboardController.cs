@@ -50,6 +50,14 @@ public class DashboardController : Controller
             HasServices     = hasServices,
         };
 
+        if (isCaregiver)
+        {
+            var verification = await HttpContext.RequestServices
+                .GetRequiredService<frontida4baby.Web.Services.IVerificationService>().GetSummaryAsync(userId);
+            vm.VerificationCheck = true;
+            vm.VerificationMissing = verification.Missing();
+        }
+
         if (tab == "posts" || tab == "")
         {
             vm.MyPosts = await _db.Posts
@@ -242,6 +250,8 @@ public class DashboardController : Controller
         }
 
         await _db.SaveChangesAsync();
+        if (user.IsCaregiver)
+            await HttpContext.RequestServices.GetRequiredService<frontida4baby.Web.Services.IVerificationService>().SyncProfileAsync(user.Id);
 
         TempData["SettingsSaved"] = true;
         return RedirectToAction(nameof(Settings));

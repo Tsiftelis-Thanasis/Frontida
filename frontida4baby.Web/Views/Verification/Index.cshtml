@@ -1,0 +1,228 @@
+@model frontida4baby.Web.Controllers.VerificationPageViewModel
+@using frontida4baby.Web.Models.Entities
+@using frontida4baby.Web.Services
+@{
+    ViewData["Title"] = "Επαλήθευση προφίλ";
+    var s = Model.Summary;
+    var phonePrefill = (TempData["VerifyPhone"] as string) ?? s.PhoneNumber;
+    var codeSent = TempData["VerifyPhone"] != null;
+    var today = DateTime.UtcNow.Date;
+    var oldest = today.AddMonths(-Model.CriminalRecordValidityMonths).AddDays(1);
+    var renewSoon = s.CriminalRecordExpiresAt != null && (s.CriminalRecordExpiresAt.Value - DateTime.UtcNow).TotalDays < 30;
+}
+
+<div class="container py-4" style="max-width:860px">
+    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+        <h2 class="mb-0">Επαλήθευση προφίλ</h2>
+        <span class="badge @(s.IsFullyVerified ? "bg-success" : "bg-secondary") fs-6">@s.CompletedSteps / @VerificationSummary.TotalSteps</span>
+    </div>
+    <p class="text-muted">
+        Ολοκληρώστε τα βήματα για να εμφανίζεται στο προφίλ σας η σήμανση <strong>Επαληθευμένος</strong>.
+        Οι οικογένειες βλέπουν ποια βήματα έχετε ολοκληρώσει.
+    </p>
+
+    @if (TempData["VerifyMessage"] is string okMsg)
+    {
+        <div class="alert alert-success">@okMsg</div>
+    }
+    @if (TempData["VerifyError"] is string errMsg)
+    {
+        <div class="alert alert-danger">@errMsg</div>
+    }
+
+    @if (s.IsFullyVerified)
+    {
+        <div class="alert alert-success d-flex align-items-center gap-2">
+            <i class="fa-solid fa-circle-check"></i> Το προφίλ σας είναι πλήρως επαληθευμένο.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning">
+            <strong>Το προφίλ σας δεν είναι ακόμα πλήρως επαληθευμένο.</strong>
+            Λείπουν: @string.Join(", ", s.Missing()).
+            Οι οικογένειες που βλέπουν το προφίλ ή τη δήλωση ενδιαφέροντός σας ενημερώνονται σχετικά.
+        </div>
+    }
+
+    @* 1. Email *@
+    <div class="card mb-3"><div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div>
+            <h5 class="mb-1">1. Επιβεβαίωση email</h5>
+            <small class="text-muted">Βεβαιώνει ότι έχετε πρόσβαση στη διεύθυνση email σας.</small>
+        </div>
+        @if (s.EmailConfirmed)
+        {
+            <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Επιβεβαιώθηκε</span>
+        }
+        else
+        {
+            <form asp-controller="Account" asp-action="ResendVerification" method="post">
+                @Html.AntiForgeryToken()
+                <button class="btn btn-outline-primary btn-sm">Αποστολή συνδέσμου ξανά</button>
+            </form>
+        }
+    </div></div>
+
+    @* 2. Phone *@
+    <div class="card mb-3"><div class="card-body">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+            <div>
+                <h5 class="mb-1">2. Επιβεβαίωση κινητού</h5>
+                <small class="text-muted">Θα σας στείλουμε κωδικό με SMS.</small>
+            </div>
+            @if (s.PhoneConfirmed)
+            {
+                <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>@s.PhoneNumber</span>
+            }
+        </div>
+        @if (!s.PhoneConfirmed)
+        {
+            @if (!Model.SmsAvailable)
+            {
+                <p class="text-muted mb-0 mt-2">Η αποστολή SMS δεν είναι διαθέσιμη προσωρινά.</p>
+            }
+            else
+            {
+                <form asp-action="SendPhoneCode" method="post" class="row g-2 mt-2">
+                    @Html.AntiForgeryToken()
+                    <div class="col-sm-8"><input name="phone" class="form-control" placeholder="69XXXXXXXX" value="@phonePrefill" required /></div>
+                    <div class="col-sm-4"><button class="btn btn-primary w-100">Αποστολή κωδικού</button></div>
+                </form>
+                @if (codeSent)
+                {
+                    <form asp-action="VerifyPhone" method="post" class="row g-2 mt-2">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="phone" value="@phonePrefill" />
+                        <div class="col-sm-8"><input name="code" class="form-control" placeholder="Κωδικός SMS" inputmode="numeric" autocomplete="one-time-code" required /></div>
+                        <div class="col-sm-4"><button class="btn btn-accent w-100">Επιβεβαίωση</button></div>
+                    </form>
+                }
+            }
+        }
+    </div></div>
+
+    @* 3. Address *@
+    <div class="card mb-3"><div class="card-body">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+            <div>
+                <h5 class="mb-1">3. Απόδειξη διεύθυνσης</h5>
+                <small class="text-muted">Λογαριασμός ρεύματος, νερού ή τηλεφώνου στο όνομά σας, με την ίδια διεύθυνση που έχετε δηλώσει στο προφίλ.</small>
+            </div>
+            @if (s.AddressApproved)
+            {
+                <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Εγκρίθηκε έως @s.AddressExpiresAt?.ToString("dd/MM/yyyy")</span>
+            }
+            else if (s.AddressPending)
+            {
+                <span class="badge bg-warning text-dark">Σε έλεγχο</span>
+            }
+            else if (s.AddressExpired)
+            {
+                <span class="badge bg-danger">Έληξε</span>
+            }
+        </div>
+        <p class="small mb-2 mt-2">Η διεύθυνσή σας: <strong>@(string.IsNullOrWhiteSpace(Model.Address) ? "— δεν έχει συμπληρωθεί —" : Model.Address)</strong></p>
+        @if (s.AddressRejectionReason != null && !s.AddressPending)
+        {
+            <div class="alert alert-danger py-2 small">Απορρίφθηκε: @s.AddressRejectionReason</div>
+        }
+        @if (!s.AddressApproved && !s.AddressPending)
+        {
+            <form asp-action="UploadAddress" method="post" enctype="multipart/form-data" class="row g-2">
+                @Html.AntiForgeryToken()
+                <div class="col-sm-8"><input type="file" name="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required /></div>
+                <div class="col-sm-4"><button class="btn btn-primary w-100">Ανέβασμα</button></div>
+            </form>
+            <small class="text-muted">PDF, JPG ή PNG έως @Model.MaxFileSizeMb MB. Μπορείτε να καλύψετε ό,τι δεν χρειάζεται (π.χ. ποσά).</small>
+        }
+    </div></div>
+
+    @* 4. Identity *@
+    <div class="card mb-3"><div class="card-body">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+            <div>
+                <h5 class="mb-1">4. Έλεγχος ταυτότητας</h5>
+                <small class="text-muted">Φωτογραφία ταυτότητας ή διαβατηρίου και selfie, μέσω της υπηρεσίας Stripe Identity. Τα έγγραφα δεν αποθηκεύονται σε εμάς.</small>
+            </div>
+            @switch (s.IdentityStatus)
+            {
+                case IdentityCheckStatus.Verified:
+                    <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Επαληθεύτηκε</span>
+                    break;
+                case IdentityCheckStatus.Pending:
+                    <span class="badge bg-warning text-dark">Σε εξέλιξη</span>
+                    break;
+                case IdentityCheckStatus.Failed:
+                    <span class="badge bg-danger">Ανεπιτυχής</span>
+                    break;
+            }
+        </div>
+        @if (s.IdentityStatus != IdentityCheckStatus.Verified)
+        {
+            @if (!Model.IdentityAvailable)
+            {
+                <p class="text-muted mb-0 mt-2">Ο έλεγχος ταυτότητας δεν είναι διαθέσιμος προσωρινά.</p>
+            }
+            else
+            {
+                <form asp-action="StartIdentity" method="post" class="mt-2">
+                    @Html.AntiForgeryToken()
+                    <button class="btn btn-primary">@(s.IdentityStatus == IdentityCheckStatus.NotStarted ? "Έναρξη ελέγχου" : "Δοκιμάστε ξανά")</button>
+                </form>
+            }
+        }
+    </div></div>
+
+    @* 5. Criminal record *@
+    <div class="card mb-3"><div class="card-body">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
+            <div>
+                <h5 class="mb-1">5. Πιστοποιητικό ποινικού μητρώου</h5>
+                <small class="text-muted">
+                    Βγάλτε το από το gov.gr (ψηφιακά υπογεγραμμένο). Για παιδική φροντίδα, προτιμήστε το πιστοποιητικό για εργασία με ανήλικους.
+                    Ισχύει για @Model.CriminalRecordValidityMonths μήνες από την ημερομηνία έκδοσης.
+                </small>
+            </div>
+            @if (s.CriminalRecordApproved)
+            {
+                <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Ισχύει έως @s.CriminalRecordExpiresAt?.ToString("dd/MM/yyyy")</span>
+            }
+            else if (s.CriminalRecordPending)
+            {
+                <span class="badge bg-warning text-dark">Σε έλεγχο</span>
+            }
+            else if (s.CriminalRecordExpired)
+            {
+                <span class="badge bg-danger">Έληξε</span>
+            }
+        </div>
+        @if (s.CriminalRecordUploadedAt != null)
+        {
+            <p class="small text-muted mb-1 mt-2">Τελευταίο ανέβασμα: @s.CriminalRecordUploadedAt.Value.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</p>
+        }
+        @if (s.CriminalRecordRejectionReason != null && !s.CriminalRecordPending)
+        {
+            <div class="alert alert-danger py-2 small mt-2">Απορρίφθηκε: @s.CriminalRecordRejectionReason</div>
+        }
+        @if (!s.CriminalRecordPending && (!s.CriminalRecordApproved || renewSoon))
+        {
+            <form asp-action="UploadCriminalRecord" method="post" enctype="multipart/form-data" class="row g-2 mt-1">
+                @Html.AntiForgeryToken()
+                <div class="col-md-5"><input type="file" name="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required /></div>
+                <div class="col-md-4">
+                    <input type="date" name="issuedOn" class="form-control" min="@oldest.ToString("yyyy-MM-dd")" max="@today.ToString("yyyy-MM-dd")" required />
+                    <small class="text-muted">Ημερομηνία έκδοσης</small>
+                </div>
+                <div class="col-md-3"><button class="btn btn-primary w-100">Ανέβασμα</button></div>
+            </form>
+        }
+        <p class="small text-muted mt-3 mb-0">
+            Το αρχείο το βλέπει μόνο ο έλεγχος της πλατφόρμας και διαγράφεται μετά την αξιολόγηση. Κρατάμε μόνο το αποτέλεσμα και τις ημερομηνίες.
+        </p>
+    </div></div>
+
+    <p class="small text-muted">
+        Η επαλήθευση δείχνει ότι ελέγχθηκαν τα παραπάνω στοιχεία την ημερομηνία που αναγράφεται. Δεν αποτελεί εγγύηση για τη συμπεριφορά ή την καταλληλότητα ενός φροντιστή.
+    </p>
+</div>

@@ -903,6 +903,144 @@ namespace frontida4baby.Web.Migrations
                     b.ToTable("SupportTicketReplies");
                 });
 
+            modelBuilder.Entity("frontida4baby.Web.Models.Entities.UserVerification", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("AddressApprovedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("AddressExpiredNoticeSentAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("AddressExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("AddressWarningSentAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("CriminalRecordApprovedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("CriminalRecordExpiredNoticeSentAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("CriminalRecordExpiresAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("CriminalRecordIssuedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("CriminalRecordUploadedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("CriminalRecordWarningSentAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("IdentityStatus")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("IdentityVerifiedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PhoneCodeFailedAttempts")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime?>("PhoneCodeSentAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("PhoneCodesCountDate")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("PhoneCodesSentToday")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("StripeIdentitySessionId")
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("UserVerifications");
+                });
+
+            modelBuilder.Entity("frontida4baby.Web.Models.Entities.VerificationDocument", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
+
+                    b.Property<byte[]>("Data")
+                        .HasColumnType("bytea");
+
+                    b.Property<DateTime?>("DataPurgedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime?>("IssuedOn")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("RejectionReason")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime?>("ReviewedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ReviewedByUserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("character varying(450)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("Type")
+                        .HasColumnType("integer");
+
+                    b.Property<DateTime>("UploadedAt")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Status");
+
+                    b.HasIndex("UserId", "Type", "Status");
+
+                    b.ToTable("VerificationDocuments");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -1137,6 +1275,28 @@ namespace frontida4baby.Web.Migrations
                     b.Navigation("RepliedByUser");
 
                     b.Navigation("Ticket");
+                });
+
+            modelBuilder.Entity("frontida4baby.Web.Models.Entities.UserVerification", b =>
+                {
+                    b.HasOne("frontida4baby.Web.Models.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("frontida4baby.Web.Models.Entities.VerificationDocument", b =>
+                {
+                    b.HasOne("frontida4baby.Web.Models.Entities.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("frontida4baby.Web.Models.Entities.ApplicationUser", b =>

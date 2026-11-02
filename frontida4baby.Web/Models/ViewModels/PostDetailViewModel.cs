@@ -73,6 +73,7 @@ public class ReactingUserViewModel
     public double   AverageRating   { get; set; }
     public int      ReviewCount     { get; set; }
     public bool     IsApproved      { get; set; }
+    public frontida4baby.Web.Services.VerificationSummary? Verification { get; set; }
     public DateTime ReactedAt       { get; set; }
 }
 

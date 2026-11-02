@@ -80,6 +80,13 @@
                 </div>
             </div>
 
+            @* ─── Verification ─────────────────────────────────────────────────── *@
+            @if (Model.Verification != null)
+            {
+                <hr class="my-3" />
+                @await Html.PartialAsync("_VerificationChecklist", Model.Verification)
+            }
+
             @* ─── Stats strip ──────────────────────────────────────────────────── *@
             @if (Model.HourlyRate.HasValue || Model.YearsOfExperience.HasValue)
             {

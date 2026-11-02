@@ -80,7 +80,19 @@ public class ReactionsController : Controller
         }
 
         var count = await _db.PostReactions.CountAsync(r => r.PostId == postId);
-        return Json(new { liked, count });
+
+        // Tell a caregiver who is not fully verified that the post author will see it.
+        string? notice = null;
+        if (liked && reactingUser?.IsCaregiver == true)
+        {
+            var summary = await HttpContext.RequestServices
+                .GetRequiredService<IVerificationService>().GetSummaryAsync(userId);
+            if (!summary.IsFullyVerified)
+                notice = "Το προφίλ σας δεν είναι πλήρως επαληθευμένο. Ο αναρτών θα δει ότι λείπουν: "
+                         + string.Join(", ", summary.Missing())
+                         + ". Ολοκληρώστε την επαλήθευση από το μενού «Επαλήθευση» στον πίνακα ελέγχου.";
+        }
+        return Json(new { liked, count, notice });
     }
 
     [HttpPost("/reactions/approve/{reactionId:int}")]

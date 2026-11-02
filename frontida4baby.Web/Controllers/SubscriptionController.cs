@@ -20,6 +20,7 @@ public class SubscriptionController : Controller
     private readonly IAppLogService _appLog;
     private readonly IConfiguration _config;
     private readonly IInvoicingService _invoicing;
+    private readonly IVerificationService _verification;
 
     public SubscriptionController(
         ISubscriptionService subscription,
@@ -28,7 +29,8 @@ public class SubscriptionController : Controller
         IUserEmailService userEmail,
         IAppLogService appLog,
         IConfiguration config,
-        IInvoicingService invoicing)
+        IInvoicingService invoicing,
+        IVerificationService verification)
     {
         _subscription = subscription;
         _db = db;
@@ -37,6 +39,7 @@ public class SubscriptionController : Controller
         _appLog = appLog;
         _config = config;
         _invoicing = invoicing;
+        _verification = verification;
     }
 
     [HttpGet("/subscription")]
@@ -410,6 +413,15 @@ public class SubscriptionController : Controller
                             try { await _userEmail.SendPaymentSucceededAsync(paidUser); }
                             catch { /* best-effort */ }
                         });
+                }
+            }
+            else if (stripeEvent.Type.StartsWith("identity.verification_session."))
+            {
+                if (stripeEvent.Data.Object is Stripe.Identity.VerificationSession idSession)
+                {
+                    await _verification.ApplyIdentitySessionAsync(idSession);
+                    await LogStripeAsync(AppLogLevel.Info, $"Identity check update: {idSession.Status}",
+                        $"SessionId={idSession.Id}");
                 }
             }
             else if (stripeEvent.Type == "customer.subscription.deleted")

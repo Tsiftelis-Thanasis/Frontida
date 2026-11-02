@@ -13,4 +13,6 @@ public interface IUserEmailService
     Task SendSupportConfirmationAsync(string toEmail, string name, string subject);
     Task SendRefundIssuedAsync(ApplicationUser user, decimal amount, string currency);
     Task SendTicketReplyAsync(SupportTicket ticket, string replyBody);
+    Task SendVerificationReviewAsync(ApplicationUser user, VerificationDocumentType type, bool approved, string? reason);
+    Task SendVerificationExpiryAsync(ApplicationUser user, VerificationDocumentType type, DateTime expiresOn, bool expired);
 }

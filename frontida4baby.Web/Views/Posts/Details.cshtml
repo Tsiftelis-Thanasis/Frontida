@@ -224,6 +224,13 @@
                                         new ViewDataDictionary(ViewData) { ["StarCount"] = reactor.ReviewCount })
                                 }
                                 <small class="text-muted d-block">@reactor.ReactedAt.ToLocalTime().ToString("dd MMM yyyy HH:mm")</small>
+                                @if (reactor.Verification != null)
+                                {
+                                    <div class="mt-1">
+                                        @await Html.PartialAsync("_VerificationChecklist", reactor.Verification,
+                                            new ViewDataDictionary(ViewData) { ["Compact"] = true })
+                                    </div>
+                                }
                             </div>
                             @if (reactor.IsApproved)
                             {
@@ -232,7 +239,8 @@
                             else
                             {
                                 <form asp-controller="Reactions" asp-action="ApproveReaction"
-                                      asp-route-reactionId="@reactor.ReactionId" method="post" class="d-inline">
+                                      asp-route-reactionId="@reactor.ReactionId" method="post" class="d-inline"
+                                      onsubmit="@(reactor.IsCaregiver && reactor.Verification is { IsFullyVerified: false } ? "return confirm('Αυτός ο φροντιστής δεν είναι πλήρως επαληθευμένος. Θέλετε σίγουρα να εγκρίνετε την επικοινωνία;');" : "return true;")">
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn btn-sm btn-outline-success">
                                         <i class="fas fa-check me-1"></i>Έγκριση
@@ -392,6 +400,7 @@
                 }
                 const data = await resp.json();
                 if (data.error) { alert(data.error); return; }
+                if (data.notice) { alert(data.notice); }
 
                 document.getElementById('react-count').textContent = data.count;
                 if (data.liked) {

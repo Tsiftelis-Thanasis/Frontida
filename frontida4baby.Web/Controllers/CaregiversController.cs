@@ -13,15 +13,18 @@ public class CaregiversController : Controller
     private readonly ApplicationDbContext         _context;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ISubscriptionService         _subscription;
+    private readonly IVerificationService         _verification;
 
     public CaregiversController(
         ApplicationDbContext         context,
         UserManager<ApplicationUser> userManager,
-        ISubscriptionService         subscription)
+        ISubscriptionService         subscription,
+        IVerificationService         verification)
     {
         _context      = context;
         _userManager  = userManager;
         _subscription = subscription;
+        _verification = verification;
     }
 
     public async Task<IActionResult> Index(CaregiverSearchViewModel searchModel)
@@ -117,6 +120,7 @@ public class CaregiversController : Controller
             YearsOfExperience = caregiver.Profile?.YearsOfExperience,
             IsVerified        = caregiver.Profile?.IsVerified ?? false,
             IsEmailVerified   = caregiver.EmailConfirmed,
+            Verification      = await _verification.GetSummaryAsync(caregiver.Id),
             AverageRating     = caregiver.ReceivedReviews.Any()
                                     ? caregiver.ReceivedReviews.Average(r => (double)r.Rating) : 0,
             ReviewCount       = caregiver.ReceivedReviews.Count,

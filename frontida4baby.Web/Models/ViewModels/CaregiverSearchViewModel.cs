@@ -12,6 +12,7 @@ public class CaregiverProfileViewModel
     public decimal? HourlyRate        { get; set; }
     public int?     YearsOfExperience { get; set; }
     public bool     IsVerified        { get; set; }
+    public frontida4baby.Web.Services.VerificationSummary? Verification { get; set; }
     public bool     IsEmailVerified   { get; set; }
     public double   AverageRating     { get; set; }
     public int      ReviewCount       { get; set; }
