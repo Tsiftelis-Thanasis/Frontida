@@ -163,13 +163,16 @@ public class AdminController : Controller
     }
 
     // GET /admin/logs
-    public async Task<IActionResult> Logs(AppLogLevel? level, string? dateFrom, string? dateTo, int page = 1)
+    public async Task<IActionResult> Logs(AppLogLevel? level, string? category, string? dateFrom, string? dateTo, int page = 1)
     {
         const int pageSize = 50;
         var query = _db.AppLogs.AsQueryable();
 
         if (level.HasValue)
             query = query.Where(l => l.Level == level.Value);
+
+        if (!string.IsNullOrWhiteSpace(category))
+            query = query.Where(l => l.Category == category);
 
         if (DateTime.TryParse(dateFrom, out var from))
             query = query.Where(l => l.CreatedAt >= from);
@@ -188,6 +191,8 @@ public class AdminController : Controller
         ViewBag.Level     = level;
         ViewBag.DateFrom  = dateFrom;
         ViewBag.DateTo    = dateTo;
+        ViewBag.Category  = category;
+        ViewBag.Categories = await _db.AppLogs.Select(l => l.Category).Distinct().OrderBy(c => c).ToListAsync();
         return View(logs);
     }
 

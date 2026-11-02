@@ -189,7 +189,7 @@ public class PostsController : Controller
                     IsApproved    = r.IsApprovedByOP,
                     ReactedAt     = r.CreatedAt,
                 }).ToList() : new(),
-            Replies          = post.Replies
+            Replies          = currentUserId is null ? new List<ReplyItemViewModel>() : post.Replies
                 .Where(r => r.ModerationStatus == ModerationStatus.Approved)
                 .OrderBy(r => r.CreatedAt)
                 .Select(r => new ReplyItemViewModel

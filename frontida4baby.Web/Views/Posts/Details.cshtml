@@ -246,7 +246,7 @@
         }
 
         @* Replies (only shown on approved posts) *@
-        @if (Model.ModerationStatus == ModerationStatus.Approved)
+        @if (Model.ModerationStatus == ModerationStatus.Approved && User.Identity?.IsAuthenticated == true)
         {
         <h5 class="mb-3">@Model.Replies.Count @(Model.Replies.Count == 1 ? L["PostReplySingular"].Value : L["PostReplyPlural"].Value)</h5>
 
@@ -302,6 +302,12 @@
             </div>
         }
         } @* end ModerationStatus == Approved replies section *@
+        else if (Model.ModerationStatus == ModerationStatus.Approved)
+        {
+            <div class="alert alert-light border mt-4">
+                <a asp-controller="Account" asp-action="Login">@L["NavLogin"]</a> @L["PostLoginToSeeReplies"]
+            </div>
+        }
 
         @* Reply form *@
         @if (Model.Status == PostStatus.Active && Model.ModerationStatus == ModerationStatus.Approved)

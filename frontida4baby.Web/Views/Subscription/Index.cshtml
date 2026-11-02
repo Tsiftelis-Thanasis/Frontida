@@ -13,6 +13,8 @@
         <p class="lead text-muted">@L["SubSubtitle"]</p>
     </div>
 
+    @if (currentPlan != frontida4baby.Web.Models.Entities.SubscriptionPlan.Paid)
+    {
     <div class="row justify-content-center g-4">
         <!-- Free Plan -->
         <div class="col-md-5">
@@ -47,7 +49,7 @@
             <div class="card h-100 border-primary border-2 @(currentPlan == frontida4baby.Web.Models.Entities.SubscriptionPlan.Paid ? "border-success" : "")">
                 <div class="card-header text-center py-3 bg-primary text-white">
                     <h3 class="mb-0">Premium</h3>
-                    <div class="display-6 fw-bold mt-2">€13<small class="fs-6">@L["SubPerMonth"]</small></div>
+                    <div class="display-6 fw-bold mt-2">€20<small class="fs-6">@L["SubPerMonth"]</small></div>
                 </div>
                 <div class="card-body">
                     <ul class="list-unstyled">
@@ -87,9 +89,14 @@
             </div>
         </div>
     </div>
+    }
 
     @if (currentPlan == frontida4baby.Web.Models.Entities.SubscriptionPlan.Paid && stripeEnabled)
     {
+        <div class="text-center mb-4">
+            <h2 class="fw-bold">Premium</h2>
+            <p class="text-muted">€20 / μήνα</p>
+        </div>
         <div class="row justify-content-center mt-4">
             <div class="col-md-10">
                 <div class="card">

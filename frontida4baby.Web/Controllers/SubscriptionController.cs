@@ -127,6 +127,7 @@ public class SubscriptionController : Controller
 
         var service = new SessionService();
         var session = await service.CreateAsync(options);
+        await LogStripeAsync(AppLogLevel.Info, "Checkout session created", $"SessionId={session.Id}", userId);
         return Redirect(session.Url);
     }
 
@@ -199,6 +200,7 @@ public class SubscriptionController : Controller
             ReturnUrl = $"{domain}/subscription",
         };
         var session = await new Stripe.BillingPortal.SessionService().CreateAsync(options);
+        await LogStripeAsync(AppLogLevel.Info, "Billing portal opened", null, userId);
         return Redirect(session.Url);
     }
 
@@ -280,6 +282,8 @@ public class SubscriptionController : Controller
 
         if (chargedAt < DateTime.UtcNow.AddDays(-windowDays))
         {
+            await LogStripeAsync(AppLogLevel.Warning, "Refund rejected: outside refund window",
+                $"InvoiceId={latestInvoice.Id} WindowDays={windowDays}", userId);
             TempData["SubscriptionError"] =
                 $"Η επιστροφή χρημάτων είναι διαθέσιμη μόνο εντός {windowDays} ημερών από τη χρέωση. " +
                 "Επικοινώνησε μαζί μας για βοήθεια.";
@@ -288,6 +292,8 @@ public class SubscriptionController : Controller
 
         if (latestInvoice.Id == sub.LastRefundedInvoiceId)
         {
+            await LogStripeAsync(AppLogLevel.Warning, "Refund rejected: already refunded this period",
+                $"InvoiceId={latestInvoice.Id}", userId);
             TempData["SubscriptionError"] = "Η χρέωση αυτής της περιόδου έχει ήδη επιστραφεί.";
             return RedirectToAction(nameof(Index));
         }
@@ -295,6 +301,8 @@ public class SubscriptionController : Controller
         var paymentIntentId = latestInvoice.Payments?.Data?.FirstOrDefault()?.Payment?.PaymentIntentId;
         if (string.IsNullOrEmpty(paymentIntentId))
         {
+            await LogStripeAsync(AppLogLevel.Warning, "Refund rejected: no payment intent on invoice",
+                $"InvoiceId={latestInvoice.Id}", userId);
             TempData["SubscriptionError"] = "Δεν ήταν δυνατή η επιστροφή αυτής της χρέωσης. Επικοινώνησε μαζί μας.";
             return RedirectToAction(nameof(Index));
         }
@@ -344,7 +352,10 @@ public class SubscriptionController : Controller
 
         var signatureHeader = Request.Headers["Stripe-Signature"].ToString();
         if (string.IsNullOrEmpty(signatureHeader))
+        {
+            await LogStripeAsync(AppLogLevel.Warning, "Webhook rejected: missing Stripe-Signature header.");
             return BadRequest();
+        }
 
         try
         {
@@ -356,13 +367,31 @@ public class SubscriptionController : Controller
 
             // Idempotency: skip already-processed events
             if (await _db.ProcessedStripeEvents.AnyAsync(e => e.EventId == stripeEvent.Id))
+            {
+                await LogStripeAsync(AppLogLevel.Info, $"Webhook duplicate skipped: {stripeEvent.Type}",
+                    $"EventId={stripeEvent.Id}");
                 return Ok();
+            }
+
+            await LogStripeAsync(AppLogLevel.Info, $"Webhook received: {stripeEvent.Type}",
+                $"EventId={stripeEvent.Id}");
 
             _db.ProcessedStripeEvents.Add(new Models.Entities.ProcessedStripeEvent
             {
                 EventId = stripeEvent.Id,
             });
-            await _db.SaveChangesAsync();
+            try
+            {
+                await _db.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                // Another delivery of the same event won the race; treat this one as a duplicate.
+                _db.ChangeTracker.Clear();
+                await LogStripeAsync(AppLogLevel.Info, $"Webhook duplicate skipped (concurrent): {stripeEvent.Type}",
+                    $"EventId={stripeEvent.Id}");
+                return Ok();
+            }
 
             if (stripeEvent.Type == "checkout.session.completed")
             {
@@ -371,6 +400,8 @@ public class SubscriptionController : Controller
                 {
                     await SetPlanAsync(userId, SubscriptionPlan.Paid,
                         session.CustomerId, session.SubscriptionId);
+                    await LogStripeAsync(AppLogLevel.Info, "Subscription activated (checkout completed)",
+                        $"CustomerId={session.CustomerId} SubscriptionId={session.SubscriptionId}", userId);
 
                     var paidUser = await _userManager.FindByIdAsync(userId);
                     if (paidUser is not null)
@@ -394,6 +425,8 @@ public class SubscriptionController : Controller
                         sub.Status = SubscriptionStatus.Cancelled;
                         sub.EndDate = DateTime.UtcNow;
                         await _db.SaveChangesAsync();
+                        await LogStripeAsync(AppLogLevel.Info, "Subscription cancelled (Stripe event)",
+                            $"SubscriptionId={stripeSub.Id}", sub.UserId);
 
                         var cancelledUser = await _userManager.FindByIdAsync(sub.UserId);
                         if (cancelledUser is not null)
@@ -416,6 +449,8 @@ public class SubscriptionController : Controller
                     {
                         failedSub.Status = SubscriptionStatus.PastDue;
                         await _db.SaveChangesAsync();
+                        await LogStripeAsync(AppLogLevel.Warning, "Payment failed; subscription marked past due",
+                            $"InvoiceId={invoice.Id} CustomerId={invoice.CustomerId}", failedSub.UserId);
 
                         var failedUser = await _userManager.FindByIdAsync(failedSub.UserId);
                         if (failedUser is not null)
@@ -451,6 +486,8 @@ public class SubscriptionController : Controller
                                 invoice.AmountPaid / 100m,
                                 invoice.Currency,
                                 invoice.StatusTransitions?.PaidAt ?? invoice.Created);
+                            await LogStripeAsync(AppLogLevel.Info, "Payment succeeded; local invoice issued",
+                                $"InvoiceId={invoice.Id} Amount={invoice.AmountPaid / 100m} {invoice.Currency}", paidSub.UserId);
                         }
                     }
                 }
@@ -458,11 +495,21 @@ public class SubscriptionController : Controller
 
             return Ok();
         }
-        catch (StripeException)
+        catch (StripeException ex)
         {
+            await LogStripeAsync(AppLogLevel.Warning, "Webhook rejected: signature or Stripe error", ex.Message);
             return BadRequest();
         }
+        catch (Exception ex)
+        {
+            _db.ChangeTracker.Clear();
+            await LogStripeAsync(AppLogLevel.Error, $"Webhook processing failed: {ex.Message}", ex.ToString());
+            return StatusCode(500);
+        }
     }
+
+    private Task LogStripeAsync(AppLogLevel level, string message, string? details = null, string? userId = null)
+        => _appLog.LogAsync(level, "Stripe", message, details, userId, Request.Path.Value);
 
     private async Task SetPlanAsync(string userId, SubscriptionPlan plan,
         string? stripeCustomerId, string? stripeSubscriptionId)

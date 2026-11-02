@@ -5,6 +5,10 @@
     int page = ViewBag.Page;
     int total = ViewBag.Total;
     var level = ViewBag.Level as AppLogLevel?;
+    string? category = ViewBag.Category;
+    var categories = (List<string>)ViewBag.Categories;
+    int pageSize = 50;
+    int pageCount = Math.Max(1, (int)Math.Ceiling(total / (double)pageSize));
 }
 
 <div class="container py-4">
@@ -20,6 +24,15 @@
             </select>
         </div>
         <div class="col-auto">
+            <select name="category" class="form-select form-select-sm">
+                <option value="">Όλες οι κατηγορίες</option>
+                @foreach (var cat in categories)
+                {
+                    <option value="@cat" selected="@(category == cat)">@cat</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto">
             <input type="date" name="dateFrom" value="@ViewBag.DateFrom" class="form-control form-control-sm" />
         </div>
         <div class="col-auto">
@@ -32,12 +45,13 @@
     </form>
 
     <div class="table-responsive">
-        <table class="table table-sm table-hover">
+        <table class="table table-sm table-hover align-middle">
             <thead class="table-light">
                 <tr>
                     <th>Επίπεδο</th>
                     <th>Κατηγορία</th>
                     <th>Μήνυμα</th>
+                    <th>Χρήστης</th>
                     <th>Path</th>
                     <th>Ημερομηνία</th>
                 </tr>
@@ -53,12 +67,45 @@
                             </span>
                         </td>
                         <td><small class="text-muted">@log.Category</small></td>
-                        <td class="text-truncate" style="max-width:300px" title="@log.Message">@log.Message</td>
+                        <td style="max-width:420px">
+                            <div class="text-break">@log.Message</div>
+                            @if (!string.IsNullOrWhiteSpace(log.Details))
+                            {
+                                <details class="small">
+                                    <summary class="text-muted">Λεπτομέρειες</summary>
+                                    <pre class="small bg-light p-2 mb-0 text-wrap">@log.Details</pre>
+                                </details>
+                            }
+                        </td>
+                        <td><small class="text-muted">@log.UserId</small></td>
                         <td><small class="text-muted">@log.RequestPath</small></td>
-                        <td><small>@log.CreatedAt.ToLocalTime().ToString("dd/MM/yy HH:mm")</small></td>
+                        <td><small>@log.CreatedAt.ToLocalTime().ToString("dd/MM/yy HH:mm:ss")</small></td>
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+
+    @if (pageCount > 1)
+    {
+        <nav class="d-flex justify-content-between align-items-center">
+            <span class="small text-muted">Σελίδα @(page) από @pageCount</span>
+            <div class="btn-group btn-group-sm">
+                @if (page > 1)
+                {
+                    <a class="btn btn-outline-secondary"
+                       asp-action="Logs" asp-route-level="@level" asp-route-category="@category"
+                       asp-route-dateFrom="@ViewBag.DateFrom" asp-route-dateTo="@ViewBag.DateTo"
+                       asp-route-page="@(page - 1)">Προηγούμενη</a>
+                }
+                @if (page < pageCount)
+                {
+                    <a class="btn btn-outline-secondary"
+                       asp-action="Logs" asp-route-level="@level" asp-route-category="@category"
+                       asp-route-dateFrom="@ViewBag.DateFrom" asp-route-dateTo="@ViewBag.DateTo"
+                       asp-route-page="@(page + 1)">Επόμενη</a>
+                }
+            </div>
+        </nav>
+    }
 </div>
