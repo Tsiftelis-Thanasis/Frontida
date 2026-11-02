@@ -7,7 +7,7 @@ Organised by where each value lives.
 
 ## 1. `appsettings.json` — Runtime Configuration
 
-File: `frontida4baby.Web/appsettings.json`
+File: `frontida4all.Web/appsettings.json`
 
 ```jsonc
 {
@@ -95,7 +95,7 @@ Set `Stripe:Enabled` to `false` during development to skip all payment flows.
 For **development**, use .NET user secrets:
 
 ```bash
-cd frontida4baby.Web
+cd frontida4all.Web
 dotnet user-secrets set "Moderation:ClaudeApiKey" "sk-ant-..."
 dotnet user-secrets set "Email:Password"           "your-smtp-app-password"
 dotnet user-secrets set "Stripe:SecretKey"         "sk_test_..."
@@ -117,7 +117,7 @@ Stripe__WebhookSecret=whsec_...
 
 ## 3. Seed Admin Account
 
-File: `frontida4baby.Web/Program.cs` lines ~112–126
+File: `frontida4all.Web/Program.cs` lines ~112–126
 
 Admin seed credentials come from configuration: set `Admin:Email` and `Admin:Password` (environment variables or User Secrets). The account is created only if it does not already exist, and nothing is seeded if either value is missing. Use a strong, unique password.
 
@@ -139,7 +139,7 @@ Quick global replace — run from the repo root:
 
 ```bash
 # Replace placeholder domain in all views
-find frontida4baby.Web/Views -name "*.cshtml" \
+find frontida4all.Web/Views -name "*.cshtml" \
   -exec sed -i 's/frontida4all\.gr/yourplatform.gr/g' {} \;
 ```
 
@@ -162,7 +162,7 @@ These strings are in the same view files and need updating for your actual busin
 
 ## 6. Free-plan Limits (hardcoded in `SubscriptionService.cs`)
 
-File: `frontida4baby.Web/Services/SubscriptionService.cs`
+File: `frontida4all.Web/Services/SubscriptionService.cs`
 
 These are compiled values, not config — edit the source to change them:
 

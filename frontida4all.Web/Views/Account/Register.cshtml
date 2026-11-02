@@ -1,0 +1,127 @@
+@model frontida4all.Web.Models.ViewModels.RegisterViewModel
+@using Microsoft.AspNetCore.Authentication
+@{
+    ViewData["Title"] = L["RegTitle"].Value;
+    var providers = ViewData["ExternalProviders"] as List<AuthenticationScheme> ?? new();
+}
+
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="text-center mb-4">
+            <i class="fa-solid fa-user-plus fa-2x text-primary mb-3 d-block"></i>
+            <h2>@L["RegTitle"]</h2>
+            <p class="subtitle">@L["RegSubtitle"]</p>
+        </div>
+
+        @if (providers.Count > 0)
+        {
+            <form asp-action="ExternalLogin" method="post">
+                <div class="d-grid gap-2 mb-2">
+                    @foreach (var p in providers)
+                    {
+                        var (iconClass, btnClass) = p.Name switch
+                        {
+                            "Google"          => ("fa-brands fa-google",    "btn-google"),
+                            "Facebook"        => ("fa-brands fa-facebook-f","btn-facebook"),
+                            "Microsoft"       => ("fa-brands fa-microsoft", "btn-microsoft"),
+                            "Apple"           => ("fa-brands fa-apple",     "btn-apple"),
+                            _                 => ("fa-solid fa-key",        "btn-outline-secondary")
+                        };
+                        <button type="submit" name="provider" value="@p.Name"
+                                class="btn btn-social @btnClass w-100">
+                            <i class="@iconClass"></i>
+                            @p.DisplayName
+                        </button>
+                    }
+                </div>
+            </form>
+            <div class="social-divider">@L["SocialOrDivider"]</div>
+        }
+
+        <form asp-action="Register" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger small"></div>
+
+            <div class="row g-3 mb-3">
+                <div class="col-6">
+                    <label class="form-label">@L["RegFirstName"]</label>
+                    <input asp-for="FirstName" class="form-control" autocomplete="given-name" />
+                    <span asp-validation-for="FirstName" class="text-danger small"></span>
+                </div>
+                <div class="col-6">
+                    <label class="form-label">@L["RegLastName"]</label>
+                    <input asp-for="LastName" class="form-control" autocomplete="family-name" />
+                    <span asp-validation-for="LastName" class="text-danger small"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">@L["RegEmail"]</label>
+                <input asp-for="Email" class="form-control" type="email" autocomplete="email"
+                       placeholder="your@email.com" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">@L["RegPassword"]</label>
+                <div class="password-input-wrapper">
+                    <input asp-for="Password" class="form-control" type="password"
+                           autocomplete="new-password" />
+                    <button type="button" class="password-toggle-btn" tabindex="-1" aria-label="Εμφάνιση κωδικού">
+                        <svg class="icon-eye" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        <svg class="icon-eye-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                    </button>
+                </div>
+                <span asp-validation-for="Password" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">@L["RegConfirm"]</label>
+                <div class="password-input-wrapper">
+                    <input asp-for="ConfirmPassword" class="form-control" type="password"
+                           autocomplete="new-password" />
+                    <button type="button" class="password-toggle-btn" tabindex="-1" aria-label="Εμφάνιση κωδικού">
+                        <svg class="icon-eye" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                        <svg class="icon-eye-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"></path><line x1="1" y1="1" x2="23" y2="23"></line></svg>
+                    </button>
+                </div>
+                <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+            </div>
+
+            <div class="mb-4">
+                <div class="form-check p-3 rounded-xl border" style="background:var(--c-light)">
+                    <input asp-for="IsCaregiver" class="form-check-input" />
+                    <label asp-for="IsCaregiver" class="form-check-label fw-bold">
+                        <i class="fa-solid fa-user-nurse me-1 text-primary"></i>@L["RegIsCaregiver"]
+                    </label>
+                    <small class="d-block mt-1" style="color:var(--c-muted)">@L["RegIsCaregiverHint"]</small>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <div class="form-check p-3 rounded-xl border" style="background:var(--c-light)">
+                    <input asp-for="AcceptedTerms" class="form-check-input" />
+                    <label asp-for="AcceptedTerms" class="form-check-label">
+                        Έχω διαβάσει και αποδέχομαι τους
+                        <a asp-controller="Home" asp-action="TermsOfService" target="_blank">Όρους Χρήσης</a>,
+                        την <a asp-controller="Home" asp-action="Privacy" target="_blank">Πολιτική Απορρήτου</a>,
+                        την <a asp-controller="Home" asp-action="Disclaimer" target="_blank">Αποποίηση Ευθύνης</a>
+                        και την <a asp-controller="Home" asp-action="AiReviewPolicy" target="_blank">Πολιτική Αξιολόγησης AI</a>.
+                    </label>
+                    <span asp-validation-for="AcceptedTerms" class="text-danger small d-block mt-1"></span>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-auth">@L["RegBtn"]</button>
+        </form>
+
+        <p class="text-center mt-4 mb-0 small" style="color:var(--c-muted)">
+            @L["RegHaveAccount"]
+            <a asp-controller="Account" asp-action="Login"
+               class="fw-bold" style="color:var(--c-primary)">@L["RegLoginLink"]</a>
+        </p>
+    </div>
+</div>
+
+@section Scripts {
+    @await Html.PartialAsync("_ValidationScriptsPartial")
+}

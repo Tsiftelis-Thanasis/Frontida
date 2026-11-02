@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="frontida4all.Tests/frontida4all.Tests/frontida4all.Tests.csproj" />
+  <Project Path="frontida4all.Web/frontida4all.Web.csproj" />
+</Solution>

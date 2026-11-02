@@ -1,14 +1,14 @@
-# frontida4baby - Quick Start Guide
+# frontida4all - Quick Start Guide
 
 ## ✅ Solution Created Successfully!
 
-Your frontida4baby caregiving platform solution has been created at: `C:\Develop\frontida4baby`
+Your frontida4all caregiving platform solution has been created at: `C:\Develop\frontida4all`
 
 ## 📁 Project Structure
 
 ```
-frontida4baby/
-├── frontida4baby.Web/                    # Main web application
+frontida4all/
+├── frontida4all.Web/                    # Main web application
 │   ├── Controllers/
 │   │   ├── AccountController.cs     # User authentication & registration
 │   │   ├── CaregiversController.cs  # Caregiver search & listing
@@ -32,7 +32,7 @@ frontida4baby/
 │   └── wwwroot/                     # Static files
 ├── README.md                        # Full project documentation
 ├── .gitignore                       # Git ignore file
-└── frontida4baby.sln                     # Solution file
+└── frontida4all.sln                     # Solution file
 ```
 
 ## 🗄️ Database Entities
@@ -70,14 +70,14 @@ frontida4baby/
 Make sure PostgreSQL is running (`docker run -d -e POSTGRES_PASSWORD=... -p 5432:5432 postgres:16`), then apply migrations:
 
 ```bash
-cd C:\Develop\frontida4baby\frontida4baby.Web
+cd C:\Develop\frontida4all\frontida4all.Web
 dotnet ef database update
 ```
 
 ### 2. Run the Application
 
 ```bash
-cd C:\Develop\frontida4baby\frontida4baby.Web
+cd C:\Develop\frontida4all\frontida4all.Web
 dotnet run
 ```
 
@@ -162,16 +162,16 @@ dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Po
 dotnet build
 
 # Run the application
-dotnet run --project frontida4baby.Web
+dotnet run --project frontida4all.Web
 
 # Create a new migration
-dotnet ef migrations add MigrationName --project frontida4baby.Web
+dotnet ef migrations add MigrationName --project frontida4all.Web
 
 # Apply migrations
-dotnet ef database update --project frontida4baby.Web
+dotnet ef database update --project frontida4all.Web
 
 # Remove last migration
-dotnet ef migrations remove --project frontida4baby.Web
+dotnet ef migrations remove --project frontida4all.Web
 
 # Restore packages
 dotnet restore
@@ -201,4 +201,4 @@ dotnet restore
 
 **Ready to start developing!** 🎉
 
-The foundation is set - now you can build out the views, enhance the controllers, and add business logic to make frontida4baby a complete caregiving platform.
+The foundation is set - now you can build out the views, enhance the controllers, and add business logic to make frontida4all a complete caregiving platform.

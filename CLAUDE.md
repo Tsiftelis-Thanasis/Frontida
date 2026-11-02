@@ -1,7 +1,7 @@
-# frontida4baby - Project Context for Claude
+# frontida4all - Project Context for Claude
 
 ## Project Overview
-frontida4baby (Φροντίδα - Greek for "care") is a simplified caregiving platform that connects families with verified caregivers in Greece. This is a streamlined alternative to platforms like Nannuka, focusing on simplicity and core functionality.
+frontida4all (Φροντίδα - Greek for "care") is a simplified caregiving platform that connects families with verified caregivers in Greece. This is a streamlined alternative to platforms like Nannuka, focusing on simplicity and core functionality.
 
 ## Technical Stack
 - **Framework**: .NET 10
@@ -106,7 +106,7 @@ frontida4baby (Φροντίδα - Greek for "care") is a simplified caregiving p
 
 ## Project Structure
 ```
-frontida4baby/
+frontida4all/
 ├── Controllers/
 │   ├── HomeController.cs
 │   ├── AccountController.cs

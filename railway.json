@@ -4,7 +4,7 @@
     "builder": "dockerfile"
   },
   "deploy": {
-    "startCommand": "dotnet frontida4baby.Web.dll",
+    "startCommand": "dotnet frontida4all.Web.dll",
     "restartPolicyType": "on_failure",
     "restartPolicyMaxRetries": 5
   }

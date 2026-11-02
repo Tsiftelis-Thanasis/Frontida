@@ -1,0 +1,65 @@
+@model List<frontida4all.Web.Controllers.VerificationQueueItem>
+@using frontida4all.Web.Models.Entities
+@{
+    ViewData["Title"] = "Έλεγχος εγγράφων";
+}
+<div class="container py-4">
+    <h2 class="mb-3">Έλεγχος εγγράφων επαλήθευσης <span class="badge bg-secondary">@Model.Count</span></h2>
+
+    @if (TempData["AdminMessage"] is string okMsg) { <div class="alert alert-success">@okMsg</div> }
+    @if (TempData["AdminError"] is string errMsg) { <div class="alert alert-danger">@errMsg</div> }
+
+    @if (!Model.Any())
+    {
+        <p class="text-muted">Δεν υπάρχουν έγγραφα προς έλεγχο.</p>
+    }
+
+    @foreach (var d in Model)
+    {
+        var isCriminal = d.Type == VerificationDocumentType.CriminalRecord;
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between flex-wrap gap-2">
+                    <div>
+                        <h5 class="mb-1">@(isCriminal ? "Ποινικό μητρώο" : "Απόδειξη διεύθυνσης")</h5>
+                        <div><strong>@d.UserName</strong> · @d.Email</div>
+                        @if (!isCriminal) { <div class="small text-muted">Δηλωμένη διεύθυνση: @d.Address</div> }
+                        <div class="small text-muted">Ανέβηκε @d.UploadedAt.ToLocalTime().ToString("dd/MM/yyyy HH:mm") · @d.FileName (@(d.FileSize / 1024) KB)</div>
+                    </div>
+                    <div>
+                        @if (d.HasFile)
+                        {
+                            <a class="btn btn-outline-primary" target="_blank" rel="noopener" asp-controller="AdminVerification" asp-action="File" asp-route-id="@d.DocumentId">Άνοιγμα αρχείου</a>
+                        }
+                        else { <span class="text-muted">Το αρχείο έχει διαγραφεί</span> }
+                    </div>
+                </div>
+                <hr />
+                <div class="row g-3">
+                    <div class="col-lg-6">
+                        <form asp-action="Review" asp-route-id="@d.DocumentId" method="post" class="d-flex gap-2 align-items-end flex-wrap">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="approve" value="true" />
+                            @if (isCriminal)
+                            {
+                                <div>
+                                    <label class="form-label small mb-1">Ημερομηνία έκδοσης (επιβεβαίωση)</label>
+                                    <input type="date" name="issuedOn" class="form-control" value="@d.IssuedOn?.ToString("yyyy-MM-dd")" required />
+                                </div>
+                            }
+                            <button class="btn btn-primary">Έγκριση</button>
+                        </form>
+                    </div>
+                    <div class="col-lg-6">
+                        <form asp-action="Review" asp-route-id="@d.DocumentId" method="post" class="d-flex gap-2">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="approve" value="false" />
+                            <input name="reason" class="form-control" placeholder="Λόγος απόρριψης" required maxlength="500" />
+                            <button class="btn btn-outline-secondary">Απόρριψη</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

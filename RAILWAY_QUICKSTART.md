@@ -6,7 +6,7 @@
 1. Go to https://railway.app
 2. Sign in with GitHub
 3. Click **New Project** → **Deploy from GitHub**
-4. Select `frontida4baby` repo
+4. Select `frontida4all` repo
 5. Click **Deploy**
 
 Railway auto-detects Dockerfile and starts building.

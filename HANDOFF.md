@@ -1,4 +1,4 @@
-# frontida4baby — Development Handoff
+# frontida4all — Development Handoff
 
 ## Current state: all phases complete, 16/16 tests passing — no pending items
 
@@ -10,18 +10,18 @@
 # 1. Clone & open solution
 git clone <repo-url>
 cd Frontida
-# Open frontida4baby.slnx in Visual Studio / Rider
+# Open frontida4all.slnx in Visual Studio / Rider
 
 # 2. Restore packages
-dotnet restore frontida4baby.Web/frontida4baby.Web.csproj
-dotnet restore frontida4baby.Tests/frontida4baby.Tests/frontida4baby.Tests.csproj
+dotnet restore frontida4all.Web/frontida4all.Web.csproj
+dotnet restore frontida4all.Tests/frontida4all.Tests/frontida4all.Tests.csproj
 
 # 3. Run (migrations applied automatically on startup)
-cd frontida4baby.Web
+cd frontida4all.Web
 dotnet run
 
 # 4. Run tests
-cd ../frontida4baby.Tests/frontida4baby.Tests
+cd ../frontida4all.Tests/frontida4all.Tests
 dotnet test
 # Expected: 16/16 passing (AuthTests: 8, PostTests: 4, ReactionTests: 4)
 ```
@@ -101,7 +101,7 @@ None — all items resolved.
 
 ## First-Run Admin Credentials
 
-`admin@frontida4baby.gr` / `Admin1234!` (seeded automatically on startup)
+`admin@frontida4all.gr` / `Admin1234!` (seeded automatically on startup)
 Change the password after first login.
 
 ---
@@ -111,10 +111,10 @@ Change the password after first login.
 ### Solution Structure
 ```
 Frontida/
-├── frontida4baby.Web/          .NET 10, ASP.NET Core MVC
-├── frontida4baby.Tests/
-│   └── frontida4baby.Tests/    xUnit, WebApplicationFactory, InMemory EF
-└── frontida4baby.slnx
+├── frontida4all.Web/          .NET 10, ASP.NET Core MVC
+├── frontida4all.Tests/
+│   └── frontida4all.Tests/    xUnit, WebApplicationFactory, InMemory EF
+└── frontida4all.slnx
 ```
 
 ### Controllers
@@ -159,8 +159,8 @@ Frontida/
   "SmtpPort": 587,
   "SmtpUser": "",
   "SmtpPass": "",
-  "FromAddress": "noreply@frontida4baby.gr",
-  "FromName": "frontida4baby",
+  "FromAddress": "noreply@frontida4all.gr",
+  "FromName": "frontida4all",
   "AdminEmail": ""
 }
 ```

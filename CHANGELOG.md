@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to frontida4baby, developed with Claude AI assistance.
+All notable changes to frontida4all, developed with Claude AI assistance.
 
 ---
 
@@ -104,10 +104,10 @@ All notable changes to frontida4baby, developed with Claude AI assistance.
 - Star rating partial (`_StarRating.cshtml`)
 - Subscription views (Index, Success, Cancel)
 - Dockerfile and `.dockerignore`
-- Test project (`frontida4baby.Tests`) with auth, post, and reaction integration tests
+- Test project (`frontida4all.Tests`) with auth, post, and reaction integration tests
 
 ### Changed
-- Project renamed/restructured from `Frontida.Web` to `frontida4baby.Web`
+- Project renamed/restructured from `Frontida.Web` to `frontida4all.Web`
 - `ApplicationDbContext` fully rebuilt with all new entities
 - `Program.cs` wired with all services, middleware, localization, and Stripe
 - DB migrations: `AddPostsRepliesModeration`, `AddReactionsSavesSubscriptionLogs`

@@ -1,4 +1,4 @@
-# frontida4baby — Code Review Findings & Implementation Plan
+# frontida4all — Code Review Findings & Implementation Plan
 
 **Reviewed:** `C:\Users\ttsiftelis_scytales\Downloads\Frontida\Frontida`
 **Date:** 2026-06-10
@@ -43,32 +43,32 @@ Nothing here is unfixable; most items are small, targeted changes. The plan at t
 ## 1. Security & Configuration
 
 ### SEC-1 — Hardcoded admin account seeded in every environment *(Critical)*
-`frontida4baby.Web/Program.cs:120-135`
-The bootstrap creates `admin@frontida4baby.gr` with the literal password `Admin1234!` and runs in **all** environments, including Production. Anyone who reads the source (or guesses) owns the admin role.
+`frontida4all.Web/Program.cs:120-135`
+The bootstrap creates `admin@frontida4all.gr` with the literal password `Admin1234!` and runs in **all** environments, including Production. Anyone who reads the source (or guesses) owns the admin role.
 **Fix:** Move `adminEmail`/`adminPassword` to User Secrets / environment variables. In Production, fail fast if unset and never use a default. Force a password change on first login. Only auto-seed in Development.
 
 ### SEC-2 — No login lockout (brute-force open) *(High)*
-`frontida4baby.Web/Controllers/AccountController.cs:122-123`
+`frontida4all.Web/Controllers/AccountController.cs:122-123`
 `PasswordSignInAsync(..., lockoutOnFailure: false)` disables Identity's lockout entirely. Combined with no rate limiting (SEC-4), credential stuffing is unthrottled.
 **Fix:** Set `lockoutOnFailure: true`, configure `options.Lockout` in `Program.cs` (e.g. 5 attempts / 15-min lockout), and ensure `IdentityOptions.Lockout.AllowedForNewUsers = true`.
 
 ### SEC-3 — No security response headers *(High)*
-`frontida4baby.Web/Program.cs` (pipeline ~147-170)
+`frontida4all.Web/Program.cs` (pipeline ~147-170)
 No Content-Security-Policy, `X-Content-Type-Options`, `X-Frame-Options`/frame-ancestors, or `Referrer-Policy`. The app renders user-generated content and builds HTML emails, so headers matter.
 **Fix:** Add a security-headers middleware (or the `NetEscapades.AspNetCore.SecurityHeaders` package). Start with `X-Content-Type-Options: nosniff`, frame-ancestors `'none'`, a restrictive `Referrer-Policy`, and a CSP scoped to your CDN/Unsplash usage.
 
 ### SEC-4 — No rate limiting *(Medium)*
-`frontida4baby.Web/Program.cs`
+`frontida4all.Web/Program.cs`
 Login, register, the support form, and `/subscription/webhook` are unthrottled. Each unhandled error also writes a DB row **and** emails the admin (see LOG/DATA-11), so a repeated 500 becomes an email flood.
 **Fix:** `builder.Services.AddRateLimiter(...)` + `app.UseRateLimiter()`; apply a stricter policy to auth and webhook endpoints.
 
 ### SEC-5 — Weak password / account policy *(Medium)*
-`frontida4baby.Web/Program.cs:21-26`
+`frontida4all.Web/Program.cs:21-26`
 `RequiredLength = 6`, `RequireNonAlphanumeric = false`, `RequireConfirmedAccount = false`. For a platform holding family/caregiver PII this is weak.
 **Fix:** Raise minimum length to 8–10; reconsider requiring confirmed accounts (see ACC-1).
 
 ### SEC-6 — `AllowedHosts: "*"` *(Low)*
-`frontida4baby.Web/appsettings.json:43`
+`frontida4all.Web/appsettings.json:43`
 Wildcard host binding permits Host-header spoofing.
 **Fix:** Set the explicit production hostname.
 
@@ -78,7 +78,7 @@ Wildcard host binding permits Host-header spoofing.
 **Fix:** Add `**/.claude/settings.local.json` to `.gitignore`.
 
 ### SEC-8 — `appsettings*.json` are tracked, not ignored *(Low)*
-`frontida4baby.Web/appsettings.json`, `appsettings.Development.json`
+`frontida4all.Web/appsettings.json`, `appsettings.Development.json`
 **Currently safe** — verified no live secrets are committed (Claude key, Stripe keys, connection string, and SMTP password are all absent/empty and read from User Secrets at runtime). The risk is future: a secret typed into these files would be committed.
 **Fix:** Keep using User Secrets; add a pre-commit secret scan. Do **not** blanket-ignore `appsettings.json` (it carries needed non-secret config).
 
@@ -108,9 +108,9 @@ On external login, if an account with the same email exists, the external login 
 The token is `WebUtility.UrlEncode`-d, then passed to `Url.Action` which URL-encodes it **again**; on confirm it's `UrlDecode`-d once. This relies on model binding decoding the other layer and is fragile (the classic `+`-becomes-space bug). It works today but breaks unpredictably.
 **Fix:** Don't pre-encode — let `Url.Action` handle encoding and read the raw bound value, or Base64Url-encode the token bytes explicitly on both ends.
 
-### ACC-5 — Brand-name mismatch in email/UI: "frontida4all" vs "frontida4baby" *(Medium)*
+### ACC-5 — Brand-name mismatch in email/UI: "frontida4all" vs "frontida4all" *(Medium)*
 `AccountController.cs:336` (`?? "frontida4all"`), `Views/Shared/_Layout.cshtml:8,29,158,179`, legal pages
-The product is **frontida4baby** but the layout title, navbar brand, footer, verification email default, and legal text say **frontida4all**. Confusing and looks unfinished.
+The product is **frontida4all** but the layout title, navbar brand, footer, verification email default, and legal text say **frontida4all**. Confusing and looks unfinished.
 **Fix:** Pick one brand string, centralize it (config or a resource key), and replace all occurrences.
 
 ### ACC-6 — Registration/verification/admin-notify run as fire-and-forget `Task.Run` *(Low)*
@@ -358,7 +358,7 @@ Terms-acceptance sentence + link text hardcoded Greek inside an otherwise locali
 ## 9. Testing
 
 ### TEST-1 — No authorization tests for Admin/Moderation *(High)*
-`frontida4baby.Tests/`
+`frontida4all.Tests/`
 The suite covers webhook/subscription logic well but never asserts that non-admins are blocked from `AdminController`/`ModerationController`. For a PII platform this is the biggest coverage gap.
 **Fix:** Add tests that a non-admin gets 403/redirect on admin/moderation actions.
 
@@ -390,7 +390,7 @@ Do these before any public/Production deployment.
 6. **ACC-2** Add forgot/reset-password (actions, views, email).
 7. **ACC-3** Verify provider `email_verified` before auto-linking external logins.
 8. **ACC-4** Fix token double-encoding.
-9. **ACC-5** Resolve the frontida4all/frontida4baby brand mismatch (centralize the brand string).
+9. **ACC-5** Resolve the frontida4all/frontida4all brand mismatch (centralize the brand string).
 
 ### Phase 2 — AI moderation resilience (the "24/7" work) *(~2–3 days)*
 10. **AI-4** Add HTTP resilience (retry + circuit breaker) to the Claude client.

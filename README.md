@@ -1,10 +1,10 @@
-# frontida4baby (Φροντίδα)
+# frontida4all (Φροντίδα)
 
 A caregiving platform connecting families with trusted caregivers in Greece.
 
 ## Overview
 
-frontida4baby (Φροντίδα = "care" in Greek) is a web application that helps families find verified babysitters, tutors, elderly caregivers, and other household help. It features community-driven posts, a moderation pipeline powered by Claude AI, Stripe-based subscriptions, and full Greek/English localization.
+frontida4all (Φροντίδα = "care" in Greek) is a web application that helps families find verified babysitters, tutors, elderly caregivers, and other household help. It features community-driven posts, a moderation pipeline powered by Claude AI, Stripe-based subscriptions, and full Greek/English localization.
 
 ## Features
 
@@ -60,14 +60,14 @@ dotnet restore
 Set your connection string via user secrets (don't put it in `appsettings.json`):
 
 ```bash
-cd frontida4baby.Web
+cd frontida4all.Web
 dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Port=5432;Database=frontida4baby;Username=postgres;Password=your-local-password"
 ```
 
 Set secrets for sensitive values (never commit these):
 
 ```bash
-cd frontida4baby.Web
+cd frontida4all.Web
 dotnet user-secrets set "Email:SmtpPass" "your-gmail-app-password"
 dotnet user-secrets set "Stripe:SecretKey" "sk_test_..."
 dotnet user-secrets set "Moderation:ClaudeApiKey" "sk-ant-..."
@@ -76,7 +76,7 @@ dotnet user-secrets set "Moderation:ClaudeApiKey" "sk-ant-..."
 ### 4. Migrate
 
 ```bash
-cd frontida4baby.Web
+cd frontida4all.Web
 dotnet ef database update
 ```
 
@@ -93,7 +93,7 @@ Navigate to `https://localhost:5001`.
 ## Project Structure
 
 ```
-frontida4baby/
+frontida4all/
 ├── Controllers/          # MVC controllers (thin, delegate to services)
 ├── Models/
 │   ├── Entities/         # Domain models (ApplicationUser, Post, etc.)

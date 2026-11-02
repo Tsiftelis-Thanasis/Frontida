@@ -3,12 +3,12 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Restore — separate layer so it's cached unless .csproj changes
-COPY frontida4baby.Web/frontida4baby.Web.csproj frontida4baby.Web/
-RUN dotnet restore frontida4baby.Web/frontida4baby.Web.csproj
+COPY frontida4all.Web/frontida4all.Web.csproj frontida4all.Web/
+RUN dotnet restore frontida4all.Web/frontida4all.Web.csproj
 
 # Copy source and publish
-COPY frontida4baby.Web/ frontida4baby.Web/
-WORKDIR /src/frontida4baby.Web
+COPY frontida4all.Web/ frontida4all.Web/
+WORKDIR /src/frontida4all.Web
 RUN dotnet publish -c Release -o /app/publish --no-restore
 
 # ── Runtime stage ─────────────────────────────────────────────────────────────
@@ -36,4 +36,4 @@ EXPOSE 8080
 ENV ASPNETCORE_ENVIRONMENT=Production
 ENV PORT=8080
 
-ENTRYPOINT dotnet frontida4baby.Web.dll --urls=http://+:$PORT
+ENTRYPOINT dotnet frontida4all.Web.dll --urls=http://+:$PORT

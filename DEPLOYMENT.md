@@ -1,10 +1,10 @@
 # Railway Deployment Guide
 
-This guide walks you through deploying frontida4baby to Railway.
+This guide walks you through deploying frontida4all to Railway.
 
 ## Prerequisites
 
-- GitHub account with the frontida4baby repository
+- GitHub account with the frontida4all repository
 - Railway account (https://railway.app) — free to start
 - Domain name (optional, Railway provides a free subdomain)
 
@@ -13,7 +13,7 @@ This guide walks you through deploying frontida4baby to Railway.
 1. Go to https://railway.app
 2. Sign up or log in with GitHub
 3. Click **"New Project"** → **"Deploy from GitHub"**
-4. Select your **frontida4baby** repository
+4. Select your **frontida4all** repository
 5. Click **"Deploy"**
 
 Railway will automatically detect the Dockerfile and start building.
