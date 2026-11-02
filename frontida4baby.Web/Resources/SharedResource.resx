@@ -84,7 +84,7 @@
   <data name="FtrLinks"     xml:space="preserve"><value>Quick Links</value></data>
   <data name="FtrServices"  xml:space="preserve"><value>Services</value></data>
   <data name="FtrPrivacy"   xml:space="preserve"><value>Privacy Policy</value></data>
-  <data name="FtrCopyright" xml:space="preserve"><value>© 2026 frontida4baby. All rights reserved.</value></data>
+  <data name="FtrCopyright" xml:space="preserve"><value>© 2026 frontida4all. All rights reserved.</value></data>
 
   <!-- Login -->
   <data name="LoginTitle"        xml:space="preserve"><value>Welcome Back</value></data>
@@ -185,6 +185,7 @@
   <data name="PostReplyPlaceholder" xml:space="preserve"><value>Write your reply…</value></data>
   <data name="PostSubmitReply"      xml:space="preserve"><value>Submit Reply</value></data>
   <data name="PostToReply"          xml:space="preserve"><value>to reply.</value></data>
+  <data name="PostLoginToSeeReplies" xml:space="preserve"><value>to see the replies.</value></data>
   <data name="PostClosed"           xml:space="preserve"><value>Closed</value></data>
   <data name="PostClosedMsg"        xml:space="preserve"><value>This request is closed.</value></data>
   <data name="PostBackToAll"        xml:space="preserve"><value>← Back to all requests</value></data>
@@ -282,4 +283,29 @@
   <data name="CookieMessage"    xml:space="preserve"><value>We use cookies to improve your experience on our platform.</value></data>
   <data name="CookieLearnMore" xml:space="preserve"><value>Learn more</value></data>
   <data name="CookieAccept"    xml:space="preserve"><value>Accept</value></data>
+  <data name="HomeBadge" xml:space="preserve"><value>Care for everyone</value></data>
+  <data name="HomeHeroLead" xml:space="preserve"><value>Connect with verified, caring professionals across Greece.</value></data>
+  <data name="HomeWhatHelp" xml:space="preserve"><value>What kind of help do you need?</value></data>
+  <data name="HomeCityPlaceholder" xml:space="preserve"><value>Area or city (e.g. Thessaloniki)</value></data>
+  <data name="HomeSeeCaregivers" xml:space="preserve"><value>See caregivers</value></data>
+  <data name="HomeTrustVerified" xml:space="preserve"><value>Verified profiles</value></data>
+  <data name="HomeTrustNationwide" xml:space="preserve"><value>Across Greece</value></data>
+  <data name="HomeFloatTitle" xml:space="preserve"><value>With care</value></data>
+  <data name="HomeFloatSub" xml:space="preserve"><value>and trust</value></data>
+  <data name="HomeSvcEyebrow" xml:space="preserve"><value>Our Services</value></data>
+  <data name="HomeSvcHeadA" xml:space="preserve"><value>Help for every</value></data>
+  <data name="HomeSvcHeadB" xml:space="preserve"><value>need at home</value></data>
+  <data name="ChipChildcare" xml:space="preserve"><value>Children</value></data>
+  <data name="ChipElderly" xml:space="preserve"><value>Elderly</value></data>
+  <data name="ChipTutoring" xml:space="preserve"><value>Tutoring</value></data>
+  <data name="ChipHousekeeping" xml:space="preserve"><value>Home</value></data>
+  <data name="ChipPets" xml:space="preserve"><value>Pets</value></data>
+  <data name="HomeFamiliesEyebrow" xml:space="preserve"><value>For families</value></data>
+  <data name="HomeFamiliesTitle" xml:space="preserve"><value>Need help? Tell us what you're looking for.</value></data>
+  <data name="HomeFamiliesText" xml:space="preserve"><value>Browse caregiver profiles or post your own request under “Find Help”.</value></data>
+  <data name="HomeViewProfiles" xml:space="preserve"><value>View Profiles</value></data>
+  <data name="HomeCaregiversEyebrow" xml:space="preserve"><value>For caregivers</value></data>
+  <data name="HomeCaregiversTitle" xml:space="preserve"><value>Join the community.</value></data>
+  <data name="HomeCaregiversText" xml:space="preserve"><value>Create your profile and meet families near you who need your help.</value></data>
+  <data name="HomeCreateAccount" xml:space="preserve"><value>Create Account</value></data>
 </root>

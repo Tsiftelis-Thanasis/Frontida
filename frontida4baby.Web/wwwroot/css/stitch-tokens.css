@@ -1,34 +1,35 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   Stitch Design Tokens — "The Resilient Sanctuary"
-   CSS Custom Properties for colors, typography, spacing, radii, shadows
+   frontida4all Design Tokens — warm editorial (cream, terracotta, olive)
+   Token names keep the legacy --st-* scheme so all existing views inherit it.
+   Fonts: Literata (headings) + Commissioner (body)
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
-  /* ─── Primary ─────────────────────────────────────────────────────────── */
-  --st-primary:                 #006067;
-  --st-primary-container:       #007b83;
-  --st-on-primary:              #ffffff;
-  --st-on-primary-container:    #d0fbff;
-  --st-primary-fixed:           #96f1fa;
-  --st-primary-fixed-dim:       #7ad5dd;
-  --st-on-primary-fixed:        #002022;
-  --st-on-primary-fixed-variant:#004f54;
+  /* ─── Primary (terracotta) ────────────────────────────────────────────── */
+  --st-primary:                 #B9573A;
+  --st-primary-container:       #9E4830;
+  --st-on-primary:              #FFF8EF;
+  --st-on-primary-container:    #FFF1E8;
+  --st-primary-fixed:           #F6DCCB;
+  --st-primary-fixed-dim:       #E9B79C;
+  --st-on-primary-fixed:        #3A1608;
+  --st-on-primary-fixed-variant:#8F3F27;
 
-  /* ─── Secondary ───────────────────────────────────────────────────────── */
-  --st-secondary:               #4c616c;
-  --st-secondary-container:     #cfe6f2;
-  --st-on-secondary:            #ffffff;
-  --st-on-secondary-container:  #526772;
-  --st-secondary-fixed:         #cfe6f2;
-  --st-secondary-fixed-dim:     #b4cad6;
+  /* ─── Secondary (light olive) ─────────────────────────────────────────── */
+  --st-secondary:               #4E5B3A;
+  --st-secondary-container:     #E3E7D3;
+  --st-on-secondary:            #FFF8EF;
+  --st-on-secondary-container:  #2F3627;
+  --st-secondary-fixed:         #E3E7D3;
+  --st-secondary-fixed-dim:     #C9D3B0;
 
-  /* ─── Tertiary (warm ochre) ───────────────────────────────────────────── */
-  --st-tertiary:                #84470b;
-  --st-tertiary-container:      #a25e23;
-  --st-on-tertiary:             #ffffff;
-  --st-on-tertiary-container:   #fff0e8;
-  --st-tertiary-fixed:          #ffdcc4;
-  --st-tertiary-fixed-dim:      #ffb780;
+  /* ─── Tertiary (deep olive) ───────────────────────────────────────────── */
+  --st-tertiary:                #2F3627;
+  --st-tertiary-container:      #4E5B3A;
+  --st-on-tertiary:             #FFF8EF;
+  --st-on-tertiary-container:   #E3E7D3;
+  --st-tertiary-fixed:          #F6E7BE;
+  --st-tertiary-fixed-dim:      #D9A93A;
 
   /* ─── Error ───────────────────────────────────────────────────────────── */
   --st-error:                   #ba1a1a;
@@ -36,35 +37,47 @@
   --st-on-error:                #ffffff;
   --st-on-error-container:      #93000a;
 
-  /* ─── Surface Hierarchy ───────────────────────────────────────────────── */
-  --st-surface:                 #f8fafb;
-  --st-surface-dim:             #d8dadb;
-  --st-surface-bright:          #f8fafb;
-  --st-surface-container-lowest:#ffffff;
-  --st-surface-container-low:   #f2f4f5;
-  --st-surface-container:       #eceeef;
-  --st-surface-container-high:  #e6e8e9;
-  --st-surface-container-highest:#e1e3e4;
-  --st-surface-variant:         #e1e3e4;
-  --st-surface-tint:            #006970;
+  /* ─── Surface Hierarchy (cream) ───────────────────────────────────────── */
+  --st-surface:                 #F6F0E6;
+  --st-surface-dim:             #E6DCCB;
+  --st-surface-bright:          #FFFBF5;
+  --st-surface-container-lowest:#FFFBF5;
+  --st-surface-container-low:   #F1E9DB;
+  --st-surface-container:       #EDE3D3;
+  --st-surface-container-high:  #E6DCCB;
+  --st-surface-container-highest:#DDD1BC;
+  --st-surface-variant:         #E6DCCB;
+  --st-surface-tint:            #B9573A;
 
   /* ─── On Surface ──────────────────────────────────────────────────────── */
-  --st-on-surface:              #191c1d;
-  --st-on-surface-variant:      #3e494a;
-  --st-on-background:           #191c1d;
+  --st-on-surface:              #2B2A26;
+  --st-on-surface-variant:      #5E564B;
+  --st-on-background:           #2B2A26;
 
   /* ─── Outline ─────────────────────────────────────────────────────────── */
-  --st-outline:                 #6e797a;
-  --st-outline-variant:         #bdc9ca;
+  --st-outline:                 #8A8174;
+  --st-outline-variant:         #D9CDB8;
 
   /* ─── Inverse ─────────────────────────────────────────────────────────── */
-  --st-inverse-surface:         #2e3132;
-  --st-inverse-on-surface:      #eff1f2;
-  --st-inverse-primary:         #7ad5dd;
+  --st-inverse-surface:         #2F3627;
+  --st-inverse-on-surface:      #F6F0E6;
+  --st-inverse-primary:         #E9B79C;
+
+  /* ─── Service category tints (from design) ────────────────────────────── */
+  --st-tint-childcare:          #F6E7BE;
+  --st-tint-elderly:            #F6DCCB;
+  --st-tint-tutoring:           #DCE6EA;
+  --st-tint-housekeeping:       #E3E7D3;
+  --st-tint-pets:               #E9DFEA;
+  --st-dot-childcare:           #D9A93A;
+  --st-dot-elderly:             #B9573A;
+  --st-dot-tutoring:            #4F7A8C;
+  --st-dot-housekeeping:        #4E5B3A;
+  --st-dot-pets:                #7E5F86;
 
   /* ─── Typography ──────────────────────────────────────────────────────── */
-  --st-font-headline:           'Manrope', sans-serif;
-  --st-font-body:               'Inter', sans-serif;
+  --st-font-headline:           'Literata', Georgia, serif;
+  --st-font-body:               'Commissioner', system-ui, sans-serif;
 
   /* ─── Spacing ─────────────────────────────────────────────────────────── */
   --st-space-1:   0.25rem;  /* 4px */
@@ -81,19 +94,32 @@
   --st-space-24:  8.5rem;   /* 136px */
 
   /* ─── Border Radius ───────────────────────────────────────────────────── */
-  --st-radius-sm:   0.25rem;
-  --st-radius-md:   0.5rem;
-  --st-radius-lg:   0.75rem;
-  --st-radius-xl:   1.5rem;
+  --st-radius-sm:   0.5rem;
+  --st-radius-md:   0.75rem;
+  --st-radius-lg:   1rem;
+  --st-radius-xl:   1.75rem;
   --st-radius-2xl:  2rem;
-  --st-radius-3xl:  1.875rem; /* 30px */
+  --st-radius-3xl:  2.25rem;
   --st-radius-full: 9999px;
 
   /* ─── Shadows ─────────────────────────────────────────────────────────── */
-  --st-shadow-editorial: 0px 20px 40px rgba(25, 28, 29, 0.06);
-  --st-shadow-nav:       0 2px 12px rgba(0, 0, 0, 0.06);
+  --st-shadow-editorial: 0 18px 40px -24px rgba(80, 55, 30, 0.35);
+  --st-shadow-nav:       none;
 
   /* ─── Transitions ─────────────────────────────────────────────────────── */
   --st-transition:  0.22s ease;
   --st-transition-fast: 0.15s ease;
+
+  /* ─── Bootstrap variable bridge ───────────────────────────────────────── */
+  --bs-body-font-family: var(--st-font-body);
+  --bs-body-bg: var(--st-surface);
+  --bs-body-color: var(--st-on-surface);
+  --bs-link-color: var(--st-primary);
+  --bs-link-hover-color: var(--st-primary-container);
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--st-font-headline);
+  font-weight: 500;
+  letter-spacing: -0.01em;
 }

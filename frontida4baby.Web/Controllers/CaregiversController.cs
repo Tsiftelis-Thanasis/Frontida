@@ -42,7 +42,8 @@ public class CaregiversController : Controller
 
         if (!string.IsNullOrEmpty(searchModel.City))
         {
-            query = query.Where(u => u.City == searchModel.City);
+            var city = searchModel.City.Trim().ToLower();
+            query = query.Where(u => u.City != null && u.City.ToLower().Contains(city));
         }
 
         if (searchModel.MaxHourlyRate.HasValue)

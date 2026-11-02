@@ -55,7 +55,7 @@
 }
 .st-nav .navbar-toggler-icon {
   filter: none;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%23191c1d' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%232B2A26' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
 /* Nav auth buttons */
@@ -229,7 +229,7 @@
   flex-wrap: wrap;
   box-shadow: var(--st-shadow-editorial);
   max-width: 44rem;
-  border: 1px solid rgba(189, 201, 202, 0.3);
+  border: 1px solid rgba(217, 205, 184, 0.3);
 }
 .st-search-bar .form-select,
 .st-search-bar .form-control {
@@ -297,7 +297,7 @@
   right: -3rem;
   width: 16rem;
   height: 16rem;
-  background: rgba(0, 96, 103, 0.05);
+  background: rgba(185, 87, 58, 0.05);
   border-radius: 50%;
   filter: blur(48px);
 }
@@ -393,15 +393,15 @@
   transform: scale(1.1);
 }
 .st-card .st-card-icon.icon-primary {
-  background: rgba(0, 96, 103, 0.1);
+  background: rgba(185, 87, 58, 0.1);
   color: var(--st-primary);
 }
 .st-card .st-card-icon.icon-tertiary {
-  background: rgba(132, 71, 11, 0.1);
+  background: rgba(47, 54, 39, 0.1);
   color: var(--st-tertiary);
 }
 .st-card .st-card-icon.icon-secondary {
-  background: rgba(76, 97, 108, 0.1);
+  background: rgba(78, 91, 58, 0.1);
   color: var(--st-secondary);
 }
 .st-card .st-card-icon.icon-on-primary {
@@ -440,10 +440,10 @@
   color: var(--st-on-surface-variant);
 }
 .st-card-accent-bottom {
-  border-bottom: 4px solid rgba(132, 71, 11, 0.15);
+  border-bottom: 4px solid rgba(47, 54, 39, 0.15);
 }
 .st-card-accent-top {
-  border-top: 4px solid rgba(76, 97, 108, 0.15);
+  border-top: 4px solid rgba(78, 91, 58, 0.15);
 }
 
 @media (max-width: 768px) {
@@ -481,7 +481,7 @@
   left: 0;
   right: 0;
   height: 1px;
-  background: rgba(189, 201, 202, 0.3);
+  background: rgba(217, 205, 184, 0.3);
   z-index: 0;
 }
 .st-step {
@@ -544,7 +544,7 @@
   top: -2.5rem;
   left: -2.5rem;
   font-size: 8rem;
-  color: rgba(0, 96, 103, 0.05);
+  color: rgba(185, 87, 58, 0.05);
   font-family: serif;
   font-weight: 900;
   line-height: 1;
@@ -709,7 +709,7 @@
   left: 0;
   right: 0;
   background: var(--st-surface-container-lowest);
-  box-shadow: 0 -4px 20px rgba(25, 28, 29, 0.06);
+  box-shadow: 0 -4px 20px rgba(80, 55, 30, 0.06);
   z-index: 1030;
   border-top: none;
 }
@@ -826,7 +826,7 @@
 
 /* ─── Forms — Ghost border style ────────────────────────────────────────── */
 .st-form-control {
-  border: 2px solid rgba(189, 201, 202, 0.3);
+  border: 2px solid rgba(217, 205, 184, 0.3);
   border-radius: var(--st-radius-md);
   padding: 0.65rem 1rem;
   font-family: var(--st-font-body);
@@ -837,7 +837,7 @@
 }
 .st-form-control:focus {
   border-color: var(--st-primary);
-  box-shadow: 0 0 0 3px rgba(0, 96, 103, 0.12);
+  box-shadow: 0 0 0 3px rgba(185, 87, 58, 0.12);
   outline: none;
 }
 

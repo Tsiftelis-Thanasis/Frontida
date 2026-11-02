@@ -84,7 +84,7 @@
   <data name="FtrLinks"     xml:space="preserve"><value>Γρήγοροι Σύνδεσμοι</value></data>
   <data name="FtrServices"  xml:space="preserve"><value>Υπηρεσίες</value></data>
   <data name="FtrPrivacy"   xml:space="preserve"><value>Πολιτική Απορρήτου</value></data>
-  <data name="FtrCopyright" xml:space="preserve"><value>© 2026 frontida4baby. Όλα τα δικαιώματα διατηρούνται.</value></data>
+  <data name="FtrCopyright" xml:space="preserve"><value>© 2026 frontida4all. Όλα τα δικαιώματα διατηρούνται.</value></data>
 
   <!-- Σύνδεση -->
   <data name="LoginTitle"        xml:space="preserve"><value>Καλώς Ήρθατε</value></data>
@@ -185,6 +185,7 @@
   <data name="PostReplyPlaceholder" xml:space="preserve"><value>Γράψτε την απάντησή σας…</value></data>
   <data name="PostSubmitReply"      xml:space="preserve"><value>Δημοσίευση Απάντησης</value></data>
   <data name="PostToReply"          xml:space="preserve"><value>για να απαντήσετε.</value></data>
+  <data name="PostLoginToSeeReplies" xml:space="preserve"><value>για να δείτε τις απαντήσεις.</value></data>
   <data name="PostClosed"           xml:space="preserve"><value>Κλειστό</value></data>
   <data name="PostClosedMsg"        xml:space="preserve"><value>Αυτό το αίτημα έχει κλείσει.</value></data>
   <data name="PostBackToAll"        xml:space="preserve"><value>← Πίσω σε όλα τα αιτήματα</value></data>
@@ -282,4 +283,29 @@
   <data name="CookieMessage"    xml:space="preserve"><value>Χρησιμοποιούμε cookies για να βελτιώσουμε την εμπειρία σας στην πλατφόρμα μας.</value></data>
   <data name="CookieLearnMore" xml:space="preserve"><value>Μάθετε περισσότερα</value></data>
   <data name="CookieAccept"    xml:space="preserve"><value>Αποδοχή</value></data>
+  <data name="HomeBadge" xml:space="preserve"><value>Φροντίδα για όλους</value></data>
+  <data name="HomeHeroLead" xml:space="preserve"><value>Συνδέουμε οικογένειες με επαληθευμένους επαγγελματίες σε όλη την Ελλάδα.</value></data>
+  <data name="HomeWhatHelp" xml:space="preserve"><value>Τι βοήθεια χρειάζεστε;</value></data>
+  <data name="HomeCityPlaceholder" xml:space="preserve"><value>Περιοχή ή πόλη (π.χ. Θεσσαλονίκη)</value></data>
+  <data name="HomeSeeCaregivers" xml:space="preserve"><value>Δείτε φροντιστές</value></data>
+  <data name="HomeTrustVerified" xml:space="preserve"><value>Επαληθευμένα προφίλ</value></data>
+  <data name="HomeTrustNationwide" xml:space="preserve"><value>Σε όλη την Ελλάδα</value></data>
+  <data name="HomeFloatTitle" xml:space="preserve"><value>Με φροντίδα</value></data>
+  <data name="HomeFloatSub" xml:space="preserve"><value>και εμπιστοσύνη</value></data>
+  <data name="HomeSvcEyebrow" xml:space="preserve"><value>Οι Υπηρεσίες μας</value></data>
+  <data name="HomeSvcHeadA" xml:space="preserve"><value>Βοήθεια για κάθε</value></data>
+  <data name="HomeSvcHeadB" xml:space="preserve"><value>ανάγκη του σπιτιού</value></data>
+  <data name="ChipChildcare" xml:space="preserve"><value>Παιδιά</value></data>
+  <data name="ChipElderly" xml:space="preserve"><value>Ηλικιωμένοι</value></data>
+  <data name="ChipTutoring" xml:space="preserve"><value>Μαθήματα</value></data>
+  <data name="ChipHousekeeping" xml:space="preserve"><value>Σπίτι</value></data>
+  <data name="ChipPets" xml:space="preserve"><value>Κατοικίδια</value></data>
+  <data name="HomeFamiliesEyebrow" xml:space="preserve"><value>Για οικογένειες</value></data>
+  <data name="HomeFamiliesTitle" xml:space="preserve"><value>Χρειάζεστε βοήθεια; Πείτε μας τι ψάχνετε.</value></data>
+  <data name="HomeFamiliesText" xml:space="preserve"><value>Δείτε προφίλ φροντιστών ή δημοσιεύστε τη δική σας ανάγκη στο «Βρες Βοήθεια».</value></data>
+  <data name="HomeViewProfiles" xml:space="preserve"><value>Δείτε Προφίλ</value></data>
+  <data name="HomeCaregiversEyebrow" xml:space="preserve"><value>Για φροντιστές</value></data>
+  <data name="HomeCaregiversTitle" xml:space="preserve"><value>Γίνετε μέλος της κοινότητας.</value></data>
+  <data name="HomeCaregiversText" xml:space="preserve"><value>Φτιάξτε το προφίλ σας και γνωρίστε οικογένειες κοντά σας που χρειάζονται τη βοήθειά σας.</value></data>
+  <data name="HomeCreateAccount" xml:space="preserve"><value>Δημιουργία Λογαριασμού</value></data>
 </root>
