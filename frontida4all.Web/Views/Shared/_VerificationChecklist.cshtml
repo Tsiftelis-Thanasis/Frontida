@@ -10,27 +10,27 @@
     {
         <div class="vf-notice @(compact ? "mb-1" : "mb-2")">
             <i class="fa-solid fa-triangle-exclamation me-1"></i>
-            <strong>Προφίλ όχι πλήρως επαληθευμένο.</strong>
+            <strong>@L["VfChecklistNotFull"]</strong>
             @if (!compact)
             {
-                <span>Λείπουν: @string.Join(", ", Model.Missing()). Ελέγξτε προσεκτικά πριν αποφασίσετε.</span>
+                <span>@L["VfMissingLabel"] @string.Join(", ", Model.MissingKeys().Select(k => L[k].Value)). @L["VfCheckCarefully"]</span>
             }
         </div>
     }
     <ul class="vf-list">
-        @Html.Raw(Chip(Model.EmailConfirmed, "Email"))
-        @Html.Raw(Chip(Model.PhoneConfirmed, "Κινητό"))
-        @Html.Raw(Chip(Model.AddressApproved, "Διεύθυνση"))
-        @Html.Raw(Chip(Model.IdentityVerified, "Ταυτότητα"))
+        @Html.Raw(Chip(Model.EmailConfirmed, L["VfChipEmail"].Value))
+        @Html.Raw(Chip(Model.PhoneConfirmed, L["VfChipPhone"].Value))
+        @Html.Raw(Chip(Model.AddressApproved, L["VfChipAddress"].Value))
+        @Html.Raw(Chip(Model.IdentityVerified, L["VfChipIdentity"].Value))
         @Html.Raw(Chip(Model.CriminalRecordApproved,
             Model.CriminalRecordApproved && Model.CriminalRecordExpiresAt != null
-                ? $"Ποινικό μητρώο (έως {Model.CriminalRecordExpiresAt:MM/yyyy})"
-                : "Ποινικό μητρώο"))
+                ? string.Format(L["VfChipCriminalUntil"].Value, Model.CriminalRecordExpiresAt?.ToString("MM/yyyy"))
+                : L["VfChipCriminal"].Value))
     </ul>
     @if (!compact)
     {
         <div class="small text-muted mt-2">
-            Η επαλήθευση δεν αποτελεί εγγύηση για τη συμπεριφορά ή την καταλληλότητα. Ελέγξτε πάντα τα στοιχεία και τις συστάσεις μόνοι σας.
+            @L["VfDisclaimerShort"]
         </div>
     }
 </div>

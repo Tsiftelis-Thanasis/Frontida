@@ -2,7 +2,7 @@
 @using frontida4all.Web.Models.Entities
 @using frontida4all.Web.Services
 @{
-    ViewData["Title"] = "Επαλήθευση προφίλ";
+    ViewData["Title"] = L["VfPageTitle"].Value;
     var s = Model.Summary;
     var phonePrefill = (TempData["VerifyPhone"] as string) ?? s.PhoneNumber;
     var codeSent = TempData["VerifyPhone"] != null;
@@ -13,12 +13,11 @@
 
 <div class="container py-4" style="max-width:860px">
     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
-        <h2 class="mb-0">Επαλήθευση προφίλ</h2>
+        <h2 class="mb-0">@L["VfPageTitle"]</h2>
         <span class="badge @(s.IsFullyVerified ? "bg-success" : "bg-secondary") fs-6">@s.CompletedSteps / @VerificationSummary.TotalSteps</span>
     </div>
     <p class="text-muted">
-        Ολοκληρώστε τα βήματα για να εμφανίζεται στο προφίλ σας η σήμανση <strong>Επαληθευμένος</strong>.
-        Οι οικογένειες βλέπουν ποια βήματα έχετε ολοκληρώσει.
+        @Html.Raw(L["VfIntro"].Value)
     </p>
 
     @if (TempData["VerifyMessage"] is string okMsg)
@@ -33,33 +32,33 @@
     @if (s.IsFullyVerified)
     {
         <div class="alert alert-success d-flex align-items-center gap-2">
-            <i class="fa-solid fa-circle-check"></i> Το προφίλ σας είναι πλήρως επαληθευμένο.
+            <i class="fa-solid fa-circle-check"></i> @L["VfFullyVerified"]
         </div>
     }
     else
     {
         <div class="alert alert-warning">
-            <strong>Το προφίλ σας δεν είναι ακόμα πλήρως επαληθευμένο.</strong>
-            Λείπουν: @string.Join(", ", s.Missing()).
-            Οι οικογένειες που βλέπουν το προφίλ ή τη δήλωση ενδιαφέροντός σας ενημερώνονται σχετικά.
+            <strong>@L["VfNotFully"]</strong>
+            @L["VfMissingLabel"] @string.Join(", ", s.MissingKeys().Select(k => L[k].Value)).
+            @L["VfFamiliesNotified"]
         </div>
     }
 
     @* 1. Email *@
     <div class="card mb-3"><div class="card-body d-flex justify-content-between align-items-center flex-wrap gap-2">
         <div>
-            <h5 class="mb-1">1. Επιβεβαίωση email</h5>
-            <small class="text-muted">Βεβαιώνει ότι έχετε πρόσβαση στη διεύθυνση email σας.</small>
+            <h5 class="mb-1">@L["VfEmailTitle"]</h5>
+            <small class="text-muted">@L["VfEmailDesc"]</small>
         </div>
         @if (s.EmailConfirmed)
         {
-            <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Επιβεβαιώθηκε</span>
+            <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>@L["VfConfirmed"]</span>
         }
         else
         {
             <form asp-controller="Account" asp-action="ResendVerification" method="post">
                 @Html.AntiForgeryToken()
-                <button class="btn btn-outline-primary btn-sm">Αποστολή συνδέσμου ξανά</button>
+                <button class="btn btn-outline-primary btn-sm">@L["VfResendLink"]</button>
             </form>
         }
     </div></div>
@@ -68,8 +67,8 @@
     <div class="card mb-3"><div class="card-body">
         <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
             <div>
-                <h5 class="mb-1">2. Επιβεβαίωση κινητού</h5>
-                <small class="text-muted">Θα σας στείλουμε κωδικό με SMS.</small>
+                <h5 class="mb-1">@L["VfPhoneTitle"]</h5>
+                <small class="text-muted">@L["VfPhoneDesc"]</small>
             </div>
             @if (s.PhoneConfirmed)
             {
@@ -80,22 +79,22 @@
         {
             @if (!Model.SmsAvailable)
             {
-                <p class="text-muted mb-0 mt-2">Η αποστολή SMS δεν είναι διαθέσιμη προσωρινά.</p>
+                <p class="text-muted mb-0 mt-2">@L["VfSmsUnavailable"]</p>
             }
             else
             {
                 <form asp-action="SendPhoneCode" method="post" class="row g-2 mt-2">
                     @Html.AntiForgeryToken()
                     <div class="col-sm-8"><input name="phone" class="form-control" placeholder="69XXXXXXXX" value="@phonePrefill" required /></div>
-                    <div class="col-sm-4"><button class="btn btn-primary w-100">Αποστολή κωδικού</button></div>
+                    <div class="col-sm-4"><button class="btn btn-primary w-100">@L["VfSendCode"]</button></div>
                 </form>
                 @if (codeSent)
                 {
                     <form asp-action="VerifyPhone" method="post" class="row g-2 mt-2">
                         @Html.AntiForgeryToken()
                         <input type="hidden" name="phone" value="@phonePrefill" />
-                        <div class="col-sm-8"><input name="code" class="form-control" placeholder="Κωδικός SMS" inputmode="numeric" autocomplete="one-time-code" required /></div>
-                        <div class="col-sm-4"><button class="btn btn-accent w-100">Επιβεβαίωση</button></div>
+                        <div class="col-sm-8"><input name="code" class="form-control" placeholder="@L["VfSmsCode"]" inputmode="numeric" autocomplete="one-time-code" required /></div>
+                        <div class="col-sm-4"><button class="btn btn-accent w-100">@L["VfConfirmBtn"]</button></div>
                     </form>
                 }
             }
@@ -106,35 +105,35 @@
     <div class="card mb-3"><div class="card-body">
         <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
             <div>
-                <h5 class="mb-1">3. Απόδειξη διεύθυνσης</h5>
-                <small class="text-muted">Λογαριασμός ρεύματος, νερού ή τηλεφώνου στο όνομά σας, με την ίδια διεύθυνση που έχετε δηλώσει στο προφίλ.</small>
+                <h5 class="mb-1">@L["VfAddrTitle"]</h5>
+                <small class="text-muted">@L["VfAddrDesc"]</small>
             </div>
             @if (s.AddressApproved)
             {
-                <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Εγκρίθηκε έως @s.AddressExpiresAt?.ToString("dd/MM/yyyy")</span>
+                <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>@L["VfApprovedUntil"] @s.AddressExpiresAt?.ToString("dd/MM/yyyy")</span>
             }
             else if (s.AddressPending)
             {
-                <span class="badge bg-warning text-dark">Σε έλεγχο</span>
+                <span class="badge bg-warning text-dark">@L["VfInReview"]</span>
             }
             else if (s.AddressExpired)
             {
-                <span class="badge bg-danger">Έληξε</span>
+                <span class="badge bg-danger">@L["VfExpired"]</span>
             }
         </div>
-        <p class="small mb-2 mt-2">Η διεύθυνσή σας: <strong>@(string.IsNullOrWhiteSpace(Model.Address) ? "— δεν έχει συμπληρωθεί —" : Model.Address)</strong></p>
+        <p class="small mb-2 mt-2">@L["VfYourAddress"] <strong>@(string.IsNullOrWhiteSpace(Model.Address) ? L["VfAddressEmpty"].Value : Model.Address)</strong></p>
         @if (s.AddressRejectionReason != null && !s.AddressPending)
         {
-            <div class="alert alert-danger py-2 small">Απορρίφθηκε: @s.AddressRejectionReason</div>
+            <div class="alert alert-danger py-2 small">@L["VfRejected"] @s.AddressRejectionReason</div>
         }
         @if (!s.AddressApproved && !s.AddressPending)
         {
             <form asp-action="UploadAddress" method="post" enctype="multipart/form-data" class="row g-2">
                 @Html.AntiForgeryToken()
                 <div class="col-sm-8"><input type="file" name="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required /></div>
-                <div class="col-sm-4"><button class="btn btn-primary w-100">Ανέβασμα</button></div>
+                <div class="col-sm-4"><button class="btn btn-primary w-100">@L["VfUpload"]</button></div>
             </form>
-            <small class="text-muted">PDF, JPG ή PNG έως @Model.MaxFileSizeMb MB. Μπορείτε να καλύψετε ό,τι δεν χρειάζεται (π.χ. ποσά).</small>
+            <small class="text-muted">@string.Format(L["VfFileHint"].Value, Model.MaxFileSizeMb)</small>
         }
     </div></div>
 
@@ -142,19 +141,19 @@
     <div class="card mb-3"><div class="card-body">
         <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
             <div>
-                <h5 class="mb-1">4. Έλεγχος ταυτότητας</h5>
-                <small class="text-muted">Φωτογραφία ταυτότητας ή διαβατηρίου και selfie, μέσω της υπηρεσίας Stripe Identity. Τα έγγραφα δεν αποθηκεύονται σε εμάς.</small>
+                <h5 class="mb-1">@L["VfIdTitle"]</h5>
+                <small class="text-muted">@L["VfIdDesc"]</small>
             </div>
             @switch (s.IdentityStatus)
             {
                 case IdentityCheckStatus.Verified:
-                    <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Επαληθεύτηκε</span>
+                    <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>@L["VfIdVerified"]</span>
                     break;
                 case IdentityCheckStatus.Pending:
-                    <span class="badge bg-warning text-dark">Σε εξέλιξη</span>
+                    <span class="badge bg-warning text-dark">@L["VfIdPending"]</span>
                     break;
                 case IdentityCheckStatus.Failed:
-                    <span class="badge bg-danger">Ανεπιτυχής</span>
+                    <span class="badge bg-danger">@L["VfIdFailed"]</span>
                     break;
             }
         </div>
@@ -162,13 +161,13 @@
         {
             @if (!Model.IdentityAvailable)
             {
-                <p class="text-muted mb-0 mt-2">Ο έλεγχος ταυτότητας δεν είναι διαθέσιμος προσωρινά.</p>
+                <p class="text-muted mb-0 mt-2">@L["VfIdUnavailable"]</p>
             }
             else
             {
                 <form asp-action="StartIdentity" method="post" class="mt-2">
                     @Html.AntiForgeryToken()
-                    <button class="btn btn-primary">@(s.IdentityStatus == IdentityCheckStatus.NotStarted ? "Έναρξη ελέγχου" : "Δοκιμάστε ξανά")</button>
+                    <button class="btn btn-primary">@(s.IdentityStatus == IdentityCheckStatus.NotStarted ? L["VfIdStart"].Value : L["VfIdRetry"].Value)</button>
                 </form>
             }
         }
@@ -178,32 +177,31 @@
     <div class="card mb-3"><div class="card-body">
         <div class="d-flex justify-content-between align-items-start flex-wrap gap-2">
             <div>
-                <h5 class="mb-1">5. Πιστοποιητικό ποινικού μητρώου</h5>
+                <h5 class="mb-1">@L["VfCrTitle"]</h5>
                 <small class="text-muted">
-                    Βγάλτε το από το gov.gr (ψηφιακά υπογεγραμμένο). Για παιδική φροντίδα, προτιμήστε το πιστοποιητικό για εργασία με ανήλικους.
-                    Ισχύει για @Model.CriminalRecordValidityMonths μήνες από την ημερομηνία έκδοσης.
+                    @string.Format(L["VfCrDesc"].Value, Model.CriminalRecordValidityMonths)
                 </small>
             </div>
             @if (s.CriminalRecordApproved)
             {
-                <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>Ισχύει έως @s.CriminalRecordExpiresAt?.ToString("dd/MM/yyyy")</span>
+                <span class="badge bg-success"><i class="fa-solid fa-check me-1"></i>@L["VfValidUntil"] @s.CriminalRecordExpiresAt?.ToString("dd/MM/yyyy")</span>
             }
             else if (s.CriminalRecordPending)
             {
-                <span class="badge bg-warning text-dark">Σε έλεγχο</span>
+                <span class="badge bg-warning text-dark">@L["VfInReview"]</span>
             }
             else if (s.CriminalRecordExpired)
             {
-                <span class="badge bg-danger">Έληξε</span>
+                <span class="badge bg-danger">@L["VfExpired"]</span>
             }
         </div>
         @if (s.CriminalRecordUploadedAt != null)
         {
-            <p class="small text-muted mb-1 mt-2">Τελευταίο ανέβασμα: @s.CriminalRecordUploadedAt.Value.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</p>
+            <p class="small text-muted mb-1 mt-2">@L["VfLastUpload"] @s.CriminalRecordUploadedAt.Value.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</p>
         }
         @if (s.CriminalRecordRejectionReason != null && !s.CriminalRecordPending)
         {
-            <div class="alert alert-danger py-2 small mt-2">Απορρίφθηκε: @s.CriminalRecordRejectionReason</div>
+            <div class="alert alert-danger py-2 small mt-2">@L["VfRejected"] @s.CriminalRecordRejectionReason</div>
         }
         @if (!s.CriminalRecordPending && (!s.CriminalRecordApproved || renewSoon))
         {
@@ -212,17 +210,17 @@
                 <div class="col-md-5"><input type="file" name="file" class="form-control" accept=".pdf,.jpg,.jpeg,.png" required /></div>
                 <div class="col-md-4">
                     <input type="date" name="issuedOn" class="form-control" min="@oldest.ToString("yyyy-MM-dd")" max="@today.ToString("yyyy-MM-dd")" required />
-                    <small class="text-muted">Ημερομηνία έκδοσης</small>
+                    <small class="text-muted">@L["VfIssueDate"]</small>
                 </div>
-                <div class="col-md-3"><button class="btn btn-primary w-100">Ανέβασμα</button></div>
+                <div class="col-md-3"><button class="btn btn-primary w-100">@L["VfUpload"]</button></div>
             </form>
         }
         <p class="small text-muted mt-3 mb-0">
-            Το αρχείο το βλέπει μόνο ο έλεγχος της πλατφόρμας και διαγράφεται μετά την αξιολόγηση. Κρατάμε μόνο το αποτέλεσμα και τις ημερομηνίες.
+            @L["VfPrivacyNote"]
         </p>
     </div></div>
 
     <p class="small text-muted">
-        Η επαλήθευση δείχνει ότι ελέγχθηκαν τα παραπάνω στοιχεία την ημερομηνία που αναγράφεται. Δεν αποτελεί εγγύηση για τη συμπεριφορά ή την καταλληλότητα ενός φροντιστή.
+        @L["VfDisclaimerLong"]
     </p>
 </div>

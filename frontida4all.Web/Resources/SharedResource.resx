@@ -19,7 +19,7 @@
 
   <!-- Hero -->
   <data name="HeroTitle"       xml:space="preserve"><value>Find Trusted Caregivers</value></data>
-  <data name="HeroSubtitle"    xml:space="preserve"><value>Connect with verified, caring professionals across Greece.</value></data>
+  <data name="HeroSubtitle"    xml:space="preserve"><value>Connect with caring professionals across Greece.</value></data>
   <data name="HeroBtnSearch"   xml:space="preserve"><value>Search</value></data>
   <data name="HeroSelectService" xml:space="preserve"><value>Service type</value></data>
   <data name="HeroSelectCity"  xml:space="preserve"><value>City</value></data>
@@ -52,7 +52,7 @@
   <data name="Stat1Value"  xml:space="preserve"><value>5,000+</value></data>
   <data name="Stat1Label"  xml:space="preserve"><value>Happy Families</value></data>
   <data name="Stat2Value"  xml:space="preserve"><value>1,200+</value></data>
-  <data name="Stat2Label"  xml:space="preserve"><value>Verified Caregivers</value></data>
+  <data name="Stat2Label"  xml:space="preserve"><value>Caregivers</value></data>
   <data name="Stat3Value"  xml:space="preserve"><value>4.8/5</value></data>
   <data name="Stat3Label"  xml:space="preserve"><value>Average Rating</value></data>
 
@@ -72,8 +72,8 @@
 
   <!-- Trust -->
   <data name="TrustTitle"         xml:space="preserve"><value>Why Choose Us?</value></data>
-  <data name="TrustVerifiedTitle" xml:space="preserve"><value>Verified Profiles</value></data>
-  <data name="TrustVerifiedDesc"  xml:space="preserve"><value>All caregivers go through an identity and background check.</value></data>
+  <data name="TrustVerifiedTitle" xml:space="preserve"><value>Verification steps completed</value></data>
+  <data name="TrustVerifiedDesc"  xml:space="preserve"><value>Caregivers can complete steps such as email, phone, address, ID and criminal record checks. Each profile shows which steps are done.</value></data>
   <data name="TrustSafeTitle"     xml:space="preserve"><value>AI-Powered Moderation</value></data>
   <data name="TrustSafeDesc"      xml:space="preserve"><value>Every post and reply is automatically reviewed by Claude AI to keep the community respectful and safe.</value></data>
   <data name="Trust24Title"       xml:space="preserve"><value>24/7 Support</value></data>
@@ -121,7 +121,7 @@
   <data name="FilterService"     xml:space="preserve"><value>Service Type</value></data>
   <data name="FilterCity"        xml:space="preserve"><value>City</value></data>
   <data name="FilterRate"        xml:space="preserve"><value>Max hourly rate (€)</value></data>
-  <data name="FilterVerified"    xml:space="preserve"><value>Verified only</value></data>
+  <data name="FilterVerified"    xml:space="preserve"><value>Only completed verification</value></data>
   <data name="FilterBtn"         xml:space="preserve"><value>Apply Filters</value></data>
   <data name="FilterClear"       xml:space="preserve"><value>Clear</value></data>
   <data name="CaregiverEmpty"    xml:space="preserve"><value>No caregivers found matching your criteria.</value></data>
@@ -284,11 +284,11 @@
   <data name="CookieLearnMore" xml:space="preserve"><value>Learn more</value></data>
   <data name="CookieAccept"    xml:space="preserve"><value>Accept</value></data>
   <data name="HomeBadge" xml:space="preserve"><value>Care for everyone</value></data>
-  <data name="HomeHeroLead" xml:space="preserve"><value>Connect with verified, caring professionals across Greece.</value></data>
+  <data name="HomeHeroLead" xml:space="preserve"><value>Connect with caring professionals across Greece.</value></data>
   <data name="HomeWhatHelp" xml:space="preserve"><value>What kind of help do you need?</value></data>
   <data name="HomeCityPlaceholder" xml:space="preserve"><value>Area or city (e.g. Thessaloniki)</value></data>
   <data name="HomeSeeCaregivers" xml:space="preserve"><value>See caregivers</value></data>
-  <data name="HomeTrustVerified" xml:space="preserve"><value>Verified profiles</value></data>
+  <data name="HomeTrustVerified" xml:space="preserve"><value>Visible verification steps</value></data>
   <data name="HomeTrustNationwide" xml:space="preserve"><value>Across Greece</value></data>
   <data name="HomeFloatTitle" xml:space="preserve"><value>With care</value></data>
   <data name="HomeFloatSub" xml:space="preserve"><value>and trust</value></data>
@@ -308,4 +308,65 @@
   <data name="HomeCaregiversTitle" xml:space="preserve"><value>Join the community.</value></data>
   <data name="HomeCaregiversText" xml:space="preserve"><value>Create your profile and meet families near you who need your help.</value></data>
   <data name="HomeCreateAccount" xml:space="preserve"><value>Create Account</value></data>
+  <data name="VfStepEmail" xml:space="preserve"><value>Email confirmation</value></data>
+  <data name="VfStepPhone" xml:space="preserve"><value>Mobile confirmation</value></data>
+  <data name="VfStepAddress" xml:space="preserve"><value>Proof of address</value></data>
+  <data name="VfStepAddressExpired" xml:space="preserve"><value>Proof of address (expired)</value></data>
+  <data name="VfStepIdentity" xml:space="preserve"><value>Identity check</value></data>
+  <data name="VfStepCriminal" xml:space="preserve"><value>Criminal record certificate</value></data>
+  <data name="VfStepCriminalExpired" xml:space="preserve"><value>Criminal record certificate (expired)</value></data>
+  <data name="VfPageTitle" xml:space="preserve"><value>Profile verification</value></data>
+  <data name="VfIntro" xml:space="preserve"><value>Complete the steps to show the <strong>lt;strong<strong>gt;Verified</strong>lt;/strong</strong>gt; badge on your profile. Families can see which steps you have completed.</value></data>
+  <data name="VfFullyVerified" xml:space="preserve"><value>Your profile is fully verified.</value></data>
+  <data name="VfNotFully" xml:space="preserve"><value>Your profile is not fully verified yet.</value></data>
+  <data name="VfMissingLabel" xml:space="preserve"><value>Missing:</value></data>
+  <data name="VfFamiliesNotified" xml:space="preserve"><value>Families viewing your profile or your expression of interest are informed about this.</value></data>
+  <data name="VfCompleteLink" xml:space="preserve"><value>Complete verification</value></data>
+  <data name="VfDashWarn" xml:space="preserve"><value>Your profile is not fully verified.</value></data>
+  <data name="VfDashNote" xml:space="preserve"><value>Families can see that your profile is incomplete.</value></data>
+  <data name="VfEmailTitle" xml:space="preserve"><value>1. Email confirmation</value></data>
+  <data name="VfEmailDesc" xml:space="preserve"><value>Confirms that you have access to your email address.</value></data>
+  <data name="VfConfirmed" xml:space="preserve"><value>Confirmed</value></data>
+  <data name="VfResendLink" xml:space="preserve"><value>Resend link</value></data>
+  <data name="VfPhoneTitle" xml:space="preserve"><value>2. Mobile confirmation</value></data>
+  <data name="VfPhoneDesc" xml:space="preserve"><value>We will send you a code by SMS.</value></data>
+  <data name="VfSmsUnavailable" xml:space="preserve"><value>SMS sending is temporarily unavailable.</value></data>
+  <data name="VfSendCode" xml:space="preserve"><value>Send code</value></data>
+  <data name="VfSmsCode" xml:space="preserve"><value>SMS code</value></data>
+  <data name="VfConfirmBtn" xml:space="preserve"><value>Confirm</value></data>
+  <data name="VfAddrTitle" xml:space="preserve"><value>3. Proof of address</value></data>
+  <data name="VfAddrDesc" xml:space="preserve"><value>An electricity, water or phone bill in your name, showing the same address as in your profile.</value></data>
+  <data name="VfApprovedUntil" xml:space="preserve"><value>Approved until</value></data>
+  <data name="VfInReview" xml:space="preserve"><value>Under review</value></data>
+  <data name="VfExpired" xml:space="preserve"><value>Expired</value></data>
+  <data name="VfYourAddress" xml:space="preserve"><value>Your address:</value></data>
+  <data name="VfAddressEmpty" xml:space="preserve"><value>— not filled in —</value></data>
+  <data name="VfRejected" xml:space="preserve"><value>Rejected:</value></data>
+  <data name="VfUpload" xml:space="preserve"><value>Upload</value></data>
+  <data name="VfFileHint" xml:space="preserve"><value>PDF, JPG or PNG up to {0} MB. You may cover anything unnecessary (e.g. amounts).</value></data>
+  <data name="VfIdTitle" xml:space="preserve"><value>4. Identity check</value></data>
+  <data name="VfIdDesc" xml:space="preserve"><value>A photo of your ID or passport and a selfie, through Stripe Identity. We do not store the documents.</value></data>
+  <data name="VfIdVerified" xml:space="preserve"><value>Verified</value></data>
+  <data name="VfIdPending" xml:space="preserve"><value>In progress</value></data>
+  <data name="VfIdFailed" xml:space="preserve"><value>Unsuccessful</value></data>
+  <data name="VfIdUnavailable" xml:space="preserve"><value>Identity check is temporarily unavailable.</value></data>
+  <data name="VfIdStart" xml:space="preserve"><value>Start check</value></data>
+  <data name="VfIdRetry" xml:space="preserve"><value>Try again</value></data>
+  <data name="VfCrTitle" xml:space="preserve"><value>5. Criminal record certificate</value></data>
+  <data name="VfCrDesc" xml:space="preserve"><value>Get it from gov.gr (digitally signed). For childcare, prefer the certificate for work with minors. Valid for {0} months from the issue date.</value></data>
+  <data name="VfValidUntil" xml:space="preserve"><value>Valid until</value></data>
+  <data name="VfLastUpload" xml:space="preserve"><value>Last upload:</value></data>
+  <data name="VfIssueDate" xml:space="preserve"><value>Issue date</value></data>
+  <data name="VfPrivacyNote" xml:space="preserve"><value>Only the platform's review team can see the file, and it is deleted after review. We keep only the result and the dates.</value></data>
+  <data name="VfDisclaimerLong" xml:space="preserve"><value>Verification shows that the above items were checked on the date shown. It is not a guarantee of a caregiver's behaviour or suitability.</value></data>
+  <data name="VfChecklistNotFull" xml:space="preserve"><value>Profile not fully verified.</value></data>
+  <data name="VfCheckCarefully" xml:space="preserve"><value>Check carefully before you decide.</value></data>
+  <data name="VfChipEmail" xml:space="preserve"><value>Email</value></data>
+  <data name="VfChipPhone" xml:space="preserve"><value>Mobile</value></data>
+  <data name="VfChipAddress" xml:space="preserve"><value>Address</value></data>
+  <data name="VfChipIdentity" xml:space="preserve"><value>Identity</value></data>
+  <data name="VfChipCriminal" xml:space="preserve"><value>Criminal record</value></data>
+  <data name="VfChipCriminalUntil" xml:space="preserve"><value>Criminal record (until {0})</value></data>
+  <data name="VfDisclaimerShort" xml:space="preserve"><value>Verification is not a guarantee of behaviour or suitability. Always check the details and references yourself.</value></data>
+  <data name="VfStamp" xml:space="preserve"><value>Approved</value></data>
 </root>

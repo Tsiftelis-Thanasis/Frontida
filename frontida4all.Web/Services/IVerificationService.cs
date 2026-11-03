@@ -49,6 +49,18 @@ public class VerificationSummary
         if (!CriminalRecordApproved) m.Add(CriminalRecordExpired ? "Πιστοποιητικό ποινικού μητρώου (έληξε)" : "Πιστοποιητικό ποινικού μητρώου");
         return m;
     }
+
+    /// <summary>Resource keys (SharedResource) of the steps still missing, for localized notices.</summary>
+    public List<string> MissingKeys()
+    {
+        var m = new List<string>();
+        if (!EmailConfirmed) m.Add("VfStepEmail");
+        if (!PhoneConfirmed) m.Add("VfStepPhone");
+        if (!AddressApproved) m.Add(AddressExpired ? "VfStepAddressExpired" : "VfStepAddress");
+        if (!IdentityVerified) m.Add("VfStepIdentity");
+        if (!CriminalRecordApproved) m.Add(CriminalRecordExpired ? "VfStepCriminalExpired" : "VfStepCriminal");
+        return m;
+    }
 }
 
 public interface IVerificationService

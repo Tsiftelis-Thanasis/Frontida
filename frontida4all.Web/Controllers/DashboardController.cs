@@ -55,7 +55,7 @@ public class DashboardController : Controller
             var verification = await HttpContext.RequestServices
                 .GetRequiredService<frontida4all.Web.Services.IVerificationService>().GetSummaryAsync(userId);
             vm.VerificationCheck = true;
-            vm.VerificationMissing = verification.Missing();
+            vm.VerificationMissing = verification.MissingKeys();
         }
 
         if (tab == "posts" || tab == "")
