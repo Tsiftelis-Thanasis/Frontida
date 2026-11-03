@@ -369,4 +369,54 @@
   <data name="VfChipCriminalUntil" xml:space="preserve"><value>Criminal record (until {0})</value></data>
   <data name="VfDisclaimerShort" xml:space="preserve"><value>Verification is not a guarantee of behaviour or suitability. Always check the details and references yourself.</value></data>
   <data name="VfStamp" xml:space="preserve"><value>Approved</value></data>
+  <data name="VfeChooseFile" xml:space="preserve"><value>Choose a file.</value></data>
+  <data name="VfeTooLarge" xml:space="preserve"><value>The file exceeds {0} MB.</value></data>
+  <data name="VfeBadType" xml:space="preserve"><value>Only PDF, JPG or PNG files are allowed.</value></data>
+  <data name="VfeIssueRequired" xml:space="preserve"><value>Enter the issue date of the certificate.</value></data>
+  <data name="VfeIssueFuture" xml:space="preserve"><value>The issue date cannot be in the future.</value></data>
+  <data name="VfeIssueTooOld" xml:space="preserve"><value>The certificate must have been issued within the last {0} months.</value></data>
+  <data name="VfeContentMismatch" xml:space="preserve"><value>The file content does not match its type.</value></data>
+  <data name="VfeDocNotFound" xml:space="preserve"><value>Document not found.</value></data>
+  <data name="VfeDocReviewed" xml:space="preserve"><value>This document has already been reviewed.</value></data>
+  <data name="VfeIssueNeeded" xml:space="preserve"><value>An issue date is required.</value></data>
+  <data name="VfeIssueFuture2" xml:space="preserve"><value>The issue date is in the future.</value></data>
+  <data name="VfeCertExpired" xml:space="preserve"><value>The certificate has already expired — reject it.</value></data>
+  <data name="VfeReasonRequired" xml:space="preserve"><value>Enter the reason for rejection.</value></data>
+  <data name="VfeRejectedDefault" xml:space="preserve"><value>Rejected</value></data>
+  <data name="VfeBadNumber" xml:space="preserve"><value>Invalid number. Use the format 69XXXXXXXX or +30…</value></data>
+  <data name="VfeSmsNow" xml:space="preserve"><value>SMS sending is not available right now.</value></data>
+  <data name="VfeNumberUsed" xml:space="preserve"><value>This number is already used by another account.</value></data>
+  <data name="VfeWaitCode" xml:space="preserve"><value>Please wait a moment before requesting a new code.</value></data>
+  <data name="VfeDailyLimit" xml:space="preserve"><value>You have reached the daily limit of codes. Try again tomorrow.</value></data>
+  <data name="VfeSmsText" xml:space="preserve"><value>frontida4all: your confirmation code is {0}</value></data>
+  <data name="VfeSmsFailed" xml:space="preserve"><value>The SMS was not sent. Please try again later.</value></data>
+  <data name="VfeFillPhoneCode" xml:space="preserve"><value>Enter the number and the code.</value></data>
+  <data name="VfeTooManyAttempts" xml:space="preserve"><value>Too many wrong attempts. Request a new code.</value></data>
+  <data name="VfeWrongCode" xml:space="preserve"><value>Wrong or expired code.</value></data>
+  <data name="VfeIdNow" xml:space="preserve"><value>Identity check is not available right now.</value></data>
+  <data name="VfeIdAlready" xml:space="preserve"><value>Your identity has already been verified.</value></data>
+  <data name="VfeIdStartFail" xml:space="preserve"><value>The check could not be started. Please try again later.</value></data>
+  <data name="VfmCodeSent" xml:space="preserve"><value>We sent you a code by SMS. Enter it below.</value></data>
+  <data name="VfmPhoneOk" xml:space="preserve"><value>Your mobile number has been confirmed.</value></data>
+  <data name="VfeFillAddress" xml:space="preserve"><value>Please fill in your address and city in Profile settings first.</value></data>
+  <data name="VfmDocSent" xml:space="preserve"><value>The document was sent for review.</value></data>
+  <data name="VfmCertSent" xml:space="preserve"><value>The certificate was sent for review.</value></data>
+  <data name="VfmIdOk" xml:space="preserve"><value>Your identity has been verified.</value></data>
+  <data name="VfmIdReceived" xml:space="preserve"><value>We received your details. You will be notified once the check is complete.</value></data>
+  <data name="VfaApproved" xml:space="preserve"><value>Approved.</value></data>
+  <data name="VfaRejected" xml:space="preserve"><value>Rejected.</value></data>
+  <data name="VfReactNotice" xml:space="preserve"><value>Your profile is not fully verified. The poster will see that the following are missing: {0}. Complete verification from the Verification link in your dashboard.</value></data>
+  <data name="VfaTitle" xml:space="preserve"><value>Document review</value></data>
+  <data name="VfaHeading" xml:space="preserve"><value>Verification document review</value></data>
+  <data name="VfaNone" xml:space="preserve"><value>There are no documents to review.</value></data>
+  <data name="VfaCriminal" xml:space="preserve"><value>Criminal record</value></data>
+  <data name="VfaAddress" xml:space="preserve"><value>Proof of address</value></data>
+  <data name="VfaDeclared" xml:space="preserve"><value>Declared address:</value></data>
+  <data name="VfaUploaded" xml:space="preserve"><value>Uploaded</value></data>
+  <data name="VfaOpen" xml:space="preserve"><value>Open file</value></data>
+  <data name="VfaDeleted" xml:space="preserve"><value>The file has been deleted</value></data>
+  <data name="VfaIssueConfirm" xml:space="preserve"><value>Issue date (confirm)</value></data>
+  <data name="VfaApproveBtn" xml:space="preserve"><value>Approve</value></data>
+  <data name="VfaReasonPh" xml:space="preserve"><value>Reason for rejection</value></data>
+  <data name="VfaRejectBtn" xml:space="preserve"><value>Reject</value></data>
 </root>

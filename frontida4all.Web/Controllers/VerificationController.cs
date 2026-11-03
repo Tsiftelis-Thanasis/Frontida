@@ -29,6 +29,7 @@ public class VerificationController : Controller
     private readonly IConfiguration _cfg;
     private readonly VerificationOptions _opts;
     private readonly IAppLogService _log;
+    private readonly Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> L;
 
     public VerificationController(
         UserManager<ApplicationUser> users,
@@ -36,9 +37,10 @@ public class VerificationController : Controller
         ISmsSender sms,
         IConfiguration cfg,
         IOptions<VerificationOptions> opts,
-        IAppLogService log)
+        IAppLogService log,
+        Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> L)
     {
-        _users = users; _verification = verification; _sms = sms; _cfg = cfg; _opts = opts.Value; _log = log;
+        _users = users; _verification = verification; _sms = sms; _cfg = cfg; _opts = opts.Value; _log = log; this.L = L;
     }
 
     private async Task<ApplicationUser?> CaregiverAsync()
@@ -79,7 +81,7 @@ public class VerificationController : Controller
         if (ok)
         {
             TempData["VerifyPhone"] = phone;
-            TempData["VerifyMessage"] = "Στείλαμε κωδικό με SMS. Γράψτε τον παρακάτω.";
+            TempData["VerifyMessage"] = L["VfmCodeSent"].Value;
         }
         else TempData["VerifyError"] = error;
         return RedirectToAction(nameof(Index));
@@ -93,7 +95,7 @@ public class VerificationController : Controller
         if (user is null) return Forbid();
 
         var (ok, error) = await _verification.VerifyPhoneCodeAsync(user, phone, code);
-        if (ok) TempData["VerifyMessage"] = "Το κινητό σας επιβεβαιώθηκε.";
+        if (ok) TempData["VerifyMessage"] = L["VfmPhoneOk"].Value;
         else
         {
             TempData["VerifyError"] = error;
@@ -111,7 +113,7 @@ public class VerificationController : Controller
         if (user is null) return Forbid();
         if (string.IsNullOrWhiteSpace(user.Address) || string.IsNullOrWhiteSpace(user.City))
         {
-            TempData["VerifyError"] = "Συμπληρώστε πρώτα τη διεύθυνση και την πόλη στις Ρυθμίσεις προφίλ.";
+            TempData["VerifyError"] = L["VfeFillAddress"].Value;
             return RedirectToAction(nameof(Index));
         }
 
@@ -119,7 +121,7 @@ public class VerificationController : Controller
         if (ok)
         {
             await _log.LogAsync(AppLogLevel.Info, "Verification", "Address proof uploaded", userId: user.Id);
-            TempData["VerifyMessage"] = "Το έγγραφο στάλθηκε για έλεγχο.";
+            TempData["VerifyMessage"] = L["VfmDocSent"].Value;
         }
         else TempData["VerifyError"] = error;
         return RedirectToAction(nameof(Index));
@@ -137,7 +139,7 @@ public class VerificationController : Controller
         if (ok)
         {
             await _log.LogAsync(AppLogLevel.Info, "Verification", "Criminal record certificate uploaded", userId: user.Id);
-            TempData["VerifyMessage"] = "Το πιστοποιητικό στάλθηκε για έλεγχο.";
+            TempData["VerifyMessage"] = L["VfmCertSent"].Value;
         }
         else TempData["VerifyError"] = error;
         return RedirectToAction(nameof(Index));
@@ -169,8 +171,8 @@ public class VerificationController : Controller
         await _verification.RefreshIdentityStatusAsync(user.Id);
         var summary = await _verification.GetSummaryAsync(user.Id);
         TempData["VerifyMessage"] = summary.IdentityVerified
-            ? "Η ταυτότητά σας επαληθεύτηκε."
-            : "Λάβαμε τα στοιχεία σας. Θα ενημερωθείτε μόλις ολοκληρωθεί ο έλεγχος.";
+            ? L["VfmIdOk"].Value
+            : L["VfmIdReceived"].Value;
         return RedirectToAction(nameof(Index));
     }
 }

@@ -31,14 +31,16 @@ public class AdminVerificationController : Controller
     private readonly UserManager<ApplicationUser> _users;
     private readonly IVerificationService _verification;
     private readonly IAppLogService _log;
+    private readonly Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> L;
 
     public AdminVerificationController(
         ApplicationDbContext db,
         UserManager<ApplicationUser> users,
         IVerificationService verification,
-        IAppLogService log)
+        IAppLogService log,
+        Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> L)
     {
-        _db = db; _users = users; _verification = verification; _log = log;
+        _db = db; _users = users; _verification = verification; _log = log; this.L = L;
     }
 
     [HttpGet("")]
@@ -88,7 +90,7 @@ public class AdminVerificationController : Controller
             id, _users.GetUserId(User)!, approve, issuedOn, reason);
 
         TempData[ok ? "AdminMessage" : "AdminError"] = ok
-            ? (approve ? "Εγκρίθηκε." : "Απορρίφθηκε.")
+            ? (approve ? L["VfaApproved"].Value : L["VfaRejected"].Value)
             : error;
         if (ok)
             await _log.LogAsync(AppLogLevel.Info, "Verification",

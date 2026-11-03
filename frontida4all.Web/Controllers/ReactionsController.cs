@@ -88,9 +88,12 @@ public class ReactionsController : Controller
             var summary = await HttpContext.RequestServices
                 .GetRequiredService<IVerificationService>().GetSummaryAsync(userId);
             if (!summary.IsFullyVerified)
-                notice = "Το προφίλ σας δεν είναι πλήρως επαληθευμένο. Ο αναρτών θα δει ότι λείπουν: "
-                         + string.Join(", ", summary.Missing())
-                         + ". Ολοκληρώστε την επαλήθευση από το μενού «Επαλήθευση» στον πίνακα ελέγχου.";
+            {
+                var loc = HttpContext.RequestServices
+                    .GetRequiredService<Microsoft.Extensions.Localization.IStringLocalizer<SharedResource>>();
+                notice = string.Format(loc["VfReactNotice"].Value,
+                    string.Join(", ", summary.MissingKeys().Select(k => loc[k].Value)));
+            }
         }
         return Json(new { liked, count, notice });
     }

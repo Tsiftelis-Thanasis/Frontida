@@ -23,6 +23,7 @@ public class VerificationService : IVerificationService
     private readonly IConfiguration _cfg;
     private readonly VerificationOptions _opts;
     private readonly ILogger<VerificationService> _logger;
+    private readonly Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> L;
 
     public VerificationService(
         ApplicationDbContext db,
@@ -31,9 +32,10 @@ public class VerificationService : IVerificationService
         IUserEmailService email,
         IConfiguration cfg,
         IOptions<VerificationOptions> opts,
-        ILogger<VerificationService> logger)
+        ILogger<VerificationService> logger,
+        Microsoft.Extensions.Localization.IStringLocalizer<SharedResource> L)
     {
-        _db = db; _users = users; _sms = sms; _email = email; _cfg = cfg; _opts = opts.Value; _logger = logger;
+        _db = db; _users = users; _sms = sms; _email = email; _cfg = cfg; _opts = opts.Value; _logger = logger; this.L = L;
     }
 
     // ── Summary ──────────────────────────────────────────────────────────────
@@ -103,11 +105,11 @@ public class VerificationService : IVerificationService
     }
 
     /// <summary>Reason of the newest document if that newest document was rejected (so the user knows to re-upload).</summary>
-    private static string? LastRejection(IEnumerable<(DocumentReviewStatus Status, DateTime UploadedAt, string? Reason)> docs)
+    private string? LastRejection(IEnumerable<(DocumentReviewStatus Status, DateTime UploadedAt, string? Reason)> docs)
     {
         var last = docs.OrderByDescending(d => d.UploadedAt).Cast<(DocumentReviewStatus Status, DateTime UploadedAt, string? Reason)?>().FirstOrDefault();
         if (last is null) return null;
-        return last.Value.Status == DocumentReviewStatus.Rejected ? (last.Value.Reason ?? "Απορρίφθηκε") : null;
+        return last.Value.Status == DocumentReviewStatus.Rejected ? (last.Value.Reason ?? L["VfeRejectedDefault"].Value) : null;
     }
 
     public async Task SyncProfileAsync(string userId)
@@ -141,20 +143,20 @@ public class VerificationService : IVerificationService
     public async Task<(bool Ok, string? Error)> SubmitDocumentAsync(
         string userId, VerificationDocumentType type, IFormFile file, DateTime? issuedOn)
     {
-        if (file is null || file.Length == 0) return (false, "Επιλέξτε αρχείο.");
+        if (file is null || file.Length == 0) return (false, L["VfeChooseFile"].Value);
         if (file.Length > _opts.MaxFileSizeMb * 1024L * 1024L)
-            return (false, $"Το αρχείο ξεπερνά τα {_opts.MaxFileSizeMb} MB.");
+            return (false, string.Format(L["VfeTooLarge"].Value, _opts.MaxFileSizeMb));
 
         var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
         if (!AllowedExtensions.Contains(ext))
-            return (false, "Επιτρέπονται μόνο αρχεία PDF, JPG ή PNG.");
+            return (false, L["VfeBadType"].Value);
 
         if (type == VerificationDocumentType.CriminalRecord)
         {
-            if (issuedOn is null) return (false, "Συμπληρώστε την ημερομηνία έκδοσης του πιστοποιητικού.");
-            if (issuedOn.Value.Date > DateTime.UtcNow.Date) return (false, "Η ημερομηνία έκδοσης δεν μπορεί να είναι στο μέλλον.");
+            if (issuedOn is null) return (false, L["VfeIssueRequired"].Value);
+            if (issuedOn.Value.Date > DateTime.UtcNow.Date) return (false, L["VfeIssueFuture"].Value);
             if (issuedOn.Value.Date.AddMonths(_opts.CriminalRecordValidityMonths) <= DateTime.UtcNow)
-                return (false, $"Το πιστοποιητικό πρέπει να έχει εκδοθεί τους τελευταίους {_opts.CriminalRecordValidityMonths} μήνες.");
+                return (false, string.Format(L["VfeIssueTooOld"].Value, _opts.CriminalRecordValidityMonths));
         }
 
         byte[] bytes;
@@ -163,7 +165,7 @@ public class VerificationService : IVerificationService
             await file.CopyToAsync(ms);
             bytes = ms.ToArray();
         }
-        if (!LooksLike(bytes, ext)) return (false, "Το περιεχόμενο του αρχείου δεν ταιριάζει με τον τύπο του.");
+        if (!LooksLike(bytes, ext)) return (false, L["VfeContentMismatch"].Value);
 
         // A new upload replaces any earlier pending one of the same type.
         var oldPending = await _db.VerificationDocuments
@@ -211,8 +213,8 @@ public class VerificationService : IVerificationService
         int documentId, string reviewerId, bool approve, DateTime? issuedOn, string? rejectionReason)
     {
         var doc = await _db.VerificationDocuments.Include(d => d.User).FirstOrDefaultAsync(d => d.Id == documentId);
-        if (doc is null) return (false, "Το έγγραφο δεν βρέθηκε.");
-        if (doc.Status != DocumentReviewStatus.Pending) return (false, "Το έγγραφο έχει ήδη εξεταστεί.");
+        if (doc is null) return (false, L["VfeDocNotFound"].Value);
+        if (doc.Status != DocumentReviewStatus.Pending) return (false, L["VfeDocReviewed"].Value);
 
         var now = DateTime.UtcNow;
         var v = await GetOrCreateAsync(doc.UserId);
@@ -222,10 +224,10 @@ public class VerificationService : IVerificationService
             if (doc.Type == VerificationDocumentType.CriminalRecord)
             {
                 var issued = (issuedOn ?? doc.IssuedOn) is { } rawIssued ? AsUtcDate(rawIssued) : (DateTime?)null;
-                if (issued is null) return (false, "Απαιτείται ημερομηνία έκδοσης.");
-                if (issued > now.Date) return (false, "Η ημερομηνία έκδοσης είναι στο μέλλον.");
+                if (issued is null) return (false, L["VfeIssueNeeded"].Value);
+                if (issued > now.Date) return (false, L["VfeIssueFuture2"].Value);
                 var expires = issued.Value.AddMonths(_opts.CriminalRecordValidityMonths);
-                if (expires <= now) return (false, "Το πιστοποιητικό έχει ήδη λήξει — απορρίψτε το.");
+                if (expires <= now) return (false, L["VfeCertExpired"].Value);
 
                 doc.IssuedOn = issued;
                 v.CriminalRecordIssuedOn = issued;
@@ -245,7 +247,7 @@ public class VerificationService : IVerificationService
         }
         else
         {
-            if (string.IsNullOrWhiteSpace(rejectionReason)) return (false, "Γράψτε τον λόγο απόρριψης.");
+            if (string.IsNullOrWhiteSpace(rejectionReason)) return (false, L["VfeReasonRequired"].Value);
             var reason = rejectionReason.Trim();
             doc.Status = DocumentReviewStatus.Rejected;
             doc.RejectionReason = reason.Length > 500 ? reason[..500] : reason;
@@ -282,23 +284,23 @@ public class VerificationService : IVerificationService
     public async Task<(bool Ok, string? Error)> SendPhoneCodeAsync(ApplicationUser user, string phone)
     {
         var number = NormalizePhone(phone);
-        if (number is null) return (false, "Μη έγκυρος αριθμός. Χρησιμοποιήστε μορφή 69XXXXXXXX ή +30…");
-        if (!_sms.IsAvailable) return (false, "Η αποστολή SMS δεν είναι διαθέσιμη αυτή τη στιγμή.");
+        if (number is null) return (false, L["VfeBadNumber"].Value);
+        if (!_sms.IsAvailable) return (false, L["VfeSmsNow"].Value);
 
         if (await _db.Users.AnyAsync(u => u.Id != user.Id && u.PhoneNumber == number && u.PhoneNumberConfirmed))
-            return (false, "Αυτός ο αριθμός χρησιμοποιείται ήδη σε άλλο λογαριασμό.");
+            return (false, L["VfeNumberUsed"].Value);
 
         var now = DateTime.UtcNow;
         var v = await GetOrCreateAsync(user.Id);
         if (v.PhoneCodeSentAt != null && now - v.PhoneCodeSentAt < PhoneCodeCooldown)
-            return (false, "Περιμένετε λίγο πριν ζητήσετε νέο κωδικό.");
+            return (false, L["VfeWaitCode"].Value);
         if (v.PhoneCodesCountDate?.Date != now.Date) { v.PhoneCodesCountDate = now; v.PhoneCodesSentToday = 0; }
         if (v.PhoneCodesSentToday >= MaxPhoneCodesPerDay)
-            return (false, "Φτάσατε το ημερήσιο όριο αποστολής κωδικών. Δοκιμάστε αύριο.");
+            return (false, L["VfeDailyLimit"].Value);
 
         var code = await _users.GenerateChangePhoneNumberTokenAsync(user, number);
-        var ok = await _sms.SendAsync(number, $"frontida4all: ο κωδικός επιβεβαίωσής σας είναι {code}", CancellationToken.None);
-        if (!ok) return (false, "Δεν στάλθηκε το SMS. Δοκιμάστε ξανά αργότερα.");
+        var ok = await _sms.SendAsync(number, string.Format(L["VfeSmsText"].Value, code), CancellationToken.None);
+        if (!ok) return (false, L["VfeSmsFailed"].Value);
 
         v.PhoneCodeSentAt = now;
         v.PhoneCodesSentToday++;
@@ -311,18 +313,18 @@ public class VerificationService : IVerificationService
     public async Task<(bool Ok, string? Error)> VerifyPhoneCodeAsync(ApplicationUser user, string phone, string code)
     {
         var number = NormalizePhone(phone);
-        if (number is null || string.IsNullOrWhiteSpace(code)) return (false, "Συμπληρώστε αριθμό και κωδικό.");
+        if (number is null || string.IsNullOrWhiteSpace(code)) return (false, L["VfeFillPhoneCode"].Value);
 
         var v = await GetOrCreateAsync(user.Id);
         if (v.PhoneCodeFailedAttempts >= MaxPhoneFailedAttempts)
-            return (false, "Πολλές λανθασμένες προσπάθειες. Ζητήστε νέο κωδικό.");
+            return (false, L["VfeTooManyAttempts"].Value);
 
         var result = await _users.ChangePhoneNumberAsync(user, number, code.Trim());
         if (!result.Succeeded)
         {
             v.PhoneCodeFailedAttempts++;
             await _db.SaveChangesAsync();
-            return (false, "Λάθος ή ληγμένος κωδικός.");
+            return (false, L["VfeWrongCode"].Value);
         }
         v.PhoneCodeFailedAttempts = 0;
         await _db.SaveChangesAsync();
@@ -338,10 +340,10 @@ public class VerificationService : IVerificationService
 
     public async Task<(string? Url, string? Error)> StartIdentityCheckAsync(ApplicationUser user, string returnUrl)
     {
-        if (!StripeIdentityEnabled) return (null, "Ο έλεγχος ταυτότητας δεν είναι διαθέσιμος αυτή τη στιγμή.");
+        if (!StripeIdentityEnabled) return (null, L["VfeIdNow"].Value);
 
         var v = await GetOrCreateAsync(user.Id);
-        if (v.IdentityStatus == IdentityCheckStatus.Verified) return (null, "Η ταυτότητά σας έχει ήδη επαληθευτεί.");
+        if (v.IdentityStatus == IdentityCheckStatus.Verified) return (null, L["VfeIdAlready"].Value);
 
         try
         {
@@ -370,7 +372,7 @@ public class VerificationService : IVerificationService
         catch (StripeException ex)
         {
             _logger.LogError(ex, "Stripe Identity session creation failed for {UserId}", user.Id);
-            return (null, "Δεν ήταν δυνατή η έναρξη του ελέγχου. Δοκιμάστε ξανά αργότερα.");
+            return (null, L["VfeIdStartFail"].Value);
         }
     }
 

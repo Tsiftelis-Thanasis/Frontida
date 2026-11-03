@@ -369,4 +369,54 @@
   <data name="VfChipCriminalUntil" xml:space="preserve"><value>Ποινικό μητρώο (έως {0})</value></data>
   <data name="VfDisclaimerShort" xml:space="preserve"><value>Η επαλήθευση δεν αποτελεί εγγύηση για τη συμπεριφορά ή την καταλληλότητα. Ελέγξτε πάντα τα στοιχεία και τις συστάσεις μόνοι σας.</value></data>
   <data name="VfStamp" xml:space="preserve"><value>Εγκεκριμένος</value></data>
+  <data name="VfeChooseFile" xml:space="preserve"><value>Επιλέξτε αρχείο.</value></data>
+  <data name="VfeTooLarge" xml:space="preserve"><value>Το αρχείο ξεπερνά τα {0} MB.</value></data>
+  <data name="VfeBadType" xml:space="preserve"><value>Επιτρέπονται μόνο αρχεία PDF, JPG ή PNG.</value></data>
+  <data name="VfeIssueRequired" xml:space="preserve"><value>Συμπληρώστε την ημερομηνία έκδοσης του πιστοποιητικού.</value></data>
+  <data name="VfeIssueFuture" xml:space="preserve"><value>Η ημερομηνία έκδοσης δεν μπορεί να είναι στο μέλλον.</value></data>
+  <data name="VfeIssueTooOld" xml:space="preserve"><value>Το πιστοποιητικό πρέπει να έχει εκδοθεί τους τελευταίους {0} μήνες.</value></data>
+  <data name="VfeContentMismatch" xml:space="preserve"><value>Το περιεχόμενο του αρχείου δεν ταιριάζει με τον τύπο του.</value></data>
+  <data name="VfeDocNotFound" xml:space="preserve"><value>Το έγγραφο δεν βρέθηκε.</value></data>
+  <data name="VfeDocReviewed" xml:space="preserve"><value>Το έγγραφο έχει ήδη εξεταστεί.</value></data>
+  <data name="VfeIssueNeeded" xml:space="preserve"><value>Απαιτείται ημερομηνία έκδοσης.</value></data>
+  <data name="VfeIssueFuture2" xml:space="preserve"><value>Η ημερομηνία έκδοσης είναι στο μέλλον.</value></data>
+  <data name="VfeCertExpired" xml:space="preserve"><value>Το πιστοποιητικό έχει ήδη λήξει — απορρίψτε το.</value></data>
+  <data name="VfeReasonRequired" xml:space="preserve"><value>Γράψτε τον λόγο απόρριψης.</value></data>
+  <data name="VfeRejectedDefault" xml:space="preserve"><value>Απορρίφθηκε</value></data>
+  <data name="VfeBadNumber" xml:space="preserve"><value>Μη έγκυρος αριθμός. Χρησιμοποιήστε μορφή 69XXXXXXXX ή +30…</value></data>
+  <data name="VfeSmsNow" xml:space="preserve"><value>Η αποστολή SMS δεν είναι διαθέσιμη αυτή τη στιγμή.</value></data>
+  <data name="VfeNumberUsed" xml:space="preserve"><value>Αυτός ο αριθμός χρησιμοποιείται ήδη σε άλλο λογαριασμό.</value></data>
+  <data name="VfeWaitCode" xml:space="preserve"><value>Περιμένετε λίγο πριν ζητήσετε νέο κωδικό.</value></data>
+  <data name="VfeDailyLimit" xml:space="preserve"><value>Φτάσατε το ημερήσιο όριο αποστολής κωδικών. Δοκιμάστε αύριο.</value></data>
+  <data name="VfeSmsText" xml:space="preserve"><value>frontida4all: ο κωδικός επιβεβαίωσής σας είναι {0}</value></data>
+  <data name="VfeSmsFailed" xml:space="preserve"><value>Δεν στάλθηκε το SMS. Δοκιμάστε ξανά αργότερα.</value></data>
+  <data name="VfeFillPhoneCode" xml:space="preserve"><value>Συμπληρώστε αριθμό και κωδικό.</value></data>
+  <data name="VfeTooManyAttempts" xml:space="preserve"><value>Πολλές λανθασμένες προσπάθειες. Ζητήστε νέο κωδικό.</value></data>
+  <data name="VfeWrongCode" xml:space="preserve"><value>Λάθος ή ληγμένος κωδικός.</value></data>
+  <data name="VfeIdNow" xml:space="preserve"><value>Ο έλεγχος ταυτότητας δεν είναι διαθέσιμος αυτή τη στιγμή.</value></data>
+  <data name="VfeIdAlready" xml:space="preserve"><value>Η ταυτότητά σας έχει ήδη επαληθευτεί.</value></data>
+  <data name="VfeIdStartFail" xml:space="preserve"><value>Δεν ήταν δυνατή η έναρξη του ελέγχου. Δοκιμάστε ξανά αργότερα.</value></data>
+  <data name="VfmCodeSent" xml:space="preserve"><value>Στείλαμε κωδικό με SMS. Γράψτε τον παρακάτω.</value></data>
+  <data name="VfmPhoneOk" xml:space="preserve"><value>Το κινητό σας επιβεβαιώθηκε.</value></data>
+  <data name="VfeFillAddress" xml:space="preserve"><value>Συμπληρώστε πρώτα τη διεύθυνση και την πόλη στις Ρυθμίσεις προφίλ.</value></data>
+  <data name="VfmDocSent" xml:space="preserve"><value>Το έγγραφο στάλθηκε για έλεγχο.</value></data>
+  <data name="VfmCertSent" xml:space="preserve"><value>Το πιστοποιητικό στάλθηκε για έλεγχο.</value></data>
+  <data name="VfmIdOk" xml:space="preserve"><value>Η ταυτότητά σας επαληθεύτηκε.</value></data>
+  <data name="VfmIdReceived" xml:space="preserve"><value>Λάβαμε τα στοιχεία σας. Θα ενημερωθείτε μόλις ολοκληρωθεί ο έλεγχος.</value></data>
+  <data name="VfaApproved" xml:space="preserve"><value>Εγκρίθηκε.</value></data>
+  <data name="VfaRejected" xml:space="preserve"><value>Απορρίφθηκε.</value></data>
+  <data name="VfReactNotice" xml:space="preserve"><value>Το προφίλ σας δεν είναι πλήρως επαληθευμένο. Ο αναρτών θα δει ότι λείπουν: {0}. Ολοκληρώστε την επαλήθευση από το μενού «Επαλήθευση» στον πίνακα ελέγχου.</value></data>
+  <data name="VfaTitle" xml:space="preserve"><value>Έλεγχος εγγράφων</value></data>
+  <data name="VfaHeading" xml:space="preserve"><value>Έλεγχος εγγράφων επαλήθευσης</value></data>
+  <data name="VfaNone" xml:space="preserve"><value>Δεν υπάρχουν έγγραφα προς έλεγχο.</value></data>
+  <data name="VfaCriminal" xml:space="preserve"><value>Ποινικό μητρώο</value></data>
+  <data name="VfaAddress" xml:space="preserve"><value>Απόδειξη διεύθυνσης</value></data>
+  <data name="VfaDeclared" xml:space="preserve"><value>Δηλωμένη διεύθυνση:</value></data>
+  <data name="VfaUploaded" xml:space="preserve"><value>Ανέβηκε</value></data>
+  <data name="VfaOpen" xml:space="preserve"><value>Άνοιγμα αρχείου</value></data>
+  <data name="VfaDeleted" xml:space="preserve"><value>Το αρχείο έχει διαγραφεί</value></data>
+  <data name="VfaIssueConfirm" xml:space="preserve"><value>Ημερομηνία έκδοσης (επιβεβαίωση)</value></data>
+  <data name="VfaApproveBtn" xml:space="preserve"><value>Έγκριση</value></data>
+  <data name="VfaReasonPh" xml:space="preserve"><value>Λόγος απόρριψης</value></data>
+  <data name="VfaRejectBtn" xml:space="preserve"><value>Απόρριψη</value></data>
 </root>

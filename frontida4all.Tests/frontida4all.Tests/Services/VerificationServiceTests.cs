@@ -43,7 +43,7 @@ public class VerificationServiceTests
         // UserManager is only needed for the phone-code flow, which is not exercised here.
         var svc = new VerificationService(db, null!, new FakeSms(), email,
             new ConfigurationBuilder().Build(), Options.Create(opts ?? new VerificationOptions()),
-            NullLogger<VerificationService>.Instance);
+            NullLogger<VerificationService>.Instance, new KeyLocalizer());
         return (db, svc, email);
     }
 
@@ -281,7 +281,7 @@ public class VerificationDateKindTests
         db.Users.Add(new ApplicationUser { Id = "u1", UserName = "u1", IsCaregiver = true });
         await db.SaveChangesAsync();
         var svc = new VerificationService(db, null!, null!, null!, new ConfigurationBuilder().Build(),
-            Options.Create(new VerificationOptions()), NullLogger<VerificationService>.Instance);
+            Options.Create(new VerificationOptions()), NullLogger<VerificationService>.Instance, new KeyLocalizer());
 
         var bytes = new byte[100];
         "%PDF-1.4"u8.CopyTo(bytes);
@@ -292,4 +292,15 @@ public class VerificationDateKindTests
 
         Assert.Equal(DateTimeKind.Utc, (await db.VerificationDocuments.SingleAsync()).IssuedOn!.Value.Kind);
     }
+}
+
+/// <summary>Returns the key as the text, so tests do not depend on resource files.</summary>
+internal sealed class KeyLocalizer : Microsoft.Extensions.Localization.IStringLocalizer<frontida4all.Web.SharedResource>
+{
+    public Microsoft.Extensions.Localization.LocalizedString this[string name]
+        => new(name, name, false);
+    public Microsoft.Extensions.Localization.LocalizedString this[string name, params object[] arguments]
+        => new(name, string.Format(name, arguments), false);
+    public IEnumerable<Microsoft.Extensions.Localization.LocalizedString> GetAllStrings(bool includeParentCultures)
+        => Enumerable.Empty<Microsoft.Extensions.Localization.LocalizedString>();
 }
