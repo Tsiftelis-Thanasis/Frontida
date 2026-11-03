@@ -75,6 +75,9 @@ if (!string.IsNullOrWhiteSpace(cfg["Authentication:Google:ClientId"]))
     {
         o.ClientId     = cfg["Authentication:Google:ClientId"]!;
         o.ClientSecret = cfg["Authentication:Google:ClientSecret"]!;
+        // The Google handler does not map this claim by default; AccountController relies on it
+        // to decide whether an existing account may be linked automatically.
+        Microsoft.AspNetCore.Authentication.ClaimActionCollectionMapExtensions.MapJsonKey(o.ClaimActions, "email_verified", "email_verified");
     });
 
 if (!string.IsNullOrWhiteSpace(cfg["Authentication:Facebook:AppId"]))
