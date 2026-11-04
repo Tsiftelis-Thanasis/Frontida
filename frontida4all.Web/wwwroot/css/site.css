@@ -1,12 +1,12 @@
 /* ─── CSS Variables (legacy compat — mapped to stitch tokens) ────────────── */
 :root {
-  --c-primary:   var(--st-primary, #B9573A);
-  --c-primary-d: var(--st-primary-container, #9E4830);
+  --c-primary:   var(--st-primary, #BF5233);
+  --c-primary-d: var(--st-primary-container, #A0422A);
   --c-dark:      var(--st-on-surface, #2B2A26);
   --c-accent:    var(--st-tertiary-fixed-dim, #D9A93A);
   --c-accent-d:  var(--st-tertiary, #2F3627);
   --c-light:     var(--st-surface-container-low, #F1E9DB);
-  --c-muted:     var(--st-on-surface-variant, #5E564B);
+  --c-muted:     var(--st-on-surface-variant, #6A5547);
   --c-white:     #FFFFFF;
   --c-border:    var(--st-outline-variant, #D9CDB8);
   --radius:      var(--st-radius-lg, 0.75rem);
@@ -109,8 +109,8 @@
 html { font-size: 16px; position: relative; min-height: 100%; }
 
 body {
-  font-family: var(--st-font-body, 'Commissioner', system-ui, sans-serif);
-  background: var(--st-surface, #F6F0E6);
+  font-family: var(--st-font-body, 'Inter', system-ui, sans-serif);
+  background: var(--st-surface, #F9F0E7);
   color: var(--st-on-surface, #2B2A26);
   margin: 0;
   overflow-x: hidden;
@@ -399,13 +399,13 @@ body { animation: fadeIn var(--anim-duration-base) var(--anim-easing-natural); }
   z-index: 1;
 }
 
-.svc-gradient-1 { background: linear-gradient(135deg, #B9573A, #9E4830); }
-.svc-gradient-2 { background: linear-gradient(135deg, #2F3627, #4E5B3A); }
-.svc-gradient-3 { background: linear-gradient(135deg, #4E5B3A, #8A8174); }
+.svc-gradient-1 { background: linear-gradient(135deg, #BF5233, #A0422A); }
+.svc-gradient-2 { background: linear-gradient(135deg, #4A2519, #8A4B33); }
+.svc-gradient-3 { background: linear-gradient(135deg, #8A4B33, #B98467); }
 .svc-gradient-4 { background: linear-gradient(135deg, var(--st-tertiary-fixed-dim), var(--st-tertiary-fixed)); color: var(--st-on-surface); }
 .svc-gradient-4 h5 { color: var(--st-on-surface); }
 .svc-gradient-4 p  { color: var(--st-on-surface-variant); }
-.svc-gradient-5 { background: linear-gradient(135deg, #4E5B3A, #D9CDB8); }
+.svc-gradient-5 { background: linear-gradient(135deg, #8A4B33, #E2CDBA); }
 
 /* ─── How It Works (legacy — kept for non-homepage) ──────────────────────── */
 .how-it-works {
@@ -1088,7 +1088,7 @@ a:hover { color: var(--st-primary-container); }
   width: 36px; height: 36px; border-radius: 18px 18px 18px 6px;
   background: var(--st-primary); color: var(--st-on-primary);
   display: inline-flex; align-items: center; justify-content: center;
-  font-family: var(--st-font-headline); font-style: italic; font-size: 1.3rem; font-weight: 500;
+  font-family: var(--st-font-headline); font-size: 1.3rem; font-weight: 700;
 }
 .st-nav .navbar-brand .brand-accent { color: var(--st-primary); }
 .st-nav .nav-link { font-size: .95rem; font-weight: 500; color: var(--st-on-surface) !important; }
@@ -1115,13 +1115,13 @@ a:hover { color: var(--st-primary-container); }
 
 /* ─── Bootstrap theme bridge: make utility classes follow the new palette ── */
 :root {
-  --bs-primary: #B9573A; --bs-primary-rgb: 185, 87, 58;
-  --bs-secondary: #4E5B3A; --bs-secondary-rgb: 78, 91, 58;
+  --bs-primary: #BF5233; --bs-primary-rgb: 191, 82, 51;
+  --bs-secondary: #8A4B33; --bs-secondary-rgb: 138, 75, 51;
   --bs-success: #4E5B3A; --bs-success-rgb: 78, 91, 58;
   --bs-warning: #D9A93A; --bs-warning-rgb: 217, 169, 58;
   --bs-info: #4F7A8C; --bs-info-rgb: 79, 122, 140;
   --bs-border-color: #E6DCCB;
-  --bs-secondary-color: #5E564B;
+  --bs-secondary-color: #6A5547;
   --bs-tertiary-bg: #F1E9DB;
 }
 .bg-primary { background-color: var(--st-primary) !important; }
