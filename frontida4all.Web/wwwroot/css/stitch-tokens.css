@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════════════
    frontida4all Design Tokens — warm editorial ((cream and terracotta))
    Token names keep the legacy --st-* scheme so all existing views inherit it.
-   Font: Inter (headings and body)
+   Font: Lato (headings and body)
    ═══════════════════════════════════════════════════════════════════════════ */
 
 :root {
@@ -76,8 +76,8 @@
   --st-dot-pets:                #7E5F86;
 
   /* ─── Typography ──────────────────────────────────────────────────────── */
-  --st-font-headline:           'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
-  --st-font-body:               'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --st-font-headline:           'Lato', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --st-font-body:               'Lato', 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
   /* ─── Spacing ─────────────────────────────────────────────────────────── */
   --st-space-1:   0.25rem;  /* 4px */
